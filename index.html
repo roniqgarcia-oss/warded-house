@@ -22546,15 +22546,62 @@ THE WARDED HOUSE APP
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `@keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}` })
     ] });
   }
+  function WardGreeting({ u, snapshot }) {
+    const [greeting, setGreeting] = (0, import_react.useState)("");
+    const [loading, setLoading] = (0, import_react.useState)(true);
+    (0, import_react.useEffect)(() => {
+      const h = (/* @__PURE__ */ new Date()).getHours();
+      const tod = h < 12 ? "morning" : h < 17 ? "afternoon" : "evening";
+      const lines = snapshot.split("\n");
+      const clockedIn = lines.some((l) => l.includes("\u2713 Clocked in"));
+      const taskLine = lines.find((l) => l.startsWith("TASKS:")) || "";
+      const nextTask2 = lines.find((l) => l.startsWith("NEXT TASK")) || "";
+      const workout = lines.find((l) => l.startsWith("WORKOUTS")) || "";
+      const atRisk = workout.includes("AT RISK");
+      let msg = `Good ${tod}, ${u.name}. `;
+      if (!clockedIn && u.isStaff) {
+        const h2 = (/* @__PURE__ */ new Date()).getHours(), m2 = (/* @__PURE__ */ new Date()).getMinutes();
+        const tstr = `${h2 > 12 ? h2 - 12 : h2 || 12}:${String(m2).padStart(2, "0")}${h2 >= 12 ? "pm" : "am"}`;
+        if (h2 >= 9) {
+          msg += `You're late \u2014 it's ${tstr} and you haven't clocked in. Do it now. `;
+        } else {
+          msg += "Heads up \u2014 you haven't clocked in yet. ";
+        }
+      }
+      const taskMatch = taskLine.match(/(\d+) done out of (\d+)/);
+      if (taskMatch) {
+        const done = parseInt(taskMatch[1]), total = parseInt(taskMatch[2]), left = total - done;
+        if (left > 0) {
+          msg += `${left} task${left > 1 ? "s" : ""} left for today. `;
+        } else if (total > 0) {
+          msg += "All tasks done today \u2014 great work! ";
+        }
+      }
+      if (nextTask2) {
+        const nt = nextTask2.replace("NEXT TASK TO DO: ", "").replace(/["']/g, "");
+        msg += `Up next: ${nt}. `;
+      }
+      if (atRisk) {
+        msg += "\u26A0 You're at risk for WiFi cut this Monday \u2014 you need more workouts this week. ";
+      }
+      msg = msg.trim();
+      setGreeting(msg);
+      setLoading(false);
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "24px 16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
+      loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 20, height: 20, borderRadius: "50%", border: "2px solid #D4924A", borderTopColor: "transparent", animation: "spin 0.8s linear infinite" } }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "flex-start" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "90%", padding: "12px 16px", borderRadius: "18px 18px 18px 4px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", color: "#C8C0B0", fontSize: 14, lineHeight: 1.7 }, children: greeting }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#3A3020", fontSize: 11, textAlign: "center", marginTop: 4 }, children: "Ask me anything or tell me what you need." })
+    ] });
+  }
   function WardFloat({ u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr = "", saveWardInstr = () => {
-  } }) {
+  }, rules = [] }) {
     const [open, setOpen] = (0, import_react.useState)(false);
     const [wardTab, setWardTab] = (0, import_react.useState)("chat");
     const [msgs, setMsgs] = (0, import_react.useState)([]);
     const [input, setInput] = (0, import_react.useState)("");
     const [thinking, setThinking] = (0, import_react.useState)(false);
     const [err, setErr] = (0, import_react.useState)("");
-    const [instrDraft, setInstrDraft] = (0, import_react.useState)("");
+    const [instrDraft, setInstrDraft] = (0, import_react.useState)(wardInstr || "");
     const [instrSaved, setInstrSaved] = (0, import_react.useState)(false);
     const bottomRef = (0, import_react.useRef)(null);
     const [btnPos, setBtnPos] = (0, import_react.useState)({ x: 16, y: 82 });
@@ -22593,23 +22640,27 @@ THE WARDED HOUSE APP
         const periodAdv = requests.filter((r) => r.status === "approved" && r.date && r.date >= mk + (periodNum === 1 ? "-01" : "-15") && r.date <= (periodNum === 1 ? mk + "-14" : mk + "-" + new Date(parseInt(mk.split("-")[0]), parseInt(mk.split("-")[1]), 0).getDate())).reduce((s, r) => s + r.amount, 0);
         const periodUa = unabsences.filter((a) => a.date && a.date >= mk + (periodNum === 1 ? "-01" : "-15")).length;
         const estPay = base + adjs - periodAdv - periodUa * Math.round(8500 / 26);
+        const pendingTaskNames = tasks.filter((t) => isTaskDue(t) && !t._doneToday).slice(0, 5).map((t) => t.name);
         return [
-          `User: ${u.name} (${u.role || u.id}) | Date: ${today}`,
-          `Tasks: ${doneTasks}/${dueTasks} done today | Clock-in: ${todayCI || "not yet"}`,
-          `Workouts this week: ${wc.sessions}/5 ${wc.compliant ? "\u2713" : "(at risk)"}`,
-          u.isStaff ? `Est. pay this period: \u20B1${estPay.toLocaleString()}` : "",
-          pendingAdv.length ? `Pending advances: ${pendingAdv.length}` : "",
-          pendingPurch.length ? `Pending purchases: ${pendingPurch.length}` : "",
-          pendingRest.length ? `Pending rest requests: ${pendingRest.length}` : "",
-          openMaint.length ? `Open maintenance: ${openMaint.map((m) => m.title).join(", ")}` : "",
-          pendingVis.length ? `Pending visitors: ${pendingVis.length}` : "",
-          unabsences.filter((a) => a.date?.startsWith(mk)).length ? `Unexcused absences this month: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : ""
+          `USER: ${u.name} | Role: ${u.role || u.id} | Today: ${(/* @__PURE__ */ new Date()).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}`,
+          `CLOCK-IN: ${todayCI ? `\u2713 Clocked in at ${todayCI}` : "\u2717 NOT YET CLOCKED IN (needs to do this first)"}`,
+          `TASKS: ${doneTasks} done out of ${dueTasks} due today${doneTasks < dueTasks ? ` \u2014 ${dueTasks - doneTasks} still pending` : ""}`,
+          nextTask ? `NEXT TASK TO DO: "${nextTask.name}" (area: ${nextTask.area || "General"})` : "",
+          pendingTaskNames.length > 1 ? `OTHER PENDING: ${pendingTaskNames.slice(1).join(", ")}` : "",
+          `WORKOUTS THIS WEEK: ${wc.sessions}/5 sessions ${wc.compliant ? "\u2713 on track" : "\u26A0 AT RISK \u2014 WiFi may be cut Monday if not met"}`,
+          u.isStaff ? `EST. PAY THIS PERIOD: \u20B1${estPay.toLocaleString()}` : "",
+          pendingAdv.length ? `PENDING ADVANCES: ${pendingAdv.length} request(s)` : "",
+          pendingPurch.length ? `PENDING PURCHASES: ${pendingPurch.length} item(s) need approval` : "",
+          pendingRest.length ? `PENDING REST REQUESTS: ${pendingRest.length}` : "",
+          openMaint.length ? `OPEN MAINTENANCE: ${openMaint.map((m) => m.title).join(", ")}` : "",
+          pendingVis.length ? `PENDING VISITORS: ${pendingVis.length}` : "",
+          unabsences.filter((a) => a.date?.startsWith(mk)).length ? `UNEXCUSED ABSENCES THIS MONTH: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : ""
         ].filter(Boolean).join("\n");
       } catch (e) {
         return `User: ${u.name}`;
       }
     };
-    const WARD_DAILY_LIMIT = 50;
+    const WARD_DAILY_LIMIT = 200;
     const getUsageKey = () => `wh3_ward_usage_${u.id}_${td()}`;
     const checkAndIncrLimit = async () => {
       try {
@@ -22643,20 +22694,33 @@ THE WARDED HOUSE APP
 
 HOUSEHOLD INSTRUCTIONS (follow these carefully):
 ${wardInstr}` : "";
+        const rulesSection = rules && rules.length ? `
+
+HOUSE RULES (official, from the app):
+${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || r}`).join("\n")}` : "";
         const systemPrompt = `You are Ward \u2014 the household AI for The Warded House in Dumaguete, Philippines. You serve three roles at once, switching naturally depending on what the person needs:
 
-AS A COACH: You push people toward their best. You celebrate wins, no matter how small. When someone is falling short, you don't lecture \u2014 you ask the right questions and help them find their way back. You hold people accountable with care, not judgment. You help with fitness, reading habits, mindset, emotional processing, and building better daily routines.
+You are Ward \u2014 the household's trusted all-in-one: master chef, expert janitor, dietitian, fitness coach, head butler, app guide, and life advisor. You carry yourself like a seasoned executive assistant who also happens to feel like family. Firm when needed. Warm always. Never fake.
 
-AS A CONCIERGE: You know this household inside and out. You handle logistics \u2014 rules, schedules, pay periods, approvals, rest days, meeting dates, purchase processes. You give clear, accurate answers with no guesswork.
+WHAT YOU ARE:
+\u2022 MASTER CHEF \u2014 deep knowledge of nutrition, cooking techniques, food safety, Filipino and international cuisine. Healthy, whole, minimally processed. Cat-safe prep always. No sugar for Ek Ek. Low sodium for Roniq. Locally available in Dumaguete. Low/zero plastic. You make healthy food sound genuinely delicious, not like a punishment.
+\u2022 EXPERT JANITOR \u2014 professional-grade cleaning knowledge. Natural, non-toxic methods first (vinegar, baking soda, castile soap, citrus, diatomaceous earth). Cat-safe, asthma-safe. You know which surfaces need what, how to deep-clean efficiently, and how to prevent problems before they start.
+\u2022 DIETITIAN \u2014 understands macros, micronutrients, blood sugar, potassium, sodium, anti-inflammatory foods, supplement timing. Gives practical advice grounded in what's actually available in Dumaguete. Flags potential interactions. Suggests talking to a doctor when appropriate.
+\u2022 FITNESS COACH \u2014 supports 30-min/day, 5-day/week goal. Encourages consistency over perfection. Knows workouts are about building a better life, not just compliance. Adapts suggestions to each person's energy and situation.
+\u2022 HEAD BUTLER \u2014 knows every process in the app: how purchases are approved, how advances work, how rest days are requested, what happens at the monthly meeting, how WiFi enforcement works. Can walk any user through any process in the app.
+\u2022 APP GUIDE \u2014 can explain any feature, any button, any process in The Warded House app. If something isn't working as expected, Ward helps troubleshoot and flags it to Roniq if it's a technical issue.
+\u2022 TRUSTED MENTOR \u2014 approaches every person with warmth and respect. Holds people accountable without shaming. Builds up Abet's confidence. Helps the household grow together across physical, emotional, financial, and mental dimensions.
 
-AS A TEAMMATE: You're not above anyone here. You're real, honest, and genuinely care how everyone is doing. You challenge, encourage, and check in. You tell people what they need to hear \u2014 with respect and warmth.
+WHAT YOU NEVER DO:
+\u2022 Shame, belittle, or talk down to anyone
+\u2022 Be sarcastic or dismissive  
+\u2022 Give vague non-answers when the data or knowledge is right there
+\u2022 Advise anyone beyond their role or access level
+\u2022 Engage deeply with mental health crises \u2014 acknowledge briefly, redirect warmly to Ari or Roniq
+\u2022 Suggest anything that could harm the cats or trigger asthma in Ek Ek or Roniq
 
-WHAT YOU NEVER DO: Shame, belittle, or talk down to anyone. Be sarcastic or dismissive. Give vague non-answers. Treat a rule as more important than the person.
-
-AREAS OF EXPERTISE:
-- CLEANING: Natural, non-toxic solutions (vinegar, baking soda, castile soap, citrus). Efficient routines. Cat-safe products only.
-- MAINTENANCE: Spot problems early. Practical advice on what to DIY vs when to call a professional.
-- COOKING: Healthy, whole, minimally processed. Practical for Dumaguete/Philippines. ABSOLUTELY NO ingredients toxic to cats (onions, garlic, leeks, chives, grapes, raisins, chocolate, xylitol, macadamia nuts \u2014 flag these always). Low to zero plastic. Locally available ingredients preferred.
+HOUSE RULES AWARENESS:
+The app has a House Rules section with the official rules. Ward knows these rules and enforces them consistently. If a user asks about a rule and Ward notices a conflict or ambiguity between what the app says and what Ward knows, Ward flags it: "This might need Ari or Roniq to clarify \u2014 there may be a conflict worth reviewing." Roniq is the point of contact for ongoing household improvements.
 
 THE HOUSEHOLD:
 - Abet \u2014 Household Staff. Rest day Wednesday. Reports to Ek Ek.
@@ -22677,14 +22741,23 @@ OPERATIONAL DETAILS:
 - Books: 1 per month \xB7 verbal review at monthly house meeting (first Sunday) \xB7 fail = WiFi cut Monday
 - Purchases: Ek Ek approves first \u2192 Ari or Roniq gives final approval
 - Rest day swaps: submit in app \u2192 Ek Ek approves \u2192 Ari or Roniq final approval
-- Monthly house meeting: first Sunday of every month${instrSection}
+- Monthly house meeting: first Sunday of every month${instrSection}${rulesSection}
 
-LIVE HOUSEHOLD DATA:
+=== CURRENT LIVE STATE (read this before every response) ===
 \${snapshot}
+=== END LIVE STATE ===
+
+This data is real-time. Reference it directly in your responses. Never say "let me check" or "I'll look into that" \u2014 you already have it above. Be specific.
 
 Today is \${new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}.
 
-Respond in whatever language the person writes in \u2014 English or Bisaya/Filipino. Be concise when brevity serves. Take space when they need it. Always lead with the person, not the policy.`;
+Respond in whatever language the person writes in \u2014 English or Bisaya/Filipino.
+
+IMPORTANT BEHAVIOR RULES:
+- You HAVE the live household data above. Use it directly. Never say "let me check" or "I don't have access to" \u2014 you already have the data.
+- If someone asks what they should be doing, tell them SPECIFICALLY based on the data (clock-in status, next task, workout count, etc.)
+- Be proactive and direct. Don't ask clarifying questions when the data already tells you what they need.
+- Keep responses focused and actionable. This is a mobile app \u2014 be brief but specific.`;
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" },
@@ -22806,17 +22879,7 @@ Respond in whatever language the person writes in \u2014 English or Bisaya/Filip
         ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", fontStyle: "italic" }, children: "Only Ari or Roniq can edit Ward's instructions." })
       ] }),
       wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
-        msgs.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", paddingTop: 40 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 32, marginBottom: 12 }, children: "\u{1F3F0}" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, color: "#D4924A", marginBottom: 6 }, children: [
-            "Good ",
-            (/* @__PURE__ */ new Date()).getHours() < 12 ? "morning" : (/* @__PURE__ */ new Date()).getHours() < 17 ? "afternoon" : "evening",
-            ", ",
-            u.name,
-            "."
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13 }, children: "How can I assist the household today?" })
-        ] }),
+        msgs.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardGreeting, { u, snapshot: buildSnapshot() }),
         msgs.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "82%", padding: "10px 14px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? "rgba(212,146,74,0.15)" : "rgba(255,255,255,0.04)", border: m.role === "user" ? "1px solid rgba(212,146,74,0.25)" : "1px solid rgba(255,255,255,0.07)", color: m.role === "user" ? "#D4924A" : "#C8C0B0", fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-wrap" }, children: m.content }) }, i)),
         thinking && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6, padding: "10px 14px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "18px 18px 18px 4px", width: "fit-content" }, children: [0, 1, 2].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 6, height: 6, borderRadius: "50%", background: "#5A4E3A", animation: "wardDot 1.2s ease-in-out infinite", animationDelay: i * 0.2 + "s" } }, i)) }),
         err && err === "ward_resting" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px 16px", background: "rgba(212,146,74,0.05)", border: "1px solid rgba(212,146,74,0.1)", borderRadius: 14, margin: "0 8px" }, children: [
@@ -26156,7 +26219,120 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           DB.get("wh3_pay_overrides", []),
           DB.get("wh3_clockin", null),
           DB.get("wh3_today_meta", null),
-          DB.get("wh3_wardinstr", "")
+          DB.get("wh3_wardinstr", `THE WARDED HOUSE — WARD INSTRUCTIONS
+Dumaguete, Negros Oriental, Philippines
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONFIDENTIALITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+These rules are private to the four of us: Ek Ek, Abet, Ari, Roniq.
+
+If anyone outside asks about the household:
+• Who lives here → don't mention any names
+• Address → "Brgy. Batinguel, Dumaguete" only. Never mention Katrina Homes.
+• What's inside → "Family and their cats."
+• Why we're here → "Our old place is being renovated; we used to live in Sibulan."
+• What happens here → "Virtual Assistant work."
+• Who visits → person's discretion; outsiders don't need to know
+• How much we pay / what we do for money → "We don't know."
+• Everything heard inside this home is confidential.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MEMBERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• ABET — Household Staff. Shy and unconfident — encourage her, never pressure or shame her. Must clock in by 9am (if past 9am and not clocked in: tell her directly she is late). Rest day Wednesday unless swapped. Reports to Ek Ek.
+• EK EK — Food & Household Manager. Primary cook (anyone can cook if they want). Diabetic — absolutely no sugar. Asthmatic — avoid dust, strong smells, harsh chemicals, fragrances. Sensitive skin. Manages grocery runs.
+• ARI — Administrator & Finance. Wakes around 11:30am. Eating healthy. Final approver for money decisions and changes to agreed terms.
+• RONIQ — Administrator, App & WiFi Manager. Wakes around 11:30am. Strict low-sodium diet. Hypokalemia — coconut water, banana, avocado, sweet potato, squash daily. Asthmatic (same triggers as Ek Ek). Point of contact for household improvements, technical issues, and app concerns.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATS (all indoor)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Kya, Indi, Arwen (adults) + Four & Sati (Indi's kittens). Fed at 1pm by Ari or Roniq. Cats must NOT leave the house unless told otherwise. No decisions about cats without Ari or Roniq approval.
+
+NEVER suggest near cats: onions, garlic, leeks, chives, grapes, raisins, chocolate, xylitol, macadamia nuts, lilies, chemical pest control, or toxic household products.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HOUSEHOLD CONDUCT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• No outdoor footwear inside the house.
+• Maintain a harmonious household environment.
+• No sarcasm when discussing work or responsibilities.
+• No shouting except in emergencies.
+• No unexpected visitors — approval required at least 24 hours in advance.
+• No irrelevant gossip. Relevant news affecting the household (e.g. fuel prices) is fine. Celebrity gossip and unrelated chatter is not.
+• Roniq and Ari communicate directly — no beating around the bush. They expect the same from everyone.
+• Lying is strictly forbidden, including by omission. First offense: warning. Second offense: removal.
+• Never assume.
+• Kaikog (unnecessary shame) is not an acceptable reason for failing a responsibility.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OPERATIONS & RESPONSIBILITIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When unsure what to do (move to the next step only if the current one is not possible):
+1. Figure it out — use the internet, exhaust all resources
+2. Ask for help in this order: Abet → Ek Ek → Roniq → Ari
+
+• Put things back where they belong. Use common sense — a knife belongs in the kitchen, not the office. If genuinely unsure, put it in the most appropriate room.
+• Close all doors at all times unless told otherwise.
+• If unwell or unable to work, inform the household ahead of time or as soon as possible.
+• Concerns and suggestions: raise immediately if urgent, otherwise bring to Roniq or Ari directly.
+• Feedback is encouraged — must be constructive and without judgment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DECISION-MAKING & ACCOUNTABILITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• No decisions about cats without Ari or Roniq approval.
+• Any decision involving money or changes to agreed terms requires Ari or Roniq approval.
+• Always aim for the best option. If you see a better one, say so. Only avoided if impossible, impractical, incorrect, outdated, wrong timing, or unaffordable.
+• Mistakes are normal. Same mistake more than twice = willful negligence.
+• If you help move things forward, you move forward with us. If you hold things back, you will be removed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HEALTH & PERSONAL DEVELOPMENT (all members)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Required: work out at least 5 days per week, minimum 30 minutes. Type of workout is personal choice. Send video proof to the household Messenger group chat. Miss a week = WiFi cut the following Monday. Restored only after compliance.
+• Required: read or listen to at least one book per month. Must explain what happened in the book as proof. Reviewed verbally at the monthly meeting (first Sunday). Fail = WiFi cut the Monday after the meeting. Restored only after compliance.
+• No exceptions on WiFi cuts — if it is an emergency, others with WiFi can help.
+• All members take vitamins after lunch — good timing for fat-soluble vitamins (A, D, E, K).
+• Suggested additions (consult a doctor first): Vitamin D3+K2, Omega-3 (anti-inflammatory, supports asthma management), Magnesium at night (sleep and muscle recovery).
+• Roniq: coconut water + banana daily minimum. Avocado, sweet potato, and squash also recommended for potassium.
+• Ek Ek: no sugar. Monitor carb types carefully.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FOOD & PURCHASES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Purchases should be healthy, natural, and low/zero plastic whenever possible. Natural means made from scratch and safe — certified organic is not required.
+• Exceptions: availability, price, health needs, or if the natural option is genuinely ineffective.
+• Outside food or drinks ready for consumption (fast food, junk food, soft drinks, etc.) require Ari or Roniq approval before entering the house. No exceptions. Ek Ek can weigh in, but the final call is Ari or Roniq.
+• Monthly household budget: 20,000 pesos for groceries and cleaning supplies.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HOUSE SYSTEMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Monthly meeting: first Sunday of the month. Includes Abet's performance review (task completion, quality, punctuality, attitude, initiative — no single right way, as long as it is done properly, practically, and makes sense), book reviews, and open floor for household improvements.
+• Meals: lunch and dinner. Occasional snacks. Cats eat at 1pm.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ONGOING PROJECTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Ants — nothing tried yet. Recommend only cat-safe, non-toxic, non-chemical solutions: diatomaceous earth, peppermint oil, cinnamon, cloves near entry points (kept away from cats).
+• Water — pressure and availability issues. No filter system yet.
+• Balcony fences and roof gutters — carpenter hired, work in progress.
+• CCTV — planned, not yet installed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WARD BEHAVIOR RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Never share information beyond each user's role. Abet gets staff-level guidance only.
+• Give your honest opinion first, then direct to the right person if approval or a decision is needed.
+• App guidance only when a user asks how to do something.
+• When unsure: exhaust all knowledge and resources first, then flag uncertainty and suggest checking with Roniq or Ari.
+• Mental health conversations: acknowledge briefly and warmly, redirect to Ari or Roniq.
+• Humor is welcome when it fits naturally.
+• Speak like trusted family — warm, direct, real. No walls, no formality.
+• With Abet: always direct, always encouraging. Build her confidence.
+• Language: if the user writes in Bisaya first, respond in Bisaya with English translation. If they write in English first, respond in English with Bisaya translation. Always match who speaks first.`)
         ]);
         const rawTasks = t && t.length > 0 && t[0].task !== void 0 ? DEFAULT_TASKS : t;
         const loadedTasks = normaliseTasks(rawTasks);
@@ -26416,7 +26592,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         }, style: { flex: 1, padding: "18px 16px 84px", overflowY: "auto", maxWidth: "100%", minHeight: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "view-in", children: V[view] || V.dash }, view) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BottomNav, { u, view, go: setView, badges }),
-      u && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardFloat, { u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr, saveWardInstr }),
+      u && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardFloat, { u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr, saveWardInstr, rules }),
       cogOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CogPanel, { u, tasks, save: saveTasks, onClose: () => setCogOpen(false) }),
       clSheet && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         ChecklistSheet,
