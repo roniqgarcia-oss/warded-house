@@ -24043,6 +24043,9 @@ THE WARDED HOUSE APP
   function Workout({ u, workouts = [], save, getWC }) {
     const [sf, setSf] = (0, import_react.useState)(false);
     const [tab, setTab] = (0, import_react.useState)("mine");
+    const [filterMember, setFilterMember] = (0, import_react.useState)("all");
+    const [filterStatus, setFilterStatus] = (0, import_react.useState)("all");
+    const [filterWeek, setFilterWeek] = (0, import_react.useState)("this");
     const [form, setForm] = (0, import_react.useState)({ date: td(), duration: "", notes: "" });
     const [wErr, setWErr] = (0, import_react.useState)("");
     const log = () => {
@@ -25892,6 +25895,53 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         document.removeEventListener("visibilitychange", onVis);
         clearTimeout(guard);
       };
+    }, []);
+    (0, import_react.useEffect)(() => {
+      if (typeof window.storage !== "undefined") return;
+      const BASE = "https://wardedhouse-abe15-default-rtdb.asia-southeast1.firebasedatabase.app/wh3";
+      let es;
+      const connect = () => {
+        try {
+          es = new EventSource(`${BASE}.json`);
+          es.addEventListener("put", (e) => {
+            try {
+              const { path, data } = JSON.parse(e.data);
+              if (!path || path === "/") return;
+              const k = path.replace(/^\//, "");
+              if (k === "wh3_tasks" && Array.isArray(data)) setTasks(normaliseTasks(data));
+              else if (k === "wh3_ev") setEvents(data || []);
+              else if (k === "wh3_req") setReqs(data || []);
+              else if (k === "wh3_rules") setRules(data || DEFAULT_RULES);
+              else if (k === "wh3_work") setWork(data || []);
+              else if (k === "wh3_books") setBooks(data || []);
+              else if (k === "wh3_purch") setPurch(data || []);
+              else if (k === "wh3_wifi") setWifi(data || []);
+              else if (k === "wh3_rest") setRest(data || []);
+              else if (k === "wh3_pantry") setPantry(data || []);
+              else if (k === "wh3_cleanlog") setCleanLog(data || []);
+              else if (k === "wh3_visitors") setVisitors(data || []);
+              else if (k === "wh3_members" && Array.isArray(data)) {
+                setMemberSettings(data);
+                _MB = [...data];
+              } else if (k === "wh3_maint") setMaint(data || []);
+              else if (k === "wh3_pins") setPins(data || {});
+              else if (k === "wh3_unabsences") setUnabsences(data || []);
+              else if (k === "wh3_pay_overrides") setOverrides(data || []);
+              else if (k === "wh3_clockin") setClockIn(data);
+              else if (k === "wh3_today_meta") setTodayMeta(data && data.date === td() ? data : null);
+            } catch (err) {
+            }
+          });
+          es.onerror = () => {
+            es?.close();
+            setTimeout(connect, 5e3);
+          };
+        } catch (err) {
+          setTimeout(connect, 1e4);
+        }
+      };
+      connect();
+      return () => es?.close();
     }, []);
     const sv = (k, fn) => (v) => {
       fn(v);
