@@ -22546,16 +22546,27 @@ THE WARDED HOUSE APP
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `@keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}` })
     ] });
   }
-  function WardFloat({ u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC }) {
+  function WardFloat({ u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr = "", saveWardInstr = () => {
+  } }) {
     const [open, setOpen] = (0, import_react.useState)(false);
+    const [wardTab, setWardTab] = (0, import_react.useState)("chat");
     const [msgs, setMsgs] = (0, import_react.useState)([]);
     const [input, setInput] = (0, import_react.useState)("");
     const [thinking, setThinking] = (0, import_react.useState)(false);
     const [err, setErr] = (0, import_react.useState)("");
+    const [instrDraft, setInstrDraft] = (0, import_react.useState)("");
+    const [instrSaved, setInstrSaved] = (0, import_react.useState)(false);
     const bottomRef = (0, import_react.useRef)(null);
+    const [btnPos, setBtnPos] = (0, import_react.useState)({ x: 16, y: 82 });
+    const dragRef = (0, import_react.useRef)(null);
+    const dragging = (0, import_react.useRef)(false);
+    const startPos = (0, import_react.useRef)({});
     (0, import_react.useEffect)(() => {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [msgs, thinking]);
+    (0, import_react.useEffect)(() => {
+      if (wardTab === "settings") setInstrDraft(wardInstr);
+    }, [wardInstr]);
     const buildSnapshot = () => {
       try {
         const today = td();
@@ -22598,6 +22609,19 @@ THE WARDED HOUSE APP
         return `User: ${u.name}`;
       }
     };
+    const WARD_DAILY_LIMIT = 50;
+    const getUsageKey = () => `wh3_ward_usage_${u.id}_${td()}`;
+    const checkAndIncrLimit = async () => {
+      try {
+        const key = getUsageKey();
+        const cur = await DB.get(key, 0);
+        if (cur >= WARD_DAILY_LIMIT) return false;
+        await DB.set(key, cur + 1);
+        return true;
+      } catch {
+        return true;
+      }
+    };
     const send = async () => {
       const text = input.trim();
       if (!text || thinking) return;
@@ -22607,13 +22631,60 @@ THE WARDED HOUSE APP
       const newMsgs = [...msgs, userMsg];
       setMsgs(newMsgs);
       setThinking(true);
+      const allowed = await checkAndIncrLimit();
+      if (!allowed) {
+        setThinking(false);
+        setErr("ward_resting");
+        return;
+      }
       try {
         const snapshot = buildSnapshot();
-        const systemPrompt = `You are Ward, the household AI concierge for The Warded House in Dumaguete, Philippines. You help manage a household of 4: Abet (household staff), Ek Ek (food/household manager), Ari (admin/finance), and Roniq (admin/WiFi). Be warm, practical, and concise. You have access to live household data:
+        const instrSection = wardInstr ? `
 
-${snapshot}
+HOUSEHOLD INSTRUCTIONS (follow these carefully):
+${wardInstr}` : "";
+        const systemPrompt = `You are Ward \u2014 the household AI for The Warded House in Dumaguete, Philippines. You serve three roles at once, switching naturally depending on what the person needs:
 
-Answer naturally. For task reminders, finances, schedules, or household advice, be specific with the data you have. Keep responses brief \u2014 this is a mobile app.`;
+AS A COACH: You push people toward their best. You celebrate wins, no matter how small. When someone is falling short, you don't lecture \u2014 you ask the right questions and help them find their way back. You hold people accountable with care, not judgment. You help with fitness, reading habits, mindset, emotional processing, and building better daily routines.
+
+AS A CONCIERGE: You know this household inside and out. You handle logistics \u2014 rules, schedules, pay periods, approvals, rest days, meeting dates, purchase processes. You give clear, accurate answers with no guesswork.
+
+AS A TEAMMATE: You're not above anyone here. You're real, honest, and genuinely care how everyone is doing. You challenge, encourage, and check in. You tell people what they need to hear \u2014 with respect and warmth.
+
+WHAT YOU NEVER DO: Shame, belittle, or talk down to anyone. Be sarcastic or dismissive. Give vague non-answers. Treat a rule as more important than the person.
+
+AREAS OF EXPERTISE:
+- CLEANING: Natural, non-toxic solutions (vinegar, baking soda, castile soap, citrus). Efficient routines. Cat-safe products only.
+- MAINTENANCE: Spot problems early. Practical advice on what to DIY vs when to call a professional.
+- COOKING: Healthy, whole, minimally processed. Practical for Dumaguete/Philippines. ABSOLUTELY NO ingredients toxic to cats (onions, garlic, leeks, chives, grapes, raisins, chocolate, xylitol, macadamia nuts \u2014 flag these always). Low to zero plastic. Locally available ingredients preferred.
+
+THE HOUSEHOLD:
+- Abet \u2014 Household Staff. Rest day Wednesday. Reports to Ek Ek.
+- Ek Ek \u2014 Food & Household Manager. Abet's direct manager.
+- Ari \u2014 Administrator \xB7 Finance.
+- Roniq \u2014 Administrator \xB7 App & WiFi Manager.
+
+THE MISSION: This household is intentionally working toward growth in four areas:
+\u2022 Physical \u2014 fitness, nutrition, movement, recovery
+\u2022 Emotional \u2014 honest communication, self-awareness, resilience
+\u2022 Financial \u2014 smart decisions, accountability, building toward something
+\u2022 Mental \u2014 reading, learning, expanding perspective
+
+OPERATIONAL DETAILS:
+- Abet's salary: \u20B18,500/month \xB7 \u20B14,250 per pay period (paid 1st & 15th)
+- Cash advance: up to \u20B14,250 per period, approved by Ari or Roniq
+- Workouts: 30 min minimum \xB7 5 days/week \xB7 Ari/Roniq verify \xB7 miss a week = WiFi cut Monday
+- Books: 1 per month \xB7 verbal review at monthly house meeting (first Sunday) \xB7 fail = WiFi cut Monday
+- Purchases: Ek Ek approves first \u2192 Ari or Roniq gives final approval
+- Rest day swaps: submit in app \u2192 Ek Ek approves \u2192 Ari or Roniq final approval
+- Monthly house meeting: first Sunday of every month${instrSection}
+
+LIVE HOUSEHOLD DATA:
+\${snapshot}
+
+Today is \${new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}.
+
+Respond in whatever language the person writes in \u2014 English or Bisaya/Filipino. Be concise when brevity serves. Take space when they need it. Always lead with the person, not the policy.`;
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" },
@@ -22632,13 +22703,64 @@ Answer naturally. For task reminders, finances, schedules, or household advice, 
         setThinking(false);
       }
     };
+    const onDragStart = (e) => {
+      dragging.current = false;
+      const touch = e.touches ? e.touches[0] : e;
+      startPos.current = { mx: touch.clientX, my: touch.clientY, bx: btnPos.x, by: btnPos.y };
+      dragRef.current = { move: (ev) => {
+        const t = ev.touches ? ev.touches[0] : ev;
+        const dx = t.clientX - startPos.current.mx, dy = t.clientY - startPos.current.my;
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragging.current = true;
+        if (dragging.current) {
+          const nx = Math.max(8, Math.min(window.innerWidth - 54, startPos.current.bx + (t.clientX - startPos.current.mx - dx + dx)));
+          const ny = Math.max(8, Math.min(window.innerHeight - 54, startPos.current.by + (t.clientY - startPos.current.my)));
+          setBtnPos({ x: Math.max(8, Math.min(window.innerWidth - 54, t.clientX - 23)), y: Math.max(68, Math.min(window.innerHeight - 54, window.innerHeight - t.clientY - 23)) });
+        }
+      }, end: () => {
+        document.removeEventListener("mousemove", dragRef.current.move);
+        document.removeEventListener("mouseup", dragRef.current.end);
+        document.removeEventListener("touchmove", dragRef.current.move);
+        document.removeEventListener("touchend", dragRef.current.end);
+      } };
+      document.addEventListener("mousemove", dragRef.current.move);
+      document.addEventListener("mouseup", dragRef.current.end);
+      document.addEventListener("touchmove", dragRef.current.move, { passive: true });
+      document.addEventListener("touchend", dragRef.current.end);
+    };
+    const [showSessionChoice, setShowSessionChoice] = (0, import_react.useState)(false);
+    const openWard = () => {
+      if (!dragging.current) {
+        if (msgs.length > 0) {
+          setShowSessionChoice(true);
+        } else {
+          setOpen(true);
+        }
+      }
+    };
+    if (showSessionChoice) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "#141410", border: "1px solid rgba(212,146,74,0.2)", borderRadius: 16, padding: 24, maxWidth: 300, width: "100%" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, color: "#D4924A", textAlign: "center", marginBottom: 6 }, children: "Welcome back" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13, textAlign: "center", marginBottom: 20 }, children: "You have an ongoing conversation with Ward." }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: () => {
+          setShowSessionChoice(false);
+          setOpen(true);
+        }, children: "Continue conversation" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => {
+          setMsgs([]);
+          setShowSessionChoice(false);
+          setOpen(true);
+        }, children: "Start new session" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setShowSessionChoice(false), children: "Cancel" })
+      ] })
+    ] }) });
     if (!open) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       "button",
       {
-        onClick: () => setOpen(true),
-        style: { position: "fixed", bottom: 82, right: 16, width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 30, transition: "transform 0.15s" },
-        onTouchStart: (e) => e.currentTarget.style.transform = "scale(0.93)",
-        onTouchEnd: (e) => e.currentTarget.style.transform = "scale(1)",
+        onMouseDown: onDragStart,
+        onTouchStart: onDragStart,
+        onClick: openWard,
+        style: { position: "fixed", bottom: btnPos.y, left: btnPos.x, width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 30, touchAction: "none" },
         children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 20, c: "#0A0907" })
       }
     );
@@ -22647,15 +22769,43 @@ Answer naturally. For task reminders, finances, schedules, or household advice, 
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, fontWeight: 600, color: "#D4924A" }, children: "Ward" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, color: "#5A4E3A" }, children: "Household AI Concierge" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 3 }, children: ["chat", "settings"].map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
+            if (t === "settings") {
+              setWardTab("settings");
+              setInstrDraft(wardInstr);
+            } else {
+              setWardTab(t);
+            }
+          }, style: { background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: wardTab === t ? 700 : 400, color: wardTab === t ? "#D4924A" : "#5A4E3A", textTransform: "capitalize", padding: 0, borderBottom: wardTab === t ? "1px solid #D4924A" : "1px solid transparent", paddingBottom: 1 }, children: t }, t)) })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
           setOpen(false);
-          setMsgs([]);
           setErr("");
         }, style: { background: "none", border: "none", color: "#5A4E3A", cursor: "pointer", fontSize: 22, padding: "4px 8px" }, children: "\xD7" })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
+      wardTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "20px 16px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#D4924A", marginBottom: 6 }, children: "Ward Instructions" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", marginBottom: 14, lineHeight: 1.6 }, children: "Tell Ward about your household \u2014 values, preferences, routines, things to avoid. Ward will use this in every conversation." }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "textarea",
+          {
+            value: instrDraft,
+            onChange: (e) => setInstrDraft(e.target.value),
+            placeholder: "Add household-specific context Ward should always know:\n\u2022 Cats: Kya, Indi, Arwen \u2014 flag anything toxic to them\n\u2022 Transitioning to zero/low plastic and non-toxic products\n\u2022 Healthier lifestyle focus \u2014 less processed food, more whole foods\n\u2022 We shop at local Dumaguete markets (prefer locally available ingredients)\n\u2022 Abet is lactose intolerant (if applicable)\n\u2022 Preferred cleaning: vinegar, baking soda, castile soap\n\u2022 [Add anything else Ward should always remember]",
+            rows: 12,
+            style: { width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 13, padding: "12px 14px", resize: "vertical", outline: "none", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.6, marginBottom: 12 }
+          }
+        ),
+        u.canApprove ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 10 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: () => {
+            saveWardInstr(instrDraft);
+            setInstrSaved(true);
+            setTimeout(() => setInstrSaved(false), 2e3);
+          }, sx: { flex: 1 }, children: instrSaved ? "\u2713 Saved" : "Save Instructions" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setInstrDraft(wardInstr), children: "Reset" })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", fontStyle: "italic" }, children: "Only Ari or Roniq can edit Ward's instructions." })
+      ] }),
+      wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
         msgs.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", paddingTop: 40 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 32, marginBottom: 12 }, children: "\u{1F3F0}" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, color: "#D4924A", marginBottom: 6 }, children: [
@@ -22669,27 +22819,36 @@ Answer naturally. For task reminders, finances, schedules, or household advice, 
         ] }),
         msgs.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "82%", padding: "10px 14px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? "rgba(212,146,74,0.15)" : "rgba(255,255,255,0.04)", border: m.role === "user" ? "1px solid rgba(212,146,74,0.25)" : "1px solid rgba(255,255,255,0.07)", color: m.role === "user" ? "#D4924A" : "#C8C0B0", fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-wrap" }, children: m.content }) }, i)),
         thinking && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6, padding: "10px 14px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "18px 18px 18px 4px", width: "fit-content" }, children: [0, 1, 2].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 6, height: 6, borderRadius: "50%", background: "#5A4E3A", animation: "wardDot 1.2s ease-in-out infinite", animationDelay: i * 0.2 + "s" } }, i)) }),
-        err && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center" }, children: err }),
+        err && err === "ward_resting" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px 16px", background: "rgba(212,146,74,0.05)", border: "1px solid rgba(212,146,74,0.1)", borderRadius: 14, margin: "0 8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 28, marginBottom: 8 }, children: "\u{1F319}" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#D4924A", marginBottom: 4 }, children: "Ward needs to rest" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: "#5A4E3A", fontSize: 12, lineHeight: 1.6 }, children: [
+            "You've reached your ",
+            WARD_DAILY_LIMIT,
+            " message daily limit. Ward will be back at midnight. You can still scroll through your conversation above."
+          ] })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center" }, children: err }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: bottomRef })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", gap: 10, alignItems: "flex-end", flexShrink: 0, paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }, children: [
+      wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", gap: 10, alignItems: "flex-end", flexShrink: 0, paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "textarea",
           {
             value: input,
             onChange: (e) => setInput(e.target.value),
             onKeyDown: (e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === "Enter" && !e.shiftKey && err !== "ward_resting") {
                 e.preventDefault();
                 send();
               }
             },
-            placeholder: "Ask Ward anything...",
+            disabled: err === "ward_resting",
+            placeholder: err === "ward_resting" ? "Ward is resting until midnight..." : "Ask Ward anything...",
             rows: 1,
             style: { flex: 1, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 14, padding: "10px 14px", resize: "none", outline: "none", maxHeight: 100, overflowY: "auto", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.5 }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: send, disabled: !input.trim() || thinking, style: { width: 40, height: 40, borderRadius: "50%", background: input.trim() && !thinking ? "linear-gradient(135deg,#C4893A,#D4924A)" : "rgba(255,255,255,0.05)", border: "none", cursor: input.trim() && !thinking ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "upload", s: 16, c: input.trim() && !thinking ? "#0A0907" : "#3A3428" }) })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: send, disabled: !input.trim() || thinking || err === "ward_resting", style: { width: 40, height: 40, borderRadius: "50%", background: input.trim() && !thinking ? "linear-gradient(135deg,#C4893A,#D4924A)" : "rgba(255,255,255,0.05)", border: "none", cursor: input.trim() && !thinking ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "upload", s: 16, c: input.trim() && !thinking ? "#0A0907" : "#3A3428" }) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: ".wardDot{animation:wardDot 1.2s ease-in-out infinite}@keyframes wardDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}" })
     ] });
@@ -25970,13 +26129,14 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const [clEditTask, setClEditTask] = (0, import_react.useState)(null);
     const [clPermPrompt, setClPermPrompt] = (0, import_react.useState)(false);
     const [todayMeta, setTodayMeta] = (0, import_react.useState)(null);
+    const [wardInstr, setWardInstr] = (0, import_react.useState)("");
     _MB = memberSettings;
     const [ready, setReady] = (0, import_react.useState)(false);
     const [loadError, setLoadError] = (0, import_react.useState)(null);
     const [refreshing, setRefreshing] = (0, import_react.useState)(false);
     const doLoad = async (silent) => {
       try {
-        const [t, e, r, ru, w, b, p, rd, pt, cl, vi, wl, ms2, ma, pn, ua, ov, ci, tm] = await Promise.all([
+        const [t, e, r, ru, w, b, p, rd, pt, cl, vi, wl, ms2, ma, pn, ua, ov, ci, tm, wi] = await Promise.all([
           DB.get("wh3_tasks", DEFAULT_TASKS),
           DB.get("wh3_ev", []),
           DB.get("wh3_req", []),
@@ -25995,7 +26155,8 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           DB.get("wh3_unabsences", []),
           DB.get("wh3_pay_overrides", []),
           DB.get("wh3_clockin", null),
-          DB.get("wh3_today_meta", null)
+          DB.get("wh3_today_meta", null),
+          DB.get("wh3_wardinstr", "")
         ]);
         const rawTasks = t && t.length > 0 && t[0].task !== void 0 ? DEFAULT_TASKS : t;
         const loadedTasks = normaliseTasks(rawTasks);
@@ -26096,7 +26257,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       fn(v);
       DB.set(k, v);
     };
-    const saveTasks = sv("wh3_tasks", setTasks), saveEv = sv("wh3_ev", setEvents), saveReqs = sv("wh3_req", setReqs), saveRules = sv("wh3_rules", setRules), saveWork = sv("wh3_work", setWork), saveBooks = sv("wh3_books", setBooks), savePurch = sv("wh3_purch", setPurch), saveRest = sv("wh3_rest", setRest), savePantry = sv("wh3_pantry", setPantry), saveCleanLog = sv("wh3_cleanlog", setCleanLog), saveVisitors = sv("wh3_visitors", setVisitors), saveMembers = sv("wh3_members", setMemberSettings), saveMaint = sv("wh3_maint", setMaint), savePins = sv("wh3_pins", setPins), saveWifi = sv("wh3_wifi", setWifi), saveUnabsences = sv("wh3_unabsences", setUnabsences), saveOverrides = sv("wh3_pay_overrides", setOverrides), saveClockIn = sv("wh3_clockin", setClockIn), saveTodayMeta = sv("wh3_today_meta", setTodayMeta);
+    const saveTasks = sv("wh3_tasks", setTasks), saveEv = sv("wh3_ev", setEvents), saveReqs = sv("wh3_req", setReqs), saveRules = sv("wh3_rules", setRules), saveWork = sv("wh3_work", setWork), saveBooks = sv("wh3_books", setBooks), savePurch = sv("wh3_purch", setPurch), saveRest = sv("wh3_rest", setRest), savePantry = sv("wh3_pantry", setPantry), saveCleanLog = sv("wh3_cleanlog", setCleanLog), saveVisitors = sv("wh3_visitors", setVisitors), saveMembers = sv("wh3_members", setMemberSettings), saveMaint = sv("wh3_maint", setMaint), savePins = sv("wh3_pins", setPins), saveWardInstr = sv("wh3_wardinstr", setWardInstr), saveWifi = sv("wh3_wifi", setWifi), saveUnabsences = sv("wh3_unabsences", setUnabsences), saveOverrides = sv("wh3_pay_overrides", setOverrides), saveClockIn = sv("wh3_clockin", setClockIn), saveTodayMeta = sv("wh3_today_meta", setTodayMeta);
     const logClean = (entry) => {
       const updated = [...cleanLog, entry];
       saveCleanLog(updated.length > 500 ? updated.slice(-500) : updated);
@@ -26255,7 +26416,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         }, style: { flex: 1, padding: "18px 16px 84px", overflowY: "auto", maxWidth: "100%", minHeight: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "view-in", children: V[view] || V.dash }, view) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BottomNav, { u, view, go: setView, badges }),
-      u && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardFloat, { u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC }),
+      u && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardFloat, { u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr, saveWardInstr }),
       cogOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CogPanel, { u, tasks, save: saveTasks, onClose: () => setCogOpen(false) }),
       clSheet && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         ChecklistSheet,
