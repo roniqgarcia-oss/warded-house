@@ -22616,7 +22616,7 @@ ${snapshot}
 Answer naturally. For task reminders, finances, schedules, or household advice, be specific with the data you have. Keep responses brief \u2014 this is a mobile app.`;
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
-          headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" },
+          headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" },
           body: JSON.stringify({ model: "llama-3.3-70b-versatile", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
         });
         if (!res.ok) {
@@ -25186,7 +25186,7 @@ Answer naturally. For task reminders, finances, schedules, or household advice, 
       if (!name.trim()) return;
       setClassifying(true);
       try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 15,
           messages: [{ role: "user", content: `Classify this ingredient into exactly one category. Consider all cultural names, local Filipino/Bisaya/Cebuano names, regional variations, and synonyms (e.g. malunggay=moringa=Vegetable, tulingan=mackerel tuna=Protein, kamote=sweet potato=Grain & Carb, gata=coconut milk=Condiment). Reply with ONLY the category name, nothing else.
@@ -25222,7 +25222,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       if (ingRecipes[item.id]) return;
       setIngLoading((l) => ({ ...l, [item.id]: true }));
       try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
         const d = await res.json();
         setIngRecipes((r) => ({ ...r, [item.id]: d.content && d.content[0] ? d.content[0].text : "Could not load recipes." }));
       } catch (e) {
@@ -25237,7 +25237,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       setRecipeResult("");
       try {
         const ingList = items.map((i) => `${i.name}${i.quantity ? ` (${i.quantity} ${i.unit})` : ""}`).join(", ");
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 1500,
           tools: [{ "type": "web_search_20250305", "name": "web_search" }],
