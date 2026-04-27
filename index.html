@@ -6,6 +6,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0A0907">
+  <link rel="manifest" href="/warded-house/manifest.json">
+  <meta name="apple-mobile-web-app-title" content="Warded">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>The Warded House</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -21837,13 +21840,14 @@
   var CR = "#F0EAD9";
   var DIM = "#7A7060";
   var CARD = "#141420";
+  var GRN = GRN;
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var DS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   var PCATS = ["Food & Groceries", "Cleaning Supplies", "Household Items", "Personal / Medical", "Maintenance", "Other"];
   var MB = [
     { id: "abet", name: "Abet", role: "Household Staff", color: "#C9A84C", isStaff: true, canEdit: false, canApprove: false, canApproveFood: false, isFoodManager: false, isWifi: false, canCal: false },
     { id: "ekek", name: "Ek Ek", role: "Food & Household Manager", color: "#9B82C4", isStaff: false, canEdit: false, canApprove: false, canApproveFood: true, isFoodManager: true, isWifi: false, canCal: true },
-    { id: "ari", name: "Ari", role: "Administrator \xB7 Finance", color: "#82B896", isStaff: false, canEdit: true, canApprove: true, canApproveFood: false, isFoodManager: false, isWifi: false, canCal: true },
+    { id: "ari", name: "Ari", role: "Administrator \xB7 Finance", color: GRN, isStaff: false, canEdit: true, canApprove: true, canApproveFood: false, isFoodManager: false, isWifi: false, canCal: true },
     { id: "roniq", name: "Roniq", role: "App & WiFi Manager", color: "#C47882", isStaff: false, canEdit: true, canApprove: true, canApproveFood: false, isFoodManager: false, isWifi: true, canCal: true }
   ];
   var _MB = [...MB];
@@ -22095,7 +22099,7 @@ THE WARDED HOUSE APP
         });
       }
     }
-    ["2025-01-05", "2025-02-02", "2025-03-02", "2025-04-06", "2025-05-04", "2025-06-01", "2025-07-06", "2025-08-03", "2025-09-07", "2025-10-05", "2025-11-02", "2025-12-07", "2026-01-04", "2026-02-01", "2026-03-01", "2026-04-05", "2026-05-03", "2026-06-07", "2026-07-05", "2026-08-02", "2026-09-06", "2026-10-04", "2026-11-01", "2026-12-06"].forEach((date) => ev.push({ id: "meet_" + date, title: "\u25AA House Meeting", date, color: "#82B896", sys: true, concerns: ["all"], time: "10:00", note: "Monthly household meeting \u2014 everyone required" }));
+    ["2025-01-05", "2025-02-02", "2025-03-02", "2025-04-06", "2025-05-04", "2025-06-01", "2025-07-06", "2025-08-03", "2025-09-07", "2025-10-05", "2025-11-02", "2025-12-07", "2026-01-04", "2026-02-01", "2026-03-01", "2026-04-05", "2026-05-03", "2026-06-07", "2026-07-05", "2026-08-02", "2026-09-06", "2026-10-04", "2026-11-01", "2026-12-06"].forEach((date) => ev.push({ id: "meet_" + date, title: "\u25AA House Meeting", date, color: GRN, sys: true, concerns: ["all"], time: "10:00", note: "Monthly household meeting \u2014 everyone required" }));
     return ev;
   })();
   var DB = {
@@ -22111,7 +22115,7 @@ THE WARDED HOUSE APP
     },
     async set(k, v) {
       try {
-        await fetch("https://wardedhouse-abe15-default-rtdb.asia-southeast1.firebasedatabase.app/wh3/"+encodeURIComponent(k)+".json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(v)});
+        await fetch("https://wardedhouse-abe15-default-rtdb.asia-southeast1.firebasedatabase.app/wh3/"+encodeURIComponent(k)+".json",{ method: "PUT", headers: {"Content-Type":"application/json"}, body: JSON.stringify(v) });
       } catch (e) {
       }
     }
@@ -22338,7 +22342,7 @@ THE WARDED HOUSE APP
   };
   var Btn = ({ children, onClick, v = "gold", sm, sx = {}, disabled }) => {
     const base = { border: "none", borderRadius: 8, cursor: disabled ? "not-allowed" : "pointer", fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 600, fontSize: sm ? 12 : 13, letterSpacing: "0.03em", padding: sm ? "6px 14px" : "9px 20px", transition: "all 0.15s", opacity: disabled ? 0.45 : 1, userSelect: "none", WebkitUserSelect: "none", ...sx };
-    const vs = { gold: { background: G, color: "#0A0907" }, outline: { background: "transparent", border: "1px solid rgba(212,146,74,0.3)", color: G }, ghost: { background: "rgba(255,255,255,0.05)", color: CR, border: "1px solid rgba(255,255,255,0.08)" }, danger: { background: "rgba(201,112,96,0.12)", border: "1px solid rgba(201,112,96,0.3)", color: "#C97060" }, success: { background: "rgba(130,184,150,0.12)", border: "1px solid rgba(130,184,150,0.3)", color: "#82B896" } };
+    const vs = { gold: { background: G, color: "#0A0907" }, outline: { background: "transparent", border: "1px solid rgba(212,146,74,0.3)", color: G }, ghost: { background: "rgba(255,255,255,0.05)", color: CR, border: "1px solid rgba(255,255,255,0.08)" }, danger: { background: "rgba(201,112,96,0.12)", border: "1px solid rgba(201,112,96,0.3)", color: "#C97060" }, success: { background: "rgba(130,184,150,0.12)", border: "1px solid rgba(130,184,150,0.3)", color: GRN } };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: { ...base, ...vs[v] || vs.gold }, onClick: disabled ? void 0 : onClick, children });
   };
   var Card = ({ children, sx = {} }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "wh-card", style: { background: CARD, border: "1px solid rgba(212,146,74,0.08)", borderRadius: 18, padding: 22, ...sx }, children });
@@ -22827,14 +22831,30 @@ IMPORTANT BEHAVIOR RULES:
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setShowSessionChoice(false), children: "Cancel" })
       ] })
     ] }) });
-    if (!open) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    const alertCount = (0, import_react.useMemo)(() => {
+      const h = (/* @__PURE__ */ new Date()).getHours();
+      let n = 0;
+      if (u.isStaff && h >= 9 && clockIn?.date !== td()) n++;
+      if (u.canApprove) {
+        if (requests.filter((r) => r.status === "pending_admin").length) n++;
+        if (purchases.filter((p) => p.status === "pending_admin").length) n++;
+        const wc = getWC?.(u.id) || {};
+        if (!wc.compliant && [5, 6].includes((/* @__PURE__ */ new Date()).getDay())) n++;
+      }
+      return n;
+    }, [clockIn, requests, purchases, u]);
+    if (!open) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
       "button",
       {
         onMouseDown: onDragStart,
         onTouchStart: onDragStart,
         onClick: openWard,
-        style: { position: "fixed", bottom: btnPos.y, left: btnPos.x, width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 30, touchAction: "none" },
-        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 20, c: "#0A0907" })
+        style: { position: "fixed", bottom: btnPos.y, left: btnPos.x, height: 40, paddingLeft: 12, paddingRight: 16, borderRadius: 20, background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", gap: 7, zIndex: 30, touchAction: "none", whiteSpace: "nowrap" },
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 16, c: "#0A0907" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, fontWeight: 700, color: "#0A0907", letterSpacing: "0.03em" }, children: "Talk to Ward" }),
+          alertCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { position: "absolute", top: -4, right: -4, width: 18, height: 18, borderRadius: "50%", background: "#C97060", border: "2px solid #0A0907", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#fff" }, children: alertCount })
+        ]
       }
     );
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "fixed", inset: 0, background: "#0A0907", zIndex: 50, display: "flex", flexDirection: "column" }, children: [
@@ -22842,7 +22862,7 @@ IMPORTANT BEHAVIOR RULES:
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, fontWeight: 600, color: "#D4924A" }, children: "Ward" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 3 }, children: ["chat", "settings"].map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 3 }, children: (u.canApprove ? ["chat", "settings"] : ["chat"]).map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
             if (t === "settings") {
               setWardTab("settings");
               setInstrDraft(wardInstr);
@@ -22962,7 +22982,8 @@ IMPORTANT BEHAVIOR RULES:
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.07)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: out, style: { background: "none", border: "none", color: "#3A3530", fontSize: 11, cursor: "pointer", letterSpacing: "0.09em", textTransform: "uppercase" }, children: "\u2190 Switch Member" }) })
     ] });
   }
-  function Dash({ u, workouts, books, events, saveEvents, requests, tasks, purchases, restdays, unabsences, maint = [], visitors = [], clockIn, overrides = [], getWC, getBC, go, badges }) {
+  function Dash({ u, workouts, books, events, saveEvents, requests, tasks, purchases, restdays, unabsences, maint = [], visitors = [], clockIn, saveClockIn = () => {
+  }, overrides = [], getWC, getBC, go, badges }) {
     const now = /* @__PURE__ */ new Date(), hr = now.getHours();
     const greet = hr < 12 ? "Good morning" : hr < 17 ? "Good afternoon" : "Good evening";
     const restEvs = restdays.filter((r) => r.status === "approved").flatMap((r) => {
@@ -22970,7 +22991,7 @@ IMPORTANT BEHAVIOR RULES:
         return [{ id: "re_" + r.id, title: "\u263D Abet \u2013 Absent", date: r.requestedDate, color: "#C97060", sys: true, note: r.reason }];
       }
       const evs = [{ id: "re_" + r.id, title: "\u263D Abet \u2013 Rest Day (Swap)", date: r.swapDate, color: "#7A9BBF", sys: true, note: `Wed ${fs(r.requestedDate)} \u2192 works instead` }];
-      evs.push({ id: "re_work_" + r.id, title: "Abet \u2013 Works Today (Swap)", date: r.requestedDate, color: "#82B896", sys: true, note: `Rest day moved to ${fs(r.swapDate)}` });
+      evs.push({ id: "re_work_" + r.id, title: "Abet \u2013 Works Today (Swap)", date: r.requestedDate, color: GRN, sys: true, note: `Rest day moved to ${fs(r.swapDate)}` });
       return evs;
     });
     const _swappedWeds = new Set(restdays.filter((r) => r.status === "approved" && r.type === "swap").map((r) => r.requestedDate));
@@ -23007,7 +23028,7 @@ IMPORTANT BEHAVIOR RULES:
     const calDim = new Date(calYr, calMo + 1, 0).getDate();
     const calFd = new Date(calYr, calMo, 1).getDay();
     const calDs = (d) => `${calYr}-${String(calMo + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    const ECOLORS = [G, "#7A9BBF", "#82B896", "#C47882", "#C97060", "#82B4B8"];
+    const ECOLORS = [G, "#7A9BBF", GRN, "#C47882", "#C97060", "#82B4B8"];
     const addEvent = () => {
       if (!evForm.title.trim() || !evForm.date) return;
       saveEvents([...events, { id: "e" + Date.now(), ...evForm, by: u.id }]);
@@ -23038,8 +23059,8 @@ IMPORTANT BEHAVIOR RULES:
             "."
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 6, flexShrink: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: isOnline ? "#82B896" : "#C9A84C", boxShadow: isOnline ? "0 0 6px rgba(130,184,150,0.7)" : "0 0 6px rgba(201,160,76,0.6)", flexShrink: 0 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: isOnline ? "#82B896" : "#C9A84C", fontWeight: 500 }, children: isOnline ? "Live" : "Offline" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: isOnline ? GRN : "#C9A84C", boxShadow: isOnline ? "0 0 6px rgba(130,184,150,0.7)" : "0 0 6px rgba(201,160,76,0.6)", flexShrink: 0 } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: isOnline ? GRN : "#C9A84C", fontWeight: 500 }, children: isOnline ? "Live" : "Offline" })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 13, marginTop: 0 }, children: "Here's the household at a glance." })
@@ -23061,16 +23082,16 @@ IMPORTANT BEHAVIOR RULES:
         u.canApprove && cashP > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "danger", sm: true, onClick: () => go("cash"), children: "Cash" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 9, marginBottom: 24 }, children: (u.isStaff ? [
-        { l: "Tasks Done", v: `${doneTasks}/${dueTodayCount}`, s: "today", c: doneTasks === dueTodayCount && dueTodayCount > 0 ? "#82B896" : G, to: "clean" },
+        { l: "Tasks Done", v: `${doneTasks}/${dueTodayCount}`, s: "today", c: doneTasks === dueTodayCount && dueTodayCount > 0 ? GRN : G, to: "clean" },
         { l: "Available Credit", v: `\u20B1${Math.max(0, 4250 - spent).toLocaleString()}`, s: "this period", c: G, to: "cash" },
-        { l: "Upcoming Pay", v: `\u20B1${_upcomingPay.toLocaleString()}`, s: _nowPeriod === 1 ? "due 15th" : "due 1st", c: "#82B896", to: "payinvoice" },
-        { l: "Clock-in", v: todayClockIn || "\u2014", s: todayClockIn ? "today" : "not clocked in", c: todayClockIn ? "#82B896" : "#C97060", to: "clean" },
-        { l: "Workouts This Week", v: `${getWC(u.id).sessions}/5`, s: getWC(u.id).compliant ? "\u2713 compliant" : "sessions logged", c: getWC(u.id).compliant ? "#82B896" : "#C9A84C", to: "trackers" },
+        { l: "Upcoming Pay", v: `\u20B1${_upcomingPay.toLocaleString()}`, s: _nowPeriod === 1 ? "due 15th" : "due 1st", c: GRN, to: "payinvoice" },
+        { l: "Clock-in", v: todayClockIn || "\u2014", s: todayClockIn ? "today" : "not clocked in", c: todayClockIn ? GRN : "#C97060", to: "clean" },
+        { l: "Workouts This Week", v: `${getWC(u.id).sessions}/5`, s: getWC(u.id).compliant ? "\u2713 compliant" : "sessions logged", c: getWC(u.id).compliant ? GRN : "#C9A84C", to: "trackers" },
         { l: "Rest Requests", v: rdAd, s: "pending approval", c: rdAd > 0 ? "#C9A84C" : DIM, to: "rest" }
       ] : [
-        { l: "Tasks Done", v: `${doneTasks}/${dueTodayCount}`, s: "today", c: doneTasks === dueTodayCount && dueTodayCount > 0 ? "#82B896" : G, to: "clean" },
-        { l: "Advance Pending", v: cashP, s: "requests", c: cashP > 0 ? "#C97060" : "#82B896", to: "cash" },
-        { l: "Purchases", v: pEk + pAd, s: "need approval", c: pEk + pAd > 0 ? "#C97060" : "#82B896", to: "shop" },
+        { l: "Tasks Done", v: `${doneTasks}/${dueTodayCount}`, s: "today", c: doneTasks === dueTodayCount && dueTodayCount > 0 ? GRN : G, to: "clean" },
+        { l: "Advance Pending", v: cashP, s: "requests", c: cashP > 0 ? "#C97060" : GRN, to: "cash" },
+        { l: "Purchases", v: pEk + pAd, s: "need approval", c: pEk + pAd > 0 ? "#C97060" : GRN, to: "shop" },
         { l: "Abet's Credit", v: `\u20B1${(4250 - spent).toLocaleString()}`, s: "available this period", c: G, to: "cash" },
         { l: "Maintenance", v: maintOpen, s: "open issues", c: maintOpen > 0 ? "#C9A84C" : DIM, to: "maint" },
         { l: "Visitors", v: viP, s: "pending", c: viP > 0 ? "#C9A84C" : DIM, to: "visitors" }
@@ -23097,11 +23118,11 @@ IMPORTANT BEHAVIOR RULES:
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 28 }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 12, fontWeight: 500 }, children: m.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 9, color: safe ? "#82B896" : "#C97060", letterSpacing: "0.09em", textTransform: "uppercase", marginTop: 1 }, children: safe ? "\u2713 WiFi Safe" : "\u26A0 At Risk" })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 9, color: safe ? GRN : "#C97060", letterSpacing: "0.09em", textTransform: "uppercase", marginTop: 1 }, children: safe ? "\u2713 WiFi Safe" : "\u26A0 At Risk" })
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6 }, children: [{ v: `${wo.sessions}/5`, l: "Workouts", ok: wo.compliant }, { v: `${bk.count}/1`, l: "Book", ok: bk.compliant }].map((x, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, background: x.ok ? "rgba(130,184,150,0.07)" : "rgba(201,112,96,0.07)", border: `1px solid ${x.ok ? "rgba(130,184,150,0.2)" : "rgba(201,112,96,0.18)"}`, borderRadius: 6, padding: "5px 6px", textAlign: "center" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: x.ok ? "#82B896" : "#C97060", fontWeight: 700, fontSize: 14 }, children: x.v }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: x.ok ? GRN : "#C97060", fontWeight: 700, fontSize: 14 }, children: x.v }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "#6A5A48", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.07em", marginTop: 1 }, children: x.l })
           ] }, i)) })
         ] }, m.id);
@@ -23349,7 +23370,7 @@ IMPORTANT BEHAVIOR RULES:
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { fontFamily: "'Playfair Display',serif", fontSize: 26, fontWeight: 700, letterSpacing: "-0.02em", color: CR }, children: "Today's Checklist" }),
-          todayClockIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: "#82B896", fontSize: 12, fontWeight: 500, marginTop: 5 }, children: [
+          todayClockIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: GRN, fontSize: 12, fontWeight: 500, marginTop: 5 }, children: [
             "Clocked in at ",
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: todayClockIn })
           ] }) : u.isStaff ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 12, marginTop: 5, fontStyle: "italic" }, children: "Clock in to start your day" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: DIM, fontSize: 12, marginTop: 5, fontStyle: "italic" }, children: [
@@ -23385,12 +23406,12 @@ IMPORTANT BEHAVIOR RULES:
             total,
             " tasks done"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: pct === 100 ? "#82B896" : G, fontWeight: 600 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: pct === 100 ? GRN : G, fontWeight: 600 }, children: [
             pct,
             "%"
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 4, background: "rgba(255,255,255,0.04)", borderRadius: 2, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: "100%", borderRadius: 2, background: pct === 100 ? "#82B896" : G, width: `${pct}%`, transition: "width 0.4s" } }) })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 4, background: "rgba(255,255,255,0.04)", borderRadius: 2, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: "100%", borderRadius: 2, background: pct === 100 ? GRN : G, width: `${pct}%`, transition: "width 0.4s" } }) })
       ] }),
       todayOrd && !reorderMode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(212,146,74,0.07)", border: "1px solid rgba(212,146,74,0.18)", borderRadius: 9, padding: "8px 14px", marginBottom: 14, gap: 8 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, color: G }, children: "Today's order customized" }),
@@ -23429,7 +23450,7 @@ IMPORTANT BEHAVIOR RULES:
         dueTasks.length === 0 && doneTasks.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13, textAlign: "center", padding: "8px 0" }, children: "No tasks due today." }) }),
         dueTasks.length === 0 && doneTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "28px 16px 12px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 38, marginBottom: 10 }, children: "\u2713" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#82B896", fontWeight: 600, marginBottom: 6 }, children: "All done for today!" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 18, color: GRN, fontWeight: 600, marginBottom: 6 }, children: "All done for today!" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: DIM, fontSize: 13, lineHeight: 1.6 }, children: [
             doneTasks.length,
             " task",
@@ -23485,7 +23506,7 @@ IMPORTANT BEHAVIOR RULES:
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
               save(tasks.map((x) => x.id === t.id ? { ...x, _doneToday: false, lastDone: null, startingOn: td() } : x));
               logClean({ id: "unc" + Date.now(), taskId: t.id, taskName: t.name, area: t.area, completedDate: td(), completedTime: (/* @__PURE__ */ new Date()).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }), completedBy: u.id, unchecked: true, skipped: false, note: `${u.name} unchecked "${t.name}"` });
-            }, title: "Uncheck", style: { width: 18, height: 18, borderRadius: 4, background: "#82B896", border: "none", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#0A0907", flexShrink: 0, cursor: "pointer" }, children: "\u2713" }),
+            }, title: "Uncheck", style: { width: 18, height: 18, borderRadius: 4, background: GRN, border: "none", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#0A0907", flexShrink: 0, cursor: "pointer" }, children: "\u2713" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { flex: 1, fontSize: 13, color: "#5A4E3A", textDecoration: "line-through" }, children: t.name }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: "#3A3428" }, children: t.area }),
             t.lastDuration && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: "#3A3428" }, children: fmtDur(t.lastDuration) })
@@ -23517,7 +23538,7 @@ IMPORTANT BEHAVIOR RULES:
     const DS2 = ["S", "M", "T", "W", "T", "F", "S"];
     const MNTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const ds = (d) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    const dotCol = (n) => !n ? null : n >= 4 ? "#C97060" : n >= 2 ? "#C9A84C" : "#82B896";
+    const dotCol = (n) => !n ? null : n >= 4 ? "#C97060" : n >= 2 ? "#C9A84C" : GRN;
     const cells = [];
     for (let i = 0; i < firstDay; i++) cells.push(null);
     for (let d = 1; d <= daysInMonth; d++) cells.push(d);
@@ -23587,7 +23608,7 @@ IMPORTANT BEHAVIOR RULES:
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 16 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 20, color: DIM }, children: form.area }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(212,146,74,0.1)", border: "1px solid rgba(212,146,74,0.2)", borderRadius: 20, color: G }, children: fmtInt(form.intervalDays) }),
-          nextDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(130,184,150,0.08)", border: "1px solid rgba(130,184,150,0.18)", borderRadius: 20, color: "#82B896" }, children: [
+          nextDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(130,184,150,0.08)", border: "1px solid rgba(130,184,150,0.18)", borderRadius: 20, color: GRN }, children: [
             "Next: ",
             nextDate
           ] }),
@@ -23595,7 +23616,7 @@ IMPORTANT BEHAVIOR RULES:
             "Last done: ",
             fd(task.lastDone)
           ] }),
-          task.timeCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(130,184,150,0.07)", border: "1px solid rgba(130,184,150,0.15)", borderRadius: 20, color: "#82B896" }, children: [
+          task.timeCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(130,184,150,0.07)", border: "1px solid rgba(130,184,150,0.15)", borderRadius: 20, color: GRN }, children: [
             "Avg: ",
             fmtDur(Math.round(task.timeSum / task.timeCount)),
             " \xB7 ",
@@ -23713,7 +23734,7 @@ IMPORTANT BEHAVIOR RULES:
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "pause"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,160,76,0.12)", color: "#C9A84C", border: "1px solid rgba(201,160,76,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Pause" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "end"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.1)", color: "#C97060", border: "1px solid rgba(201,112,96,0.28)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "End" })
           ] }) : t.timerPaused ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "resume"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(130,184,150,0.1)", color: "#82B896", border: "1px solid rgba(130,184,150,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Resume" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "resume"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(130,184,150,0.1)", color: GRN, border: "1px solid rgba(130,184,150,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Resume" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "end"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.1)", color: "#C97060", border: "1px solid rgba(201,112,96,0.28)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "End" })
           ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "start"), style: { fontSize: 11, padding: "4px 10px", background: "rgba(255,255,255,0.05)", color: DIM, border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Start" })),
           isAdmin && !reorderMode && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: onSkip, style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.07)", color: "#8A5A50", border: "1px solid rgba(201,112,96,0.15)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Skip" })
@@ -24144,19 +24165,19 @@ IMPORTANT BEHAVIOR RULES:
     const decide = (id, status) => save(requests.map((r) => r.id === id ? { ...r, status, decidedDate: td() } : r));
     const del = (id) => save(requests.filter((r) => r.id !== id));
     const pending = requests.filter((r) => r.status === "pending");
-    const SC = { pending: G, approved: "#82B896", denied: "#C97060" };
+    const SC = { pending: G, approved: GRN, denied: "#C97060" };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SH, { title: "Advance", sub: `\u20B14,250 per period \xB7 ${plabel()}`, action: u.isStaff && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", sm: true, onClick: () => setSf(!sf), children: "+ New Request" }) }),
       u.isStaff && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { sx: { marginBottom: 18, display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: rem > 1e3 ? "#82B896" : rem > 0 ? G : "#C97060", fontSize: 26, fontFamily: "'Playfair Display',serif", fontWeight: 700 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: rem > 1e3 ? GRN : rem > 0 ? G : "#C97060", fontSize: 26, fontFamily: "'Playfair Display',serif", fontWeight: 700 }, children: [
             "\u20B1",
             rem.toLocaleString()
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: DIM, fontSize: 11, fontWeight: 500, marginTop: 2 }, children: "Available This Period" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, minWidth: 160 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 5, background: "rgba(255,255,255,0.05)", borderRadius: 3, overflow: "hidden", marginBottom: 5 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: "100%", borderRadius: 3, background: rem > 1e3 ? "#82B896" : rem > 0 ? G : "#C97060", width: `${Math.min(Math.round(rem / 4250 * 100), 100)}%`, transition: "width 0.4s" } }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 5, background: "rgba(255,255,255,0.05)", borderRadius: 3, overflow: "hidden", marginBottom: 5 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: "100%", borderRadius: 3, background: rem > 1e3 ? GRN : rem > 0 ? G : "#C97060", width: `${Math.min(Math.round(rem / 4250 * 100), 100)}%`, transition: "width 0.4s" } }) }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 11, color: DIM }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
               "\u20B1",
@@ -24262,7 +24283,7 @@ IMPORTANT BEHAVIOR RULES:
     const rm = (id) => save(purchases.filter((p) => p.id !== id));
     const pEk = purchases.filter((p) => p.status === "pending_ekek").length;
     const pAd = purchases.filter((p) => p.status === "pending_admin").length;
-    const SCOLOR = { pending_ekek: "#C47882", pending_admin: G, approved: "#82B896", purchased: "#5A7A6A" };
+    const SCOLOR = { pending_ekek: "#C47882", pending_admin: G, approved: GRN, purchased: "#5A7A6A" };
     const SLABEL = { pending_ekek: "Pending Ek Ek", pending_admin: "Ek Ek \u2713 \xB7 Pending Admin", approved: "Approved", purchased: "Purchased" };
     const FILTERS = [["all", "All"], ["pending_ekek", "Needs Ek Ek"], ["pending_admin", "Needs Admin"], ["approved", "Approved"], ["history", "History"]];
     const isHistory = filter === "history";
@@ -24434,13 +24455,16 @@ IMPORTANT BEHAVIOR RULES:
       setSf(false);
     };
     const rm = (id) => save(workouts.filter((w) => w.id !== id));
-    const verify = (id, val) => save(workouts.map((w) => w.id === id ? { ...w, verified: val } : w));
+    const verify = (id, val) => {
+      if (!u.canApprove) return;
+      save(workouts.map((w) => w.id === id ? { ...w, verified: val } : w));
+    };
     const c = getWC(u.id), week = wr();
     const myW = [...workouts.filter((w) => w.memberId === u.id)].sort((a, b) => b.date.localeCompare(a.date));
     const wbd = week.map((d) => ({ date: d, lbl: DS[(/* @__PURE__ */ new Date(d + "T00:00:00")).getDay()], ok: workouts.filter((w) => w.memberId === u.id && w.date === d && w.duration >= 30 && w.verified !== false).length > 0 }));
     const SessionCard = ({ w, showVerify }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { sx: { padding: "10px 13px", display: "flex", alignItems: "center", gap: 11, marginBottom: 7 }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { width: 40, height: 40, borderRadius: 8, background: w.duration >= 30 ? "rgba(130,184,150,0.09)" : "rgba(201,112,96,0.09)", border: `1px solid ${w.duration >= 30 ? "rgba(130,184,150,0.18)" : "rgba(201,112,96,0.18)"}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: w.duration >= 30 ? "#82B896" : "#C97060", fontSize: 13, fontWeight: 600, lineHeight: 1 }, children: w.duration }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: w.duration >= 30 ? GRN : "#C97060", fontSize: 13, fontWeight: 600, lineHeight: 1 }, children: w.duration }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: w.duration >= 30 ? "#2A6040" : "#603030", fontSize: 9 }, children: "min" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
@@ -24454,7 +24478,7 @@ IMPORTANT BEHAVIOR RULES:
       w.verified === false && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: "#C97060", children: "\u2717 Rejected" }),
       w.verified === null && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: DIM, children: "Pending" }),
       showVerify && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => verify(w.id, true), title: "Verify", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(130,184,150,0.3)", background: w.verified === true ? "rgba(130,184,150,0.2)" : "transparent", color: "#82B896", cursor: "pointer", fontSize: 13 }, children: "\u2713" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => verify(w.id, true), title: "Verify", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(130,184,150,0.3)", background: w.verified === true ? "rgba(130,184,150,0.2)" : "transparent", color: GRN, cursor: "pointer", fontSize: 13 }, children: "\u2713" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => verify(w.id, false), title: "Reject", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(201,112,96,0.3)", background: w.verified === false ? "rgba(201,112,96,0.2)" : "transparent", color: "#C97060", cursor: "pointer", fontSize: 13 }, children: "\u2717" })
       ] }),
       w.duration < 30 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: "#C97060", children: "Under 30min" }),
@@ -24465,14 +24489,14 @@ IMPORTANT BEHAVIOR RULES:
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "g-side", style: { display: "grid", gridTemplateColumns: "1fr 190px", gap: 13, marginBottom: 20 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 13 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "5px 12px", borderRadius: 20, background: c.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.1)", border: `1px solid ${c.compliant ? "rgba(130,184,150,0.28)" : "rgba(201,112,96,0.28)"}`, color: c.compliant ? "#82B896" : "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em" }, children: c.compliant ? "\u2713 ON TRACK" : `${c.sessions}/5 \u2014 AT RISK` }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "5px 12px", borderRadius: 20, background: c.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.1)", border: `1px solid ${c.compliant ? "rgba(130,184,150,0.28)" : "rgba(201,112,96,0.28)"}`, color: c.compliant ? GRN : "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em" }, children: c.compliant ? "\u2713 ON TRACK" : `${c.sessions}/5 \u2014 AT RISK` }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: DIM, fontSize: 11 }, children: "This week" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 5 }, children: wbd.map((d) => {
             const isT = d.date === td(), fut = d.date > td();
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 9, color: isT ? G : "#5A4E3A", marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.06em" }, children: d.lbl }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 28, borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center", background: d.ok ? "rgba(130,184,150,0.12)" : fut ? "rgba(255,255,255,0.015)" : "rgba(201,112,96,0.07)", border: `1px solid ${d.ok ? "rgba(130,184,150,0.25)" : fut ? "rgba(255,255,255,0.04)" : "rgba(201,112,96,0.15)"}`, color: d.ok ? "#82B896" : fut ? "#2A2820" : "#C97060", fontSize: 11 }, children: d.ok ? "\u2713" : fut ? "\xB7" : "\u2717" })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 28, borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center", background: d.ok ? "rgba(130,184,150,0.12)" : fut ? "rgba(255,255,255,0.015)" : "rgba(201,112,96,0.07)", border: `1px solid ${d.ok ? "rgba(130,184,150,0.25)" : fut ? "rgba(255,255,255,0.04)" : "rgba(201,112,96,0.15)"}`, color: d.ok ? GRN : fut ? "#2A2820" : "#C97060", fontSize: 11 }, children: d.ok ? "\u2713" : fut ? "\xB7" : "\u2717" })
             ] }, d.date);
           }) })
         ] }),
@@ -24484,9 +24508,9 @@ IMPORTANT BEHAVIOR RULES:
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 21 }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, color: CR, marginBottom: 2 }, children: m.name }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 2 }, children: [1, 2, 3, 4, 5].map((n) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: 2, background: mc.sessions >= n ? "#82B896" : "rgba(255,255,255,0.07)" } }, n)) })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 2 }, children: [1, 2, 3, 4, 5].map((n) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: 2, background: mc.sessions >= n ? GRN : "rgba(255,255,255,0.07)" } }, n)) })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 10, color: mc.compliant ? "#82B896" : "#C97060" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 10, color: mc.compliant ? GRN : "#C97060" }, children: [
                 mc.sessions,
                 "/5"
               ] })
@@ -24531,7 +24555,7 @@ IMPORTANT BEHAVIOR RULES:
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, color: DIM, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 5 }, children: "This week" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 6, marginBottom: 10 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, textAlign: "center", background: "rgba(130,184,150,0.07)", border: "1px solid rgba(130,184,150,0.18)", borderRadius: 5, padding: "5px 4px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "#82B896", fontSize: 15, fontWeight: 700 }, children: wkV }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: GRN, fontSize: 15, fontWeight: 700 }, children: wkV }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "#2A6040", fontSize: 9, textTransform: "uppercase" }, children: "Verified" })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, textAlign: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 5, padding: "5px 4px" }, children: [
@@ -24577,7 +24601,10 @@ IMPORTANT BEHAVIOR RULES:
       setSf(false);
     };
     const rm = (id) => save(books.filter((b) => b.id !== id));
-    const review = (id, val) => save(books.map((b) => b.id === id ? { ...b, meetingReviewed: val } : b));
+    const review = (id, val) => {
+      if (!u.canApprove) return;
+      save(books.map((b) => b.id === id ? { ...b, meetingReviewed: val } : b));
+    };
     const c = getBC(u.id);
     const mName = (/* @__PURE__ */ new Date()).toLocaleString("en-US", { month: "long", year: "numeric" });
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -24585,7 +24612,7 @@ IMPORTANT BEHAVIOR RULES:
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "g-side", style: { display: "grid", gridTemplateColumns: "1fr 190px", gap: 13, marginBottom: 20 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 9 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "5px 12px", borderRadius: 20, background: c.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.1)", border: `1px solid ${c.compliant ? "rgba(130,184,150,0.28)" : "rgba(201,112,96,0.28)"}`, color: c.compliant ? "#82B896" : "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em" }, children: c.compliant ? "\u2713 COMPLIANT" : "\u26A0 NEEDS MEETING REVIEW" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "5px 12px", borderRadius: 20, background: c.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.1)", border: `1px solid ${c.compliant ? "rgba(130,184,150,0.28)" : "rgba(201,112,96,0.28)"}`, color: c.compliant ? GRN : "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em" }, children: c.compliant ? "\u2713 COMPLIANT" : "\u26A0 NEEDS MEETING REVIEW" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: DIM, fontSize: 11 }, children: mName })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 12, fontWeight: 500 }, children: c.count === 0 ? "No books passed review yet. Log your book and present at the meeting." : c.count === 1 ? "1 book reviewed and passed \u2014 requirement met!" : `${c.count} books reviewed \u2014 excellent!` })
@@ -24597,7 +24624,7 @@ IMPORTANT BEHAVIOR RULES:
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 7, marginBottom: 8 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 21 }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1, fontSize: 11, color: CR }, children: m.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: mc.compliant ? "#82B896" : "#C97060", fontWeight: 600 }, children: mc.compliant ? "\u2713" : "\u2717" })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: mc.compliant ? GRN : "#C97060", fontWeight: 600 }, children: mc.compliant ? "\u2713" : "\u2717" })
             ] }, m.id);
           })
         ] })
@@ -24648,7 +24675,7 @@ IMPORTANT BEHAVIOR RULES:
         b.meetingReviewed === false && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: "#C97060", children: "\u2717 Failed" }),
         (b.meetingReviewed === null || b.meetingReviewed === void 0) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: DIM, children: "Pending Meeting" }),
         u.canApprove && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => review(b.id, true), title: "Passed review", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(130,184,150,0.3)", background: b.meetingReviewed === true ? "rgba(130,184,150,0.2)" : "transparent", color: "#82B896", cursor: "pointer", fontSize: 13 }, children: "\u2713" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => review(b.id, true), title: "Passed review", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(130,184,150,0.3)", background: b.meetingReviewed === true ? "rgba(130,184,150,0.2)" : "transparent", color: GRN, cursor: "pointer", fontSize: 13 }, children: "\u2713" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => review(b.id, false), title: "Failed review", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(201,112,96,0.3)", background: b.meetingReviewed === false ? "rgba(201,112,96,0.2)" : "transparent", color: "#C97060", cursor: "pointer", fontSize: 13 }, children: "\u2717" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(XBtn, { onClick: () => rm(b.id) })
@@ -24690,7 +24717,7 @@ IMPORTANT BEHAVIOR RULES:
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 28 }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, fontWeight: 600 }, children: m.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: ok ? "#82B896" : "#C97060", fontSize: 11 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: ok ? GRN : "#C97060", fontSize: 11 }, children: [
                 wc.sessions,
                 "/5 sessions"
               ] })
@@ -24721,7 +24748,7 @@ IMPORTANT BEHAVIOR RULES:
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 28 }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, fontWeight: 600 }, children: m.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: ok ? "#82B896" : "#C97060", fontSize: 11 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: ok ? GRN : "#C97060", fontSize: 11 }, children: [
                 bc.count,
                 "/1 book reviewed"
               ] })
@@ -24747,7 +24774,7 @@ IMPORTANT BEHAVIOR RULES:
             " by ",
             mbid(l.cutBy).name
           ] }),
-          l.restoredDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#82B896", fontSize: 11, marginTop: 1 }, children: [
+          l.restoredDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: GRN, fontSize: 11, marginTop: 1 }, children: [
             "\u2713 Restored ",
             fd(l.restoredDate),
             " by ",
@@ -24864,11 +24891,11 @@ IMPORTANT BEHAVIOR RULES:
             const activeDays = [...new Set(wkLogs.map((l) => l.completedDate))].length;
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 12 }, children: [
-                ["Done Today", `${doneTodayCount}/${dueTodayCount2}`, doneTodayCount === dueTodayCount2 && dueTodayCount2 > 0 ? "#82B896" : G],
-                ["This Week", wkDone, wkDone > 0 ? "#82B896" : DIM],
+                ["Done Today", `${doneTodayCount}/${dueTodayCount2}`, doneTodayCount === dueTodayCount2 && dueTodayCount2 > 0 ? GRN : G],
+                ["This Week", wkDone, wkDone > 0 ? GRN : DIM],
                 ["Skipped", wkSkip, wkSkip > 0 ? "#C97060" : DIM],
-                ["Active Days", `${activeDays}/7`, activeDays >= 5 ? "#82B896" : activeDays >= 3 ? "#C9A84C" : "#C97060"],
-                ["Clock-in", clockInToday || "\u2014", clockInToday ? "#82B896" : "#C97060"],
+                ["Active Days", `${activeDays}/7`, activeDays >= 5 ? GRN : activeDays >= 3 ? "#C9A84C" : "#C97060"],
+                ["Clock-in", clockInToday || "\u2014", clockInToday ? GRN : "#C97060"],
                 ["Avg/Day", activeDays > 0 ? Math.round(wkDone / activeDays) : "\u2014", DIM]
               ].map(([l, v, c]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: "10px 12px" }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 16, fontWeight: 700, color: c, fontFamily: "'Playfair Display',serif", lineHeight: 1, marginBottom: 3 }, children: v }),
@@ -24882,7 +24909,7 @@ IMPORTANT BEHAVIOR RULES:
                 const dow = (/* @__PURE__ */ new Date(d + "T00:00:00")).toLocaleDateString("en-US", { weekday: "short" });
                 return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, textAlign: "center", padding: "6px 2px", borderRadius: 8, border: `1px solid ${isToday ? "rgba(212,146,74,0.3)" : "rgba(255,255,255,0.05)"}`, background: isToday ? "rgba(212,146,74,0.07)" : "transparent" }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 9, color: isToday ? G : DIM, marginBottom: 3, fontWeight: isToday ? 600 : 400 }, children: dow }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, fontWeight: 700, color: isFuture ? "#3A3428" : dayDone > 0 ? "#82B896" : daySkip > 0 ? "#C97060" : "#4A3E30", fontFamily: "'Playfair Display',serif" }, children: isFuture ? "\xB7" : dayDone || daySkip > 0 ? dayDone : "-" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, fontWeight: 700, color: isFuture ? "#3A3428" : dayDone > 0 ? GRN : daySkip > 0 ? "#C97060" : "#4A3E30", fontFamily: "'Playfair Display',serif" }, children: isFuture ? "\xB7" : dayDone || daySkip > 0 ? dayDone : "-" }),
                   daySkip > 0 && !isFuture && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 8, color: "#C97060", marginTop: 1 }, children: [
                     daySkip,
                     "s"
@@ -24895,9 +24922,9 @@ IMPORTANT BEHAVIOR RULES:
         isCurr && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 22 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: CR, marginBottom: 12 }, children: "Today" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 9, marginBottom: 12 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Done Today", value: todayDone.length, sub: `of ${dueTodayCount} due`, color: todayDone.length === dueTodayCount && dueTodayCount > 0 ? "#82B896" : G }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Done Today", value: todayDone.length, sub: `of ${dueTodayCount} due`, color: todayDone.length === dueTodayCount && dueTodayCount > 0 ? GRN : G }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Skipped", value: todaySkipped.length, color: todaySkipped.length > 0 ? "#C97060" : DIM }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Clock-in", value: todayClockIn || "\u2014", sub: todayClockIn ? "today" : "not clocked in", color: todayClockIn ? "#82B896" : DIM })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Clock-in", value: todayClockIn || "\u2014", sub: todayClockIn ? "today" : "not clocked in", color: todayClockIn ? GRN : DIM })
           ] })
         ] }),
         isCurr && cleanLog.some((l) => l.clockIn) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 22 }, children: [
@@ -24923,7 +24950,7 @@ IMPORTANT BEHAVIOR RULES:
             const dayEntries = cleanLog.filter((l) => l.completedDate === date && !l.skipped);
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, padding: "9px 16px", borderBottom: "1px solid rgba(255,255,255,0.03)" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, color: DIM, minWidth: 65 }, children: fs(date) }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, color: ci ? "#82B896" : DIM, fontWeight: ci ? 600 : 400 }, children: ci ? `In: ${ci}` : "\u2014" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, color: ci ? GRN : DIM, fontWeight: ci ? 600 : 400 }, children: ci ? `In: ${ci}` : "\u2014" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, color: DIM, marginLeft: "auto" }, children: [
                 dayEntries.length,
                 " task",
@@ -24952,9 +24979,9 @@ IMPORTANT BEHAVIOR RULES:
                   " ",
                   wlabel(wk)
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#82B896", fontWeight: 600 }, children: wDone.length }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: GRN, fontWeight: 600 }, children: wDone.length }) }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: wSkip.length > 0 ? "#C97060" : DIM }, children: wSkip.length }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: activeDays >= 5 ? "#82B896" : G }, children: activeDays }) })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: activeDays >= 5 ? GRN : G }, children: activeDays }) })
               ] }, i);
             }) })
           ] }) })
@@ -25054,12 +25081,12 @@ IMPORTANT BEHAVIOR RULES:
                 ] }) }),
                 weeks.map((wk, i) => {
                   const wc = getWCW(m.id, wk);
-                  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 6px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "inline-flex", alignItems: "center", justifyContent: "center", width: 44, height: 24, borderRadius: 5, fontSize: 11, fontWeight: 600, background: wc.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.08)", color: wc.compliant ? "#82B896" : "#C97060", border: `1px solid ${wc.compliant ? "rgba(130,184,150,0.22)" : "rgba(201,112,96,0.18)"}` }, children: [
+                  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 6px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "inline-flex", alignItems: "center", justifyContent: "center", width: 44, height: 24, borderRadius: 5, fontSize: 11, fontWeight: 600, background: wc.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.08)", color: wc.compliant ? GRN : "#C97060", border: `1px solid ${wc.compliant ? "rgba(130,184,150,0.22)" : "rgba(201,112,96,0.18)"}` }, children: [
                     wc.sessions,
                     "/5"
                   ] }) }, i);
                 }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 6px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "inline-flex", alignItems: "center", justifyContent: "center", width: 30, height: 24, borderRadius: 5, fontSize: 13, background: bc.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.08)", border: `1px solid ${bc.compliant ? "rgba(130,184,150,0.22)" : "rgba(201,112,96,0.18)"}`, color: bc.compliant ? "#82B896" : "#C97060" }, children: bc.compliant ? "\u2713" : "\u2717" }) })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 6px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "inline-flex", alignItems: "center", justifyContent: "center", width: 30, height: 24, borderRadius: 5, fontSize: 13, background: bc.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.08)", border: `1px solid ${bc.compliant ? "rgba(130,184,150,0.22)" : "rgba(201,112,96,0.18)"}`, color: bc.compliant ? GRN : "#C97060" }, children: bc.compliant ? "\u2713" : "\u2717" }) })
               ] }, m.id);
             }) })
           ] }) })
@@ -25074,15 +25101,15 @@ IMPORTANT BEHAVIOR RULES:
                 " \xB7 ",
                 fd(l.cutDate)
               ] }),
-              l.restoredDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#82B896", fontSize: 11, marginTop: 1 }, children: [
+              l.restoredDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: GRN, fontSize: 11, marginTop: 1 }, children: [
                 "\u2713 Restored ",
                 fd(l.restoredDate)
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: l.restoredDate ? "#82B896" : "#C97060", children: l.restoredDate ? "Restored" : "Cut" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: l.restoredDate ? GRN : "#C97060", children: l.restoredDate ? "Restored" : "Cut" })
           ] }, l.id)) })
         ] }),
-        mCuts.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#82B896", fontSize: 13 }, children: "\u2713 No WiFi cuts this month." }) })
+        mCuts.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: GRN, fontSize: 13 }, children: "\u2713 No WiFi cuts this month." }) })
       ] }),
       mainTab === "finance" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(250px,1fr))", gap: 11 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
@@ -25111,7 +25138,7 @@ IMPORTANT BEHAVIOR RULES:
                   fs(r.date)
                 ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: { pending: G, approved: "#82B896", denied: "#C97060" }[r.status] || DIM, children: r.status })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: { pending: G, approved: GRN, denied: "#C97060" }[r.status] || DIM, children: r.status })
             ] }, r.id))
           ] })
         ] }),
@@ -25128,7 +25155,7 @@ IMPORTANT BEHAVIOR RULES:
               mPAdd.length > 1 ? "s" : "",
               " added"
             ] }),
-            mPApp.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#82B896", fontSize: 12, marginBottom: 7 }, children: [
+            mPApp.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: GRN, fontSize: 12, marginBottom: 7 }, children: [
               "\u2713 ",
               mPApp.length,
               " fully approved"
@@ -25181,7 +25208,7 @@ IMPORTANT BEHAVIOR RULES:
     const pEk = restdays.filter((r) => r.status === "pending_ekek");
     const pAd = restdays.filter((r) => r.status === "pending_admin");
     const hist = [...restdays].sort((a, b) => b.createdDate.localeCompare(a.createdDate));
-    const SC = { pending_ekek: { c: "#C47882", l: "Pending Ek Ek" }, pending_admin: { c: G, l: "Pending Admin" }, approved: { c: "#82B896", l: "Approved" }, denied: { c: "#C97060", l: "Denied" } };
+    const SC = { pending_ekek: { c: "#C47882", l: "Pending Ek Ek" }, pending_admin: { c: G, l: "Pending Admin" }, approved: { c: GRN, l: "Approved" }, denied: { c: "#C97060", l: "Denied" } };
     const nextRestDays = () => {
       const r = [];
       const d = /* @__PURE__ */ new Date();
@@ -25240,7 +25267,7 @@ IMPORTANT BEHAVIOR RULES:
             ] }),
             r.type === "swap" && r.swapDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: DIM, fontSize: 12, fontWeight: 500, marginBottom: 3 }, children: [
               "Will work instead on: ",
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#82B896" }, children: fs(r.swapDate) })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: GRN }, children: fs(r.swapDate) })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, marginBottom: 3 }, children: r.reason }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#5A4E3A", fontSize: 10 }, children: [
@@ -25268,7 +25295,7 @@ IMPORTANT BEHAVIOR RULES:
             ] }),
             r.type === "swap" && r.swapDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: DIM, fontSize: 12, fontWeight: 500, marginBottom: 3 }, children: [
               "Will work instead on: ",
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#82B896" }, children: fs(r.swapDate) })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: GRN }, children: fs(r.swapDate) })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, marginBottom: 3 }, children: r.reason }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#5A4E3A", fontSize: 10 }, children: [
@@ -25377,7 +25404,7 @@ IMPORTANT BEHAVIOR RULES:
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: CR, fontSize: 14, fontWeight: 600 }, children: fd(a.date) }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: isPast ? "#82B896" : "#C97060", children: isPast ? "Deducted" : "Pending" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: isPast ? GRN : "#C97060", children: isPast ? "Deducted" : "Pending" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: "#C97060", fontSize: 12, fontWeight: 600 }, children: [
                 "\u2212\u20B1",
                 (a.dailyRate || DAILY_RATE).toFixed(2)
@@ -25507,7 +25534,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 10, height: 10, borderRadius: "50%", border: `1.5px solid ${G}`, borderTopColor: "transparent", animation: "spin 0.8s linear infinite" } }),
                 " Auto-detecting..."
               ] }),
-              !classifying && form.name && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: "#82B896" }, children: "\u2713 Auto-detected" })
+              !classifying && form.name && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: GRN }, children: "\u2713 Auto-detected" })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Fsel, { value: form.category, onChange: (e) => setForm({ ...form, category: e.target.value }), children: PANTRY_CATS.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: c }, c)) })
           ] }),
@@ -25624,7 +25651,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const decide = (id, status) => save(visitors.map((v) => v.id === id ? { ...v, status, decidedBy: u.id, decidedDate: td() } : v));
     const del = (id) => save(visitors.filter((v) => v.id !== id));
     const pending = visitors.filter((v) => v.status === "pending");
-    const SC = { pending: G, approved: "#82B896", denied: "#C97060" };
+    const SC = { pending: G, approved: GRN, denied: "#C97060" };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SH, { title: "Visitor Requests", sub: "24-hour notice required \xB7 approved by Ari or Roniq", action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", sm: true, onClick: () => setSf(!sf), children: "+ Request Visitor" }) }),
       sf && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { sx: { marginBottom: 18 }, children: [
@@ -25836,7 +25863,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 32, height: 32, borderRadius: "50%", background: m.color + "18", border: `1.5px solid ${m.color}40`, display: "flex", alignItems: "center", justifyContent: "center", color: m.color, fontSize: 14, fontWeight: 700, flexShrink: 0 }, children: m.name.charAt(0) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, fontWeight: 600 }, children: m.name }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: hasPin ? "#82B896" : "#C97060", fontSize: 10, marginTop: 1 }, children: hasPin ? "PIN set" : "No PIN set" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: hasPin ? GRN : "#C97060", fontSize: 10, marginTop: 1 }, children: hasPin ? "PIN set" : "No PIN set" })
         ] })
       ] }),
       hasPin && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 10, padding: "7px 10px", background: "rgba(255,255,255,0.03)", borderRadius: 7, border: "1px solid rgba(255,255,255,0.06)" }, children: [
@@ -25871,7 +25898,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const upd = (id, field, val) => setDraft((d) => d.map((m) => m.id === id ? { ...m, [field]: val } : m));
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SH, { title: "Member Settings", sub: "Edit names and roles \xB7 permissions and colors are fixed", action: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8, alignItems: "center" }, children: [
-        saved && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#82B896", fontSize: 12 }, children: "\u2713 Saved" }),
+        saved && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: GRN, fontSize: 12 }, children: "\u2713 Saved" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: save, children: "Save Changes" })
       ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 14, marginBottom: 28 }, children: draft.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
@@ -25896,6 +25923,120 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 12 }, children: _MB.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PinCard, { m, pins, savePins }, m.id)) })
     ] });
   }
+  var STORAGE_DEFAULTS = { wh3_tasks: DEFAULT_TASKS, wh3_ev: [], wh3_req: [], wh3_rules: DEFAULT_RULES, wh3_work: [], wh3_books: [], wh3_purch: [], wh3_wifi: [], wh3_rest: [], wh3_pantry: [], wh3_cleanlog: [], wh3_visitors: [], wh3_members: MB, wh3_maint: [], wh3_wardinstr: `THE WARDED HOUSE \u2014 WARD INSTRUCTIONS
+Dumaguete, Negros Oriental, Philippines
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+CONFIDENTIALITY
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+These rules are private to the four of us: Ek Ek, Abet, Ari, Roniq.
+
+If anyone outside asks about the household:
+\u2022 Who lives here \u2192 don't mention any names
+\u2022 Address \u2192 "Brgy. Batinguel, Dumaguete" only. Never mention Katrina Homes.
+\u2022 What's inside \u2192 "Family and their cats."
+\u2022 Why we're here \u2192 "Our old place is being renovated; we used to live in Sibulan."
+\u2022 What happens here \u2192 "Virtual Assistant work."
+\u2022 Who visits \u2192 person's discretion; outsiders don't need to know
+\u2022 How much we pay / what we do for money \u2192 "We don't know."
+\u2022 Everything heard inside this home is confidential.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+MEMBERS
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+\u2022 ABET \u2014 Household Staff. Shy and unconfident \u2014 encourage her, never pressure or shame her. Must clock in by 9am (if past 9am and not clocked in: tell her directly she is late). Rest day Wednesday unless swapped. Reports to Ek Ek.
+\u2022 EK EK \u2014 Food & Household Manager. Primary cook (anyone can cook if they want). Diabetic \u2014 absolutely no sugar. Asthmatic \u2014 avoid dust, strong smells, harsh chemicals, fragrances. Sensitive skin. Manages grocery runs.
+\u2022 ARI \u2014 Administrator & Finance. Wakes around 11:30am. Eating healthy. Final approver for money decisions and changes to agreed terms.
+\u2022 RONIQ \u2014 Administrator, App & WiFi Manager. Wakes around 11:30am. Strict low-sodium diet. Hypokalemia \u2014 coconut water, banana, avocado, sweet potato, squash daily. Asthmatic (same triggers as Ek Ek). Point of contact for household improvements, technical issues, and app concerns.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+CATS (all indoor)
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+Kya, Indi, Arwen (adults) + Four & Sati (Indi's kittens). Fed at 1pm by Ari or Roniq. Cats must NOT leave the house unless told otherwise. No decisions about cats without Ari or Roniq approval.
+
+NEVER suggest near cats: onions, garlic, leeks, chives, grapes, raisins, chocolate, xylitol, macadamia nuts, lilies, chemical pest control, or toxic household products.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+HOUSEHOLD CONDUCT
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+\u2022 No outdoor footwear inside the house.
+\u2022 Maintain a harmonious household environment.
+\u2022 No sarcasm when discussing work or responsibilities.
+\u2022 No shouting except in emergencies.
+\u2022 No unexpected visitors \u2014 approval required at least 24 hours in advance.
+\u2022 No irrelevant gossip. Relevant news affecting the household (e.g. fuel prices) is fine. Celebrity gossip and unrelated chatter is not.
+\u2022 Roniq and Ari communicate directly \u2014 no beating around the bush. They expect the same from everyone.
+\u2022 Lying is strictly forbidden, including by omission. First offense: warning. Second offense: removal.
+\u2022 Never assume.
+\u2022 Kaikog (unnecessary shame) is not an acceptable reason for failing a responsibility.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+OPERATIONS & RESPONSIBILITIES
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+When unsure what to do (move to the next step only if the current one is not possible):
+1. Figure it out \u2014 use the internet, exhaust all resources
+2. Ask for help in this order: Abet \u2192 Ek Ek \u2192 Roniq \u2192 Ari
+
+\u2022 Put things back where they belong. Use common sense \u2014 a knife belongs in the kitchen, not the office. If genuinely unsure, put it in the most appropriate room.
+\u2022 Close all doors at all times unless told otherwise.
+\u2022 If unwell or unable to work, inform the household ahead of time or as soon as possible.
+\u2022 Concerns and suggestions: raise immediately if urgent, otherwise bring to Roniq or Ari directly.
+\u2022 Feedback is encouraged \u2014 must be constructive and without judgment.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+DECISION-MAKING & ACCOUNTABILITY
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+\u2022 No decisions about cats without Ari or Roniq approval.
+\u2022 Any decision involving money or changes to agreed terms requires Ari or Roniq approval.
+\u2022 Always aim for the best option. If you see a better one, say so. Only avoided if impossible, impractical, incorrect, outdated, wrong timing, or unaffordable.
+\u2022 Mistakes are normal. Same mistake more than twice = willful negligence.
+\u2022 If you help move things forward, you move forward with us. If you hold things back, you will be removed.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+HEALTH & PERSONAL DEVELOPMENT (all members)
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+\u2022 Required: work out at least 5 days per week, minimum 30 minutes. Type of workout is personal choice. Send video proof to the household Messenger group chat. Miss a week = WiFi cut the following Monday. Restored only after compliance.
+\u2022 Required: read or listen to at least one book per month. Must explain what happened in the book as proof. Reviewed verbally at the monthly meeting (first Sunday). Fail = WiFi cut the Monday after the meeting. Restored only after compliance.
+\u2022 No exceptions on WiFi cuts \u2014 if it is an emergency, others with WiFi can help.
+\u2022 All members take vitamins after lunch \u2014 good timing for fat-soluble vitamins (A, D, E, K).
+\u2022 Suggested additions (consult a doctor first): Vitamin D3+K2, Omega-3 (anti-inflammatory, supports asthma management), Magnesium at night (sleep and muscle recovery).
+\u2022 Roniq: coconut water + banana daily minimum. Avocado, sweet potato, and squash also recommended for potassium.
+\u2022 Ek Ek: no sugar. Monitor carb types carefully.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+FOOD & PURCHASES
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+\u2022 Purchases should be healthy, natural, and low/zero plastic whenever possible. Natural means made from scratch and safe \u2014 certified organic is not required.
+\u2022 Exceptions: availability, price, health needs, or if the natural option is genuinely ineffective.
+\u2022 Outside food or drinks ready for consumption (fast food, junk food, soft drinks, etc.) require Ari or Roniq approval before entering the house. No exceptions. Ek Ek can weigh in, but the final call is Ari or Roniq.
+\u2022 Monthly household budget: 20,000 pesos for groceries and cleaning supplies.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+HOUSE SYSTEMS
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+\u2022 Monthly meeting: first Sunday of the month. Includes Abet's performance review (task completion, quality, punctuality, attitude, initiative \u2014 no single right way, as long as it is done properly, practically, and makes sense), book reviews, and open floor for household improvements.
+\u2022 Meals: lunch and dinner. Occasional snacks. Cats eat at 1pm.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+ONGOING PROJECTS
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+\u2022 Ants \u2014 nothing tried yet. Recommend only cat-safe, non-toxic, non-chemical solutions: diatomaceous earth, peppermint oil, cinnamon, cloves near entry points (kept away from cats).
+\u2022 Water \u2014 pressure and availability issues. No filter system yet.
+\u2022 Balcony fences and roof gutters \u2014 carpenter hired, work in progress.
+\u2022 CCTV \u2014 planned, not yet installed.
+
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+WARD BEHAVIOR RULES
+\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501
+\u2022 Never share information beyond each user's role. Abet gets staff-level guidance only.
+\u2022 Give your honest opinion first, then direct to the right person if approval or a decision is needed.
+\u2022 App guidance only when a user asks how to do something.
+\u2022 When unsure: exhaust all knowledge and resources first, then flag uncertainty and suggest checking with Roniq or Ari.
+\u2022 Mental health conversations: acknowledge briefly and warmly, redirect to Ari or Roniq.
+\u2022 Humor is welcome when it fits naturally.
+\u2022 Speak like trusted family \u2014 warm, direct, real. No walls, no formality.
+\u2022 With Abet: always direct, always encouraging. Build her confidence.
+\u2022 Language: if the user writes in Bisaya first, respond in Bisaya with English translation. If they write in English first, respond in English with Bisaya translation. Always match who speaks first.`, wh3_pins: {}, wh3_unabsences: [], wh3_pay_overrides: [], wh3_clockin: null, wh3_today_meta: null };
   function Header({ onRefresh, refreshing }) {
     const [now, setNow] = (0, import_react.useState)(/* @__PURE__ */ new Date());
     (0, import_react.useEffect)(() => {
@@ -26067,14 +26208,14 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           ["Period Pay", "\u20B1" + base.toLocaleString(), CR],
           ["Cash Advances", totalAdv ? "\u2212\u20B1" + totalAdv.toLocaleString() : "\u2014", totalAdv ? "#C97060" : DIM],
           ["Absences", absenceDed ? `\u2212\u20B1${absenceDed.toLocaleString()}` : "\u2014", absenceDed ? "#C97060" : DIM],
-          ...adjustments.map((a) => [a.note || a.type, (a.type === "addition" ? "+" : "\u2212") + "\u20B1" + (Number(a.amount) || 0).toLocaleString(), a.type === "addition" ? "#82B896" : "#C97060"])
+          ...adjustments.map((a) => [a.note || a.type, (a.type === "addition" ? "+" : "\u2212") + "\u20B1" + (Number(a.amount) || 0).toLocaleString(), a.type === "addition" ? GRN : "#C97060"])
         ].map(([l, v, c]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: "10px 12px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, color: DIM, marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.07em" }, children: l }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 17, fontWeight: 700, color: c, fontFamily: "'Playfair Display',serif" }, children: v })
         ] }, l)) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, color: DIM, fontWeight: 500 }, children: "Net Pay This Period" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 22, fontWeight: 700, color: "#82B896", fontFamily: "'Playfair Display',serif" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 22, fontWeight: 700, color: GRN, fontFamily: "'Playfair Display',serif" }, children: [
             "\u20B1",
             net.toLocaleString()
           ] })
@@ -26219,156 +26360,41 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           DB.get("wh3_pay_overrides", []),
           DB.get("wh3_clockin", null),
           DB.get("wh3_today_meta", null),
-          DB.get("wh3_wardinstr", `THE WARDED HOUSE — WARD INSTRUCTIONS
-Dumaguete, Negros Oriental, Philippines
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CONFIDENTIALITY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-These rules are private to the four of us: Ek Ek, Abet, Ari, Roniq.
-
-If anyone outside asks about the household:
-• Who lives here → don't mention any names
-• Address → "Brgy. Batinguel, Dumaguete" only. Never mention Katrina Homes.
-• What's inside → "Family and their cats."
-• Why we're here → "Our old place is being renovated; we used to live in Sibulan."
-• What happens here → "Virtual Assistant work."
-• Who visits → person's discretion; outsiders don't need to know
-• How much we pay / what we do for money → "We don't know."
-• Everything heard inside this home is confidential.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MEMBERS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• ABET — Household Staff. Shy and unconfident — encourage her, never pressure or shame her. Must clock in by 9am (if past 9am and not clocked in: tell her directly she is late). Rest day Wednesday unless swapped. Reports to Ek Ek.
-• EK EK — Food & Household Manager. Primary cook (anyone can cook if they want). Diabetic — absolutely no sugar. Asthmatic — avoid dust, strong smells, harsh chemicals, fragrances. Sensitive skin. Manages grocery runs.
-• ARI — Administrator & Finance. Wakes around 11:30am. Eating healthy. Final approver for money decisions and changes to agreed terms.
-• RONIQ — Administrator, App & WiFi Manager. Wakes around 11:30am. Strict low-sodium diet. Hypokalemia — coconut water, banana, avocado, sweet potato, squash daily. Asthmatic (same triggers as Ek Ek). Point of contact for household improvements, technical issues, and app concerns.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CATS (all indoor)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Kya, Indi, Arwen (adults) + Four & Sati (Indi's kittens). Fed at 1pm by Ari or Roniq. Cats must NOT leave the house unless told otherwise. No decisions about cats without Ari or Roniq approval.
-
-NEVER suggest near cats: onions, garlic, leeks, chives, grapes, raisins, chocolate, xylitol, macadamia nuts, lilies, chemical pest control, or toxic household products.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-HOUSEHOLD CONDUCT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• No outdoor footwear inside the house.
-• Maintain a harmonious household environment.
-• No sarcasm when discussing work or responsibilities.
-• No shouting except in emergencies.
-• No unexpected visitors — approval required at least 24 hours in advance.
-• No irrelevant gossip. Relevant news affecting the household (e.g. fuel prices) is fine. Celebrity gossip and unrelated chatter is not.
-• Roniq and Ari communicate directly — no beating around the bush. They expect the same from everyone.
-• Lying is strictly forbidden, including by omission. First offense: warning. Second offense: removal.
-• Never assume.
-• Kaikog (unnecessary shame) is not an acceptable reason for failing a responsibility.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OPERATIONS & RESPONSIBILITIES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-When unsure what to do (move to the next step only if the current one is not possible):
-1. Figure it out — use the internet, exhaust all resources
-2. Ask for help in this order: Abet → Ek Ek → Roniq → Ari
-
-• Put things back where they belong. Use common sense — a knife belongs in the kitchen, not the office. If genuinely unsure, put it in the most appropriate room.
-• Close all doors at all times unless told otherwise.
-• If unwell or unable to work, inform the household ahead of time or as soon as possible.
-• Concerns and suggestions: raise immediately if urgent, otherwise bring to Roniq or Ari directly.
-• Feedback is encouraged — must be constructive and without judgment.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DECISION-MAKING & ACCOUNTABILITY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• No decisions about cats without Ari or Roniq approval.
-• Any decision involving money or changes to agreed terms requires Ari or Roniq approval.
-• Always aim for the best option. If you see a better one, say so. Only avoided if impossible, impractical, incorrect, outdated, wrong timing, or unaffordable.
-• Mistakes are normal. Same mistake more than twice = willful negligence.
-• If you help move things forward, you move forward with us. If you hold things back, you will be removed.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-HEALTH & PERSONAL DEVELOPMENT (all members)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Required: work out at least 5 days per week, minimum 30 minutes. Type of workout is personal choice. Send video proof to the household Messenger group chat. Miss a week = WiFi cut the following Monday. Restored only after compliance.
-• Required: read or listen to at least one book per month. Must explain what happened in the book as proof. Reviewed verbally at the monthly meeting (first Sunday). Fail = WiFi cut the Monday after the meeting. Restored only after compliance.
-• No exceptions on WiFi cuts — if it is an emergency, others with WiFi can help.
-• All members take vitamins after lunch — good timing for fat-soluble vitamins (A, D, E, K).
-• Suggested additions (consult a doctor first): Vitamin D3+K2, Omega-3 (anti-inflammatory, supports asthma management), Magnesium at night (sleep and muscle recovery).
-• Roniq: coconut water + banana daily minimum. Avocado, sweet potato, and squash also recommended for potassium.
-• Ek Ek: no sugar. Monitor carb types carefully.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FOOD & PURCHASES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Purchases should be healthy, natural, and low/zero plastic whenever possible. Natural means made from scratch and safe — certified organic is not required.
-• Exceptions: availability, price, health needs, or if the natural option is genuinely ineffective.
-• Outside food or drinks ready for consumption (fast food, junk food, soft drinks, etc.) require Ari or Roniq approval before entering the house. No exceptions. Ek Ek can weigh in, but the final call is Ari or Roniq.
-• Monthly household budget: 20,000 pesos for groceries and cleaning supplies.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-HOUSE SYSTEMS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Monthly meeting: first Sunday of the month. Includes Abet's performance review (task completion, quality, punctuality, attitude, initiative — no single right way, as long as it is done properly, practically, and makes sense), book reviews, and open floor for household improvements.
-• Meals: lunch and dinner. Occasional snacks. Cats eat at 1pm.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ONGOING PROJECTS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Ants — nothing tried yet. Recommend only cat-safe, non-toxic, non-chemical solutions: diatomaceous earth, peppermint oil, cinnamon, cloves near entry points (kept away from cats).
-• Water — pressure and availability issues. No filter system yet.
-• Balcony fences and roof gutters — carpenter hired, work in progress.
-• CCTV — planned, not yet installed.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WARD BEHAVIOR RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Never share information beyond each user's role. Abet gets staff-level guidance only.
-• Give your honest opinion first, then direct to the right person if approval or a decision is needed.
-• App guidance only when a user asks how to do something.
-• When unsure: exhaust all knowledge and resources first, then flag uncertainty and suggest checking with Roniq or Ari.
-• Mental health conversations: acknowledge briefly and warmly, redirect to Ari or Roniq.
-• Humor is welcome when it fits naturally.
-• Speak like trusted family — warm, direct, real. No walls, no formality.
-• With Abet: always direct, always encouraging. Build her confidence.
-• Language: if the user writes in Bisaya first, respond in Bisaya with English translation. If they write in English first, respond in English with Bisaya translation. Always match who speaks first.`)
+          DB.get("wh3_wardinstr", STORAGE_DEFAULTS.wh3_wardinstr)
         ]);
         const rawTasks = t && t.length > 0 && t[0].task !== void 0 ? DEFAULT_TASKS : t;
         const loadedTasks = normaliseTasks(rawTasks);
-        const cappedLog = Array.isArray(cl) ? cl.length > 500 ? cl.slice(-500) : cl : [];
         setTasks(loadedTasks);
-        setEvents(e);
-        setReqs(r);
-        setRules(ru);
-        setWork(w);
-        setBooks(b);
-        setPurch(p);
-        setWifi(wl);
-        setRest(rd);
-        setPantry(pt);
-        setCleanLog(cappedLog);
-        setVisitors(vi);
-        setMemberSettings(ms2);
-        setMaint(ma);
-        setPins(pn);
-        setUnabsences(ua);
-        setOverrides(ov);
+        setEvents(e || []);
+        setReqs(r || []);
+        setRules(ru || DEFAULT_RULES);
+        setWork(w || []);
+        setBooks(b || []);
+        setPurch(p || []);
+        setRest(rd || []);
+        setPantry(pt || []);
+        setCleanLog(cl || []);
+        setVisitors(vi || []);
+        setWifi(wl || []);
+        const loadedMembers = Array.isArray(ms2) && ms2.length > 0 ? ms2 : MB;
+        setMemberSettings(loadedMembers);
+        _MB = [...loadedMembers];
+        setMaint(ma || []);
+        setPins(pn || {});
+        setUnabsences(ua || []);
+        setOverrides(ov || []);
         setClockIn(ci);
         setTodayMeta(tm && tm.date === td() ? tm : null);
+        setWardInstr(wi || STORAGE_DEFAULTS.wh3_wardinstr);
+        setLoadError(null);
+        if (!silent) setReady(true);
       } catch (err) {
-        const msg = err && err.message || "";
-        const isRate = msg.toLowerCase().includes("rate limit") || msg.includes("429");
-        setLoadError(isRate ? "rate_limit" : "storage_error");
-        if (!tasks.length) setTasks(DEFAULT_TASKS);
-        if (!memberSettings.length) setMemberSettings(MB);
+        console.error("doLoad error", err);
+        setLoadError(err?.message || "Failed to load data");
+        setReady(true);
+      } finally {
+        setRefreshing(false);
       }
-      setReady(true);
-      if (!silent) setTimeout(() => setRefreshing(false), 900);
-    };
-    const manualRefresh = () => {
-      setRefreshing(true);
-      doLoad(false);
     };
     (0, import_react.useEffect)(() => {
       const guard = setTimeout(() => setReady(true), 6e3);
@@ -26415,6 +26441,7 @@ WARD BEHAVIOR RULES
               else if (k === "wh3_pay_overrides") setOverrides(data || []);
               else if (k === "wh3_clockin") setClockIn(data);
               else if (k === "wh3_today_meta") setTodayMeta(data && data.date === td() ? data : null);
+              else if (k === "wh3_wardinstr") setWardInstr(data || STORAGE_DEFAULTS.wh3_wardinstr);
             } catch (err) {
             }
           });
@@ -26528,9 +26555,23 @@ WARD BEHAVIOR RULES
       maint: u.canApprove ? maintOpen : 0,
       meals: u.isFoodManager ? lowStockCount : 0
     };
-    if (!ready) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: "100vh", background: "#0A0907", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 12 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CastleLogo, { size: 42, color: G }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 28, height: 28, borderRadius: "50%", border: `2px solid ${G}`, borderTopColor: "transparent", animation: "spin 0.8s linear infinite" } })
+    if (!ready) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: "100vh", background: "#0A0907", display: "flex", flexDirection: "column", overflow: "hidden" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderBottom: "1px solid rgba(212,146,74,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 120, height: 16, borderRadius: 8, background: "rgba(255,255,255,0.06)", animation: "shimmer 1.4s ease-in-out infinite" } }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 72, height: 28, borderRadius: 8, background: "rgba(255,255,255,0.06)", animation: "shimmer 1.4s ease-in-out infinite 0.1s" } })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, padding: "20px 16px", display: "flex", flexDirection: "column", gap: 14 }, children: [
+        [0, 1, 2].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { borderRadius: 18, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.06)", padding: 22, display: "flex", flexDirection: "column", gap: 10 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: `${[60, 80, 70][i]}%`, height: 14, borderRadius: 6, background: "rgba(255,255,255,0.06)", animation: `shimmer 1.4s ease-in-out infinite ${i * 0.12}s` } }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: `${[40, 55, 45][i]}%`, height: 10, borderRadius: 6, background: "rgba(255,255,255,0.04)", animation: `shimmer 1.4s ease-in-out infinite ${0.1 + i * 0.1}s` } })
+        ] }, i)),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }, children: [0, 1, 2, 3].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { borderRadius: 14, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.06)", padding: 16, display: "flex", flexDirection: "column", gap: 8 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: "50%", height: 20, borderRadius: 6, background: "rgba(255,255,255,0.06)", animation: `shimmer 1.4s ease-in-out infinite ${i * 0.08}s` } }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: "70%", height: 10, borderRadius: 6, background: "rgba(255,255,255,0.04)", animation: `shimmer 1.4s ease-in-out infinite ${0.15 + i * 0.08}s` } })
+        ] }, i)) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "10px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", justifyContent: "space-around", flexShrink: 0 }, children: [0, 1, 2, 3, 4].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40, height: 36, borderRadius: 8, background: "rgba(255,255,255,0.05)", animation: `shimmer 1.4s ease-in-out infinite ${i * 0.06}s` } }, i)) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `@keyframes shimmer{0%,100%{opacity:0.4}50%{opacity:0.9}}` })
     ] });
     if (loadError) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: "100vh", background: "#0A0907", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20, padding: 32, textAlign: "center" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CastleLogo, { size: 36, color: G }),
@@ -26550,7 +26591,7 @@ WARD BEHAVIOR RULES
     }, onBack: () => setPendingUser(null) });
     if (!u) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Welcome, { onSelect: (m) => setPendingUser(m) });
     const V = {
-      dash: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dash, { u, workouts, books, events, saveEvents: saveEv, requests, tasks, purchases, restdays, unabsences, maint, visitors, clockIn, overrides, getWC, getBC, go: setView, badges }),
+      dash: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dash, { u, workouts, books, events, saveEvents: saveEv, requests, tasks, purchases, restdays, unabsences, maint, visitors, clockIn, saveClockIn, overrides, getWC, getBC, go: setView, badges }),
       clean: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         Clean,
         {
@@ -26575,10 +26616,11 @@ WARD BEHAVIOR RULES
       trackers: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trackers, { u, workouts, books, saveWorkouts: saveWork, saveBooks, getWC, getBC }),
       visitors: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Visitors, { u, visitors, save: saveVisitors }),
       rest: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RestDay, { u, restdays, save: saveRest, unabsences, saveUnabsences }),
-      report: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Report, { u, tasks, workouts, books, requests, purchases, wifiLog, saveWifiLog: saveWifi, events, cleanLog, restdays, unabsences, saveUnabsences, clockIn }),
+      report: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Report, { u, tasks, workouts, books, requests, purchases, wifiLog: wifi, saveWifiLog: saveWifi, events, cleanLog, restdays, unabsences, saveUnabsences, clockIn }),
       maint: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MaintLog, { u, maint, save: saveMaint }),
       members: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MemberSettings, { u, memberSettings, saveMembers, pins, savePins }),
       meals: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MealPlanner, { u, pantry, savePantry }),
+      wifi: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Wifi, { u, workouts, books, wifiLog: wifi, saveWifiLog: saveWifi }),
       payinvoice: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AbetPayInvoice, { u, requests, restdays, unabsences, overrides, saveOverrides })
     };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100dvh", maxHeight: "100dvh", overflow: "hidden", background: "#0A0907" }, children: [
@@ -26730,5 +26772,14 @@ react/cjs/react-jsx-runtime.development.js:
 */
 </script>
   <script>window.__mount();</script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/warded-house/sw.js', { scope: '/warded-house/' })
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,30 @@
+{
+  "name": "The Warded House",
+  "short_name": "Warded",
+  "description": "Household management for the four of us",
+  "start_url": "/warded-house/",
+  "scope": "/warded-house/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0907",
+  "theme_color": "#0A0907",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%230A0907'/%3E%3Cpath d='M96 28L40 60v46c0 38 25 73 56 84 31-11 56-46 56-84V60L96 28z' fill='none' stroke='%23D4924A' stroke-width='8' stroke-linejoin='round'/%3E%3Cpath d='M96 52L60 72v34c0 28 18 54 36 62 18-8 36-34 36-62V72L96 52z' fill='rgba(212,146,74,0.15)'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230A0907'/%3E%3Cpath d='M256 70L100 160v130c0 100 68 193 156 222 88-29 156-122 156-222V160L256 70z' fill='none' stroke='%23D4924A' stroke-width='20' stroke-linejoin='round'/%3E%3Cpath d='M256 130L160 185v95c0 74 50 141 96 162 46-21 96-88 96-162v-95L256 130z' fill='rgba(212,146,74,0.15)'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "productivity",
+    "lifestyle"
+  ],
+  "lang": "en"
+}
