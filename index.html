@@ -26398,7 +26398,10 @@ WARD BEHAVIOR RULES
     };
     (0, import_react.useEffect)(() => {
       const guard = setTimeout(() => setReady(true), 6e3);
-      doLoad(true).finally(() => clearTimeout(guard));
+      doLoad(true).finally(() => {
+        clearTimeout(guard);
+        setReady(true);
+      });
       const onVis = () => {
         if (document.visibilityState === "visible") doLoad(true);
       };
