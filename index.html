@@ -22105,17 +22105,15 @@ THE WARDED HOUSE APP
   var DB = {
     async get(k, d) {
       try {
-        const r = await fetch("https://wardedhouse-abe15-default-rtdb.asia-southeast1.firebasedatabase.app/wh3/"+encodeURIComponent(k)+".json");
-        if(!r.ok)return d;
-        const v=await r.json();
-        return v!==null?v:d;
+        const r = await window.storage.get(k, true);
+        return r ? JSON.parse(r.value) : d;
       } catch (e) {
         return d;
       }
     },
     async set(k, v) {
       try {
-        await fetch("https://wardedhouse-abe15-default-rtdb.asia-southeast1.firebasedatabase.app/wh3/"+encodeURIComponent(k)+".json",{ method: "PUT", headers: {"Content-Type":"application/json"}, body: JSON.stringify(v) });
+        await window.storage.set(k, JSON.stringify(v), true);
       } catch (e) {
       }
     }
@@ -26619,11 +26617,11 @@ WARD BEHAVIOR RULES
       trackers: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trackers, { u, workouts, books, saveWorkouts: saveWork, saveBooks, getWC, getBC }),
       visitors: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Visitors, { u, visitors, save: saveVisitors }),
       rest: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RestDay, { u, restdays, save: saveRest, unabsences, saveUnabsences }),
-      report: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Report, { u, tasks, workouts, books, requests, purchases, wifiLog: wifi, saveWifiLog: saveWifi, events, cleanLog, restdays, unabsences, saveUnabsences, clockIn }),
+      report: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Report, { u, tasks, workouts, books, requests, purchases, wifiLog: wifiLog, saveWifiLog: saveWifi, events, cleanLog, restdays, unabsences, saveUnabsences, clockIn }),
       maint: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MaintLog, { u, maint, save: saveMaint }),
       members: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MemberSettings, { u, memberSettings, saveMembers, pins, savePins }),
       meals: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MealPlanner, { u, pantry, savePantry }),
-      wifi: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Wifi, { u, workouts, books, wifiLog: wifi, saveWifiLog: saveWifi }),
+      wifi: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Wifi, { u, workouts, books, wifiLog: wifiLog, saveWifiLog: saveWifi }),
       payinvoice: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AbetPayInvoice, { u, requests, restdays, unabsences, overrides, saveOverrides })
     };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100dvh", maxHeight: "100dvh", overflow: "hidden", background: "#0A0907" }, children: [
