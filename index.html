@@ -22765,7 +22765,7 @@ IMPORTANT BEHAVIOR RULES:
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" },
-          body: JSON.stringify({ model: "llama-3.3-70b-versatile", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
+          body: JSON.stringify({ model: "meta-llama/llama-4-scout-17b-16e-instruct", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
         });
         if (!res.ok) {
           const t = await res.text();
@@ -22786,12 +22786,13 @@ IMPORTANT BEHAVIOR RULES:
       startPos.current = { mx: touch.clientX, my: touch.clientY, bx: btnPos.x, by: btnPos.y };
       dragRef.current = { move: (ev) => {
         const t = ev.touches ? ev.touches[0] : ev;
-        const dx = t.clientX - startPos.current.mx, dy = t.clientY - startPos.current.my;
+        const dx = t.clientX - startPos.current.mx;
+        const dy = t.clientY - startPos.current.my;
         if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragging.current = true;
         if (dragging.current) {
-          const nx = Math.max(8, Math.min(window.innerWidth - 54, startPos.current.bx + (t.clientX - startPos.current.mx - dx + dx)));
-          const ny = Math.max(8, Math.min(window.innerHeight - 54, startPos.current.by + (t.clientY - startPos.current.my)));
-          setBtnPos({ x: Math.max(8, Math.min(window.innerWidth - 54, t.clientX - 23)), y: Math.max(68, Math.min(window.innerHeight - 54, window.innerHeight - t.clientY - 23)) });
+          const newLeft = Math.max(8, Math.min(window.innerWidth - 120, startPos.current.bx + dx));
+          const newBottom = Math.max(68, Math.min(window.innerHeight - 60, startPos.current.by - dy));
+          setBtnPos({ x: newLeft, y: newBottom });
         }
       }, end: () => {
         document.removeEventListener("mousemove", dragRef.current.move);
@@ -22982,7 +22983,7 @@ IMPORTANT BEHAVIOR RULES:
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.07)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: out, style: { background: "none", border: "none", color: "#3A3530", fontSize: 11, cursor: "pointer", letterSpacing: "0.09em", textTransform: "uppercase" }, children: "\u2190 Switch Member" }) })
     ] });
   }
-  function Dash({ u, workouts, books, events, saveEvents, requests, tasks, purchases, restdays, unabsences, maint = [], visitors = [], clockIn, saveClockIn = () => {
+  function Dash({ u, sseOk = false, workouts, books, events, saveEvents, requests, tasks, purchases, restdays, unabsences, maint = [], visitors = [], clockIn, saveClockIn = () => {
   }, overrides = [], getWC, getBC, go, badges }) {
     const now = /* @__PURE__ */ new Date(), hr = now.getHours();
     const greet = hr < 12 ? "Good morning" : hr < 17 ? "Good afternoon" : "Good evening";
@@ -23060,7 +23061,7 @@ IMPORTANT BEHAVIOR RULES:
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 6, flexShrink: 0 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: isOnline ? GRN : "#C9A84C", boxShadow: isOnline ? "0 0 6px rgba(130,184,150,0.7)" : "0 0 6px rgba(201,160,76,0.6)", flexShrink: 0 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: isOnline ? GRN : "#C9A84C", fontWeight: 500 }, children: isOnline ? "Live" : "Offline" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: sseOk ? GRN : isOnline ? "#C9A84C" : "#C97060", fontWeight: 500 }, children: sseOk ? "Live" : isOnline ? "Connecting..." : "Offline" })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 13, marginTop: 0 }, children: "Here's the household at a glance." })
@@ -25436,7 +25437,7 @@ IMPORTANT BEHAVIOR RULES:
       setClassifying(true);
       try {
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
+          model: "meta-llama/llama-4-maverick-17b-128e-instruct",
           max_tokens: 15,
           messages: [{ role: "user", content: `Classify this ingredient into exactly one category. Consider all cultural names, local Filipino/Bisaya/Cebuano names, regional variations, and synonyms (e.g. malunggay=moringa=Vegetable, tulingan=mackerel tuna=Protein, kamote=sweet potato=Grain & Carb, gata=coconut milk=Condiment). Reply with ONLY the category name, nothing else.
 
@@ -25471,7 +25472,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       if (ingRecipes[item.id]) return;
       setIngLoading((l) => ({ ...l, [item.id]: true }));
       try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({ model: "meta-llama/llama-4-maverick-17b-128e-instruct", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
         const d = await res.json();
         setIngRecipes((r) => ({ ...r, [item.id]: d.content && d.content[0] ? d.content[0].text : "Could not load recipes." }));
       } catch (e) {
@@ -25487,7 +25488,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       try {
         const ingList = items.map((i) => `${i.name}${i.quantity ? ` (${i.quantity} ${i.unit})` : ""}`).join(", ");
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
+          model: "meta-llama/llama-4-maverick-17b-128e-instruct",
           max_tokens: 1500,
           tools: [{ "type": "web_search_20250305", "name": "web_search" }],
           messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. For each recipe: name, source URL, ingredients (mark which I already have \u2713), 3-step summary, and why it's a healthy choice.` }]
@@ -25568,7 +25569,10 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
               ] }),
               ingLoading[item.id] && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 14, height: 14, borderRadius: "50%", border: `2px solid ${G}`, borderTopColor: "transparent", animation: "spin 0.8s linear infinite" } }),
               item.lowStock && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#C97060", fontSize: 10, fontWeight: 700 }, children: "LOW" }),
-              ingRecipes[item.id] && !ingLoading[item.id] && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: G, fontSize: 10 }, children: "6 recipes \u2192" }),
+              ingRecipes[item.id] && !ingLoading[item.id] && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: G, fontSize: 10 }, children: [
+                ingRecipes[item.id].length,
+                " recipes \u2192"
+              ] }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: (e) => {
                 e.stopPropagation();
                 toggleLowStock(item.id);
@@ -26334,6 +26338,7 @@ WARD BEHAVIOR RULES
     const [clPermPrompt, setClPermPrompt] = (0, import_react.useState)(false);
     const [todayMeta, setTodayMeta] = (0, import_react.useState)(null);
     const [wardInstr, setWardInstr] = (0, import_react.useState)("");
+    const [sseOk, setSseOk] = (0, import_react.useState)(false);
     _MB = memberSettings;
     const [ready, setReady] = (0, import_react.useState)(false);
     const [loadError, setLoadError] = (0, import_react.useState)(null);
@@ -26423,6 +26428,7 @@ WARD BEHAVIOR RULES
       const connect = () => {
         try {
           es = new EventSource(`${BASE}.json`);
+          es.onopen = () => setSseOk(true);
           es.addEventListener("put", (e) => {
             try {
               const { path, data } = JSON.parse(e.data);
@@ -26454,6 +26460,7 @@ WARD BEHAVIOR RULES
             }
           });
           es.onerror = () => {
+            setSseOk(false);
             es?.close();
             setTimeout(connect, 5e3);
           };
@@ -26599,7 +26606,7 @@ WARD BEHAVIOR RULES
     }, onBack: () => setPendingUser(null) });
     if (!u) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Welcome, { onSelect: (m) => setPendingUser(m) });
     const V = {
-      dash: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dash, { u, workouts, books, events, saveEvents: saveEv, requests, tasks, purchases, restdays, unabsences, maint, visitors, clockIn, saveClockIn, overrides, getWC, getBC, go: setView, badges }),
+      dash: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dash, { u, sseOk, workouts, books, events, saveEvents: saveEv, requests, tasks, purchases, restdays, unabsences, maint, visitors, clockIn, saveClockIn, overrides, getWC, getBC, go: setView, badges }),
       clean: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         Clean,
         {
