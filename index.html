@@ -1338,10 +1338,10 @@
             implementation
           };
         }
-        function getCrossOriginStringAs(as, input2) {
+        function getCrossOriginStringAs(as, input) {
           if ("font" === as) return "";
-          if ("string" === typeof input2)
-            return "use-credentials" === input2 ? input2 : "";
+          if ("string" === typeof input)
+            return "use-credentials" === input ? input : "";
         }
         function getValueDescriptorExpectingObjectForWarning(thing) {
           return null === thing ? "`null`" : void 0 === thing ? "`undefined`" : "" === thing ? "an empty string" : 'something with type "' + typeof thing + '"';
@@ -2341,8 +2341,8 @@
             ), true;
           try {
             rendererID = hook.inject(internals), injectedHook = hook;
-          } catch (err2) {
-            console.error("React instrumentation encountered an error: %o.", err2);
+          } catch (err) {
+            console.error("React instrumentation encountered an error: %o.", err);
           }
           return hook.checkDCE ? true : false;
         }
@@ -2351,10 +2351,10 @@
           if (injectedHook && "function" === typeof injectedHook.setStrictMode)
             try {
               injectedHook.setStrictMode(rendererID, newIsStrictMode);
-            } catch (err2) {
+            } catch (err) {
               hasLoggedError || (hasLoggedError = true, console.error(
                 "React instrumentation encountered an error: %o",
-                err2
+                err
               ));
             }
         }
@@ -4170,7 +4170,7 @@
           for (var element = getActiveElement(containerInfo.document); element instanceof containerInfo.HTMLIFrameElement; ) {
             try {
               var JSCompiler_inline_result = "string" === typeof element.contentWindow.location.href;
-            } catch (err2) {
+            } catch (err) {
               JSCompiler_inline_result = false;
             }
             if (JSCompiler_inline_result) containerInfo = element.contentWindow;
@@ -11408,10 +11408,10 @@
           if (injectedHook && "function" === typeof injectedHook.onCommitFiberUnmount)
             try {
               injectedHook.onCommitFiberUnmount(rendererID, deletedFiber);
-            } catch (err2) {
+            } catch (err) {
               hasLoggedError || (hasLoggedError = true, console.error(
                 "React instrumentation encountered an error: %o",
-                err2
+                err
               ));
             }
           var prevEffectStart = pushComponentEffectStart(), prevEffectDuration = pushComponentEffectDuration(), prevEffectErrors = pushComponentEffectErrors(), prevEffectDidSpawnUpdate = pushComponentEffectDidSpawnUpdate();
@@ -14317,10 +14317,10 @@
                   schedulerPriority,
                   didError
                 );
-              } catch (err2) {
+              } catch (err) {
                 hasLoggedError || (hasLoggedError = true, console.error(
                   "React instrumentation encountered an error: %o",
-                  err2
+                  err
                 ));
               }
             isDevToolsPresent && startViewTransitionStartTime.memoizedUpdaters.clear();
@@ -14476,10 +14476,10 @@
             if (injectedHook && "function" === typeof injectedHook.onPostCommitFiberRoot)
               try {
                 injectedHook.onPostCommitFiberRoot(rendererID, priority);
-              } catch (err2) {
+              } catch (err) {
                 hasLoggedError || (hasLoggedError = true, console.error(
                   "React instrumentation encountered an error: %o",
-                  err2
+                  err
                 ));
               }
             var stateNode = priority.current.stateNode;
@@ -17991,10 +17991,10 @@
           if (injectedHook && "function" === typeof injectedHook.onScheduleFiberRoot)
             try {
               injectedHook.onScheduleFiberRoot(rendererID, container, element);
-            } catch (err2) {
+            } catch (err) {
               hasLoggedError || (hasLoggedError = true, console.error(
                 "React instrumentation encountered an error: %o",
-                err2
+                err
               ));
             }
           parentComponent = getContextForSubtree(parentComponent);
@@ -21840,7 +21840,6 @@
   var CR = "#F0EAD9";
   var DIM = "#7A7060";
   var CARD = "#141420";
-  var GRN = GRN;
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var DS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   var PCATS = ["Food & Groceries", "Cleaning Supplies", "Household Items", "Personal / Medical", "Maintenance", "Other"];
@@ -22099,7 +22098,7 @@ THE WARDED HOUSE APP
         });
       }
     }
-    ["2025-01-05", "2025-02-02", "2025-03-02", "2025-04-06", "2025-05-04", "2025-06-01", "2025-07-06", "2025-08-03", "2025-09-07", "2025-10-05", "2025-11-02", "2025-12-07", "2026-01-04", "2026-02-01", "2026-03-01", "2026-04-05", "2026-05-03", "2026-06-07", "2026-07-05", "2026-08-02", "2026-09-06", "2026-10-04", "2026-11-01", "2026-12-06"].forEach((date) => ev.push({ id: "meet_" + date, title: "\u25AA House Meeting", date, color: GRN, sys: true, concerns: ["all"], time: "10:00", note: "Monthly household meeting \u2014 everyone required" }));
+    ["2025-01-05", "2025-02-02", "2025-03-02", "2025-04-06", "2025-05-04", "2025-06-01", "2025-07-06", "2025-08-03", "2025-09-07", "2025-10-05", "2025-11-02", "2025-12-07", "2026-01-04", "2026-02-01", "2026-03-01", "2026-04-05", "2026-05-03", "2026-06-07", "2026-07-05", "2026-08-02", "2026-09-06", "2026-10-04", "2026-11-01", "2026-12-06"].forEach((date) => ev.push({ id: "meet_" + date, title: "\u25AA House Meeting", date, color: "#82B896", sys: true, concerns: ["all"], time: "10:00", note: "Monthly household meeting \u2014 everyone required" }));
     return ev;
   })();
   var DB = {
@@ -22342,7 +22341,7 @@ THE WARDED HOUSE APP
   };
   var Btn = ({ children, onClick, v = "gold", sm, sx = {}, disabled }) => {
     const base = { border: "none", borderRadius: 8, cursor: disabled ? "not-allowed" : "pointer", fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 600, fontSize: sm ? 12 : 13, letterSpacing: "0.03em", padding: sm ? "6px 14px" : "9px 20px", transition: "all 0.15s", opacity: disabled ? 0.45 : 1, userSelect: "none", WebkitUserSelect: "none", ...sx };
-    const vs = { gold: { background: G, color: "#0A0907" }, outline: { background: "transparent", border: "1px solid rgba(212,146,74,0.3)", color: G }, ghost: { background: "rgba(255,255,255,0.05)", color: CR, border: "1px solid rgba(255,255,255,0.08)" }, danger: { background: "rgba(201,112,96,0.12)", border: "1px solid rgba(201,112,96,0.3)", color: "#C97060" }, success: { background: "rgba(130,184,150,0.12)", border: "1px solid rgba(130,184,150,0.3)", color: GRN } };
+    const vs = { gold: { background: G, color: "#0A0907" }, outline: { background: "transparent", border: "1px solid rgba(212,146,74,0.3)", color: G }, ghost: { background: "rgba(255,255,255,0.05)", color: CR, border: "1px solid rgba(255,255,255,0.08)" }, danger: { background: "rgba(201,112,96,0.12)", border: "1px solid rgba(201,112,96,0.3)", color: "#C97060" }, success: { background: "rgba(130,184,150,0.12)", border: "1px solid rgba(130,184,150,0.3)", color: "#82B896" } };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: { ...base, ...vs[v] || vs.gold }, onClick: disabled ? void 0 : onClick, children });
   };
   var Card = ({ children, sx = {} }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "wh-card", style: { background: CARD, border: "1px solid rgba(212,146,74,0.08)", borderRadius: 18, padding: 22, ...sx }, children });
@@ -22518,7 +22517,7 @@ THE WARDED HOUSE APP
     const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "\u232B"];
     const title = locked ? "Account Locked" : phase === "create" ? "Create Your PIN" : phase === "confirm" ? "Confirm Your PIN" : "Enter PIN";
     const sub = locked ? "Contact Ari or Roniq to reset your PIN" : phase === "create" ? "Choose a 4-digit PIN for your account" : phase === "confirm" ? "Re-enter your PIN to confirm" : member.role;
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: "100dvh", background: "#0A0907", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px", position: "relative", overflow: "hidden" }, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { minHeight: "100vh", background: "#0A0907", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, position: "relative" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 500, height: 500, borderRadius: "50%", background: `radial-gradient(circle,${member.color}07 0%,transparent 65%)`, pointerEvents: "none" } }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: onBack, style: { position: "absolute", top: 22, left: 22, background: "none", border: "none", color: "#5A5040", cursor: "pointer", fontSize: 13, fontWeight: 500, letterSpacing: "0.05em" }, children: "\u2190 Back" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", marginBottom: 32, position: "relative" }, children: [
@@ -22528,7 +22527,7 @@ THE WARDED HOUSE APP
       ] }),
       !locked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 14, marginBottom: 8, animation: shake ? "pinShake 0.5s ease" : "none" }, children: [0, 1, 2, 3].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 14, height: 14, borderRadius: "50%", background: i < digits.length ? member.color : "transparent", border: `2px solid ${i < digits.length ? member.color : member.color + "44"}`, transition: "all 0.15s" } }, i)) }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 22, marginBottom: 16, textAlign: "center" }, children: error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, fontWeight: 500 }, children: error }) }),
-      !locked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, width: "min(224px,80vw)" }, children: KEYS.map((k, i) => {
+      !locked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, width: 224 }, children: KEYS.map((k, i) => {
         if (k === "") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {}, i);
         const isDel = k === "\u232B";
         return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
@@ -22588,30 +22587,18 @@ THE WARDED HOUSE APP
       if (atRisk) {
         msg += "\u26A0 You're at risk for WiFi cut this Monday \u2014 you need more workouts this week. ";
       }
-      // Pending approvals
       if (u.canApprove || u.isFoodManager) {
-        const advLine = lines.find((l) => l.startsWith("PENDING ADVANCES:"));
-        const purchLine = lines.find((l) => l.startsWith("PENDING PURCHASES:"));
-        const restLine = lines.find((l) => l.startsWith("PENDING REST"));
-        const visLine = lines.find((l) => l.startsWith("PENDING VISITORS:"));
-        const pending = [];
+        var advLine = lines.find(function(l){return l.startsWith("PENDING ADVANCES:");});
+        var purchLine = lines.find(function(l){return l.startsWith("PENDING PURCHASES:");});
+        var pending = [];
         if (advLine && advLine.includes("pending")) pending.push("cash advance");
         if (purchLine && purchLine.includes("pending")) pending.push("purchase request");
-        if (restLine && restLine.includes("pending")) pending.push("rest day swap");
-        if (visLine && visLine.includes("pending")) pending.push("visitor request");
-        if (pending.length > 0) msg += "\uD83D\uDD14 Needs your approval: " + pending.join(", ") + ". ";
+        if (pending.length) msg += "\uD83D\uDD14 Needs approval: " + pending.join(", ") + ". ";
       }
-      // Rest day reminder for Abet
       if (u.isStaff) {
-        const restDayLine = lines.find((l) => l.startsWith("ABET REST DAY:"));
-        if (restDayLine) {
-          const parts = restDayLine.replace("ABET REST DAY: ", "");
-          msg += "Your rest day: " + parts + ". ";
-        }
+        var rd = lines.find(function(l){return l.startsWith("ABET REST DAY:");});
+        if (rd) msg += "Rest day: " + rd.replace("ABET REST DAY: ", "") + ". ";
       }
-      // Book compliance risk
-      const bookLine = lines.find((l) => l.startsWith("BOOKS:"));
-      if (bookLine && bookLine.includes("no book")) msg += "\uD83D\uDCDA No book logged this month yet. ";
       msg = msg.trim();
       setGreeting(msg);
       setLoading(false);
@@ -22622,45 +22609,27 @@ THE WARDED HOUSE APP
     ] });
   }
   function WardFloat({ u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr = "", saveWardInstr = () => {
-  }, rules = [], groqKey: groqKey2 = "" }) {
-    const [open2, setOpen2] = (0, import_react.useState)(false);
-    const [msgsRemaining, setMsgsRemaining] = (0, import_react.useState)(null);
-    const [wardTab2, setWardTab2] = (0, import_react.useState)("chat");
-    const [msgs2, setMsgs2] = (0, import_react.useState)([]);
-    const [input2, setInput2] = (0, import_react.useState)("");
-    const [thinking2, setThinking] = (0, import_react.useState)(false);
-    const [err2, setErr2] = (0, import_react.useState)("");
-    const [instrDraft2, setInstrDraft2] = (0, import_react.useState)(wardInstr || "");
-    const [instrSaved2, setInstrSaved2] = (0, import_react.useState)(false);
-    const bottomRef2 = (0, import_react.useRef)(null);
-    const [btnPos2, setBtnPos] = (0, import_react.useState)({ x: 16, y: 82 });
+  }, rules = [] }) {
+    const [open, setOpen] = (0, import_react.useState)(false);
+    const [wardTab, setWardTab] = (0, import_react.useState)("chat");
+    const [msgs, setMsgs] = (0, import_react.useState)([]);
+    const [input, setInput] = (0, import_react.useState)("");
+    const [thinking, setThinking] = (0, import_react.useState)(false);
+    const [err, setErr] = (0, import_react.useState)("");
+    const [instrDraft, setInstrDraft] = (0, import_react.useState)(wardInstr || "");
+    const [instrSaved, setInstrSaved] = (0, import_react.useState)(false);
+    const bottomRef = (0, import_react.useRef)(null);
+    const [btnPos, setBtnPos] = (0, import_react.useState)({ x: 16, y: 82 });
     const dragRef = (0, import_react.useRef)(null);
-    const dragging2 = (0, import_react.useRef)(false);
+    const dragging = (0, import_react.useRef)(false);
     const startPos = (0, import_react.useRef)({});
     (0, import_react.useEffect)(() => {
-      bottomRef2.current?.scrollIntoView({ behavior: "smooth" });
-    }, [msgs2, thinking2]);
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [msgs, thinking]);
     (0, import_react.useEffect)(() => {
-      if (wardTab2 === "settings") setInstrDraft2(wardInstr);
+      if (wardTab === "settings") setInstrDraft(wardInstr);
     }, [wardInstr]);
-    (0, import_react.useEffect)(() => {
-      if (open2) {
-        DB.get(getUsageKey(), 0).then(cur => setMsgsRemaining(Math.max(0, WARD_DAILY_LIMIT2 - cur)));
-      }
-    }, [open2]);
-    const alertCount2 = (0, import_react.useMemo)(() => {
-      const h = (/* @__PURE__ */ new Date()).getHours();
-      let n = 0;
-      if (u.isStaff && h >= 9 && clockIn?.date !== td()) n++;
-      if (u.canApprove) {
-        if (requests.filter((r) => r.status === "pending_admin").length) n++;
-        if (purchases.filter((p) => p.status === "pending_admin").length) n++;
-        const wc = getWC?.(u.id) || {};
-        if (!wc.compliant && [5, 6].includes((/* @__PURE__ */ new Date()).getDay())) n++;
-      }
-      return n;
-    }, [clockIn, requests, purchases, u]);
-    const buildSnapshot2 = () => {
+    const buildSnapshot = () => {
       try {
         const today = td();
         const wk = wr();
@@ -22688,7 +22657,7 @@ THE WARDED HOUSE APP
         const estPay = base + adjs - periodAdv - periodUa * Math.round(8500 / 26);
         const pendingTaskNames = tasks.filter((t) => isTaskDue(t) && !t._doneToday).slice(0, 5).map((t) => t.name);
         return [
-          `USER: ${u.name} | Role: ${u.role || u.id} | Today: ${(/* @__PURE__ */ new Date()).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",hour12:true}) + " | " + (/* @__PURE__ */ new Date()).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}`,
+          `USER: ${u.name} | Role: ${u.role || u.id} | Today: ${(/* @__PURE__ */ new Date()).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",hour12:true}) + " | " + (new Date()).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}`,
           `CLOCK-IN: ${todayCI ? `\u2713 Clocked in at ${todayCI}` : "\u2717 NOT YET CLOCKED IN (needs to do this first)"}`,
           `TASKS: ${doneTasks} done out of ${dueTasks} due today${doneTasks < dueTasks ? ` \u2014 ${dueTasks - doneTasks} still pending` : ""}`,
           nextTask ? `NEXT TASK TO DO: "${nextTask.name}" (area: ${nextTask.area || "General"})` : "",
@@ -22701,86 +22670,55 @@ THE WARDED HOUSE APP
           openMaint.length ? `OPEN MAINTENANCE: ${openMaint.map((m) => m.title).join(", ")}` : "",
           pendingVis.length ? `PENDING VISITORS: ${pendingVis.length}` : "",
           unabsences.filter((a) => a.date?.startsWith(mk)).length ? `UNEXCUSED ABSENCES THIS MONTH: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : "",
-          (() => {
-            const today = td();
-            const todayDate = new Date(today);
-            const dayOfWeek = todayDate.getDay(); // 0=Sun,3=Wed
-            const daysUntilWed = (3 - dayOfWeek + 7) % 7 || 7;
-            const nextWed = new Date(todayDate); nextWed.setDate(todayDate.getDate() + daysUntilWed);
-            const nextWedStr = nextWed.toISOString().slice(0,10);
-            const approvedSwap = restdays.find(r => r.status === 'approved' && r.date > today);
-            if (approvedSwap) return `ABET REST DAY: Swapped to ${approvedSwap.date} (approved)`;
-            const pendingSwap = restdays.find(r => r.status === 'pending_ekek' || r.status === 'pending_admin');
-            if (pendingSwap) return `ABET REST DAY: Next Wednesday ${nextWedStr} (swap request pending for ${pendingSwap.date})`;
-            return `ABET REST DAY: Next Wednesday ${nextWedStr}`;
-          })()
+          (function() { var t2=td(); var d2=new Date(t2); var dow=d2.getDay(); var dw=(3-dow+7)%7||7; var nw=new Date(d2); nw.setDate(d2.getDate()+dw); var nws=nw.toISOString().slice(0,10); var aS=restdays.find(function(r){return r.status==="approved"&&r.date>t2;}); if(aS) return "ABET REST DAY: Swapped to "+aS.date+" (approved)"; var pS=restdays.find(function(r){return r.status==="pending_ekek"||r.status==="pending_admin";}); if(pS) return "ABET REST DAY: Next Wednesday "+nws+" (swap pending for "+pS.date+")"; return "ABET REST DAY: Next Wednesday "+nws; })()
         ].filter(Boolean).join("\n");
       } catch (e) {
         return `User: ${u.name}`;
       }
     };
-    const WARD_DAILY_LIMIT2 = u.id === "roniq" ? 20 : u.id === "ari" ? 40 : 60;
-    const [usageCount2, setUsageCount2] = (0, import_react.useState)(0);
-    (0, import_react.useEffect)(() => {
-      DB.get(getUsageKey(), 0).then(n => setUsageCount2(n || 0));
-    }, [open2]);
+    const WARD_DAILY_LIMIT = u.id === "roniq" ? 20 : u.id === "ari" ? 40 : 60;
     const getUsageKey = () => `wh3_ward_usage_${u.id}_${td()}`;
     const checkAndIncrLimit = async () => {
       try {
         const key = getUsageKey();
         const cur = await DB.get(key, 0);
-        if (cur >= WARD_DAILY_LIMIT2) { setMsgsRemaining(0); return false; }
+        if (cur >= WARD_DAILY_LIMIT) return false;
         await DB.set(key, cur + 1);
-        setMsgsRemaining(WARD_DAILY_LIMIT2 - cur - 1);
+        setUsageCount2(cur + 1);
         return true;
       } catch {
         return true;
       }
     };
-    const send2 = async () => {
-      const text = input2.trim();
-      if (!text || thinking2) return;
-      if (!groqKey2) {
-        setErr2("Ward setup incomplete \u2014 Groq key missing from Firebase.");
-        return;
-      }
-      setInput2("");
-      setErr2("");
+    const send = async () => {
+      const text = input.trim();
+      if (!text || thinking) return;
+      setInput("");
+      setErr("");
       const userMsg = { role: "user", content: text };
-      const rawMsgs = [...msgs2, userMsg];
-      // Compress older messages to save tokens (keep last 6, summarize earlier)
-      let newMsgs;
-      if (rawMsgs.length > 8) {
-        const older = rawMsgs.slice(0, rawMsgs.length - 6);
-        const recent = rawMsgs.slice(rawMsgs.length - 6);
-        const summary = older.map((m) => (m.role === "user" ? "User: " : "Ward: ") + m.content).join(" | ");
-        const summaryMsg = { role: "user", content: "[Earlier conversation summary: " + summary.slice(0, 400) + "]" };
-        newMsgs = [summaryMsg, ...recent];
-      } else {
-        newMsgs = rawMsgs;
-      }
-      setMsgs2(newMsgs);
+      const newMsgs = [...msgs, userMsg];
+      setMsgs(newMsgs);
       setThinking(true);
       const allowed = await checkAndIncrLimit();
       if (!allowed) {
         setThinking(false);
-        setErr2("ward_resting");
+        setErr("ward_resting");
         return;
       }
       try {
-        const snapshot = buildSnapshot2();
+        const snapshot = buildSnapshot();
         const instrSection = (wardInstr && rawMsgs.length <= 1) ? `
 
 HOUSEHOLD INSTRUCTIONS (follow these carefully):
 ${wardInstr}` : "";
-        const rulesSection = Array.isArray(rules) && rules.length ? `
+        const rulesSection = rules && rules.length ? `
 
 HOUSE RULES (official, from the app):
-${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).join("\n")}` : "";
-        const systemPrompt = `You are Ward \u2014 The Warded House AI. Master chef, janitor, dietitian, fitness coach, app guide, and trusted family member for Ek Ek, Abet, Ari, and Roniq in Dumaguete, Philippines.\n\nPERSONALITY: Warm, direct, real. No walls, no formality. Humor when it fits. Trusted family, not an assistant.\nWith Abet: always encouraging, build her confidence. Never shame or pressure.\nWith Ari/Roniq: direct, no beating around the bush.\n\nLANGUAGE: English first + Bisaya translation. If user writes Bisaya first, flip it.\n\nHEALTH:\n- Ek Ek: diabetic (no sugar), asthmatic (no dust/strong smells/harsh chemicals), sensitive skin\n- Roniq: low-sodium strict, hypokalemia (needs coconut water, banana, avocado, sweet potato, squash daily), asthmatic\n- Abet: standard rest day Wednesday\n- All: vitamins after lunch, 5 workouts/week min, 1 book/month min\n\nCATS (Kya, Indi, Arwen + kittens Four & Sati): indoor only, fed 1pm by Ari/Roniq. NEVER suggest near cats: onions, garlic, grapes, chocolate, xylitol, lilies, chemical pest control.\n\nRULES SUMMARY: No outdoor shoes inside. No unexpected visitors (24h notice). No outside junk food without Ari/Roniq approval. No lying. Lying = warning then removal. Kaikog not an excuse. Any money decision needs Ari/Roniq approval.\n\nWIFI CUTS: Miss workout week = cut Monday. Fail monthly book = cut after meeting. No exceptions.\n\nAPP EXPERTISE - know every screen and feature:\nDashboard(clock-in,compliance), Checklist(tasks+timers), Advance(cash,2-step approval), Shop(purchases,2-step), Meals(pantry+AI recipes), Trackers(workouts+books), Rest(swap requests), Visitors(24h notice), Maintenance(issues), Reports(finance+wifi+attendance), WiFi(enforcement log), Members(PINs,admin only), Pay Invoice(Abet salary,admin only), Ward Settings(instructions,Ari/Roniq only).\n\nLIVE DATA BELOW: Current time, tasks, workouts, advances, purchases, rest days, pantry, visitors, maintenance. Use it directly in responses.\n\n${instrSection}${rulesSection}\n\n=== CURRENT LIVE STATE (read this before every response) ===\nThe USER line shows the EXACT current time when this message was sent.\n${snapshot}\n=== END ===`
+${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || r}`).join("\n")}` : "";
+        const systemPrompt = `You are Ward \u2014 The Warded House AI. Master chef, janitor, dietitian, fitness coach, app guide, and trusted family member for Ek Ek, Abet, Ari, and Roniq in Dumaguete, Philippines.\n\nPERSONALITY: Warm, direct, real. Humor when it fits. Trusted family, not an assistant. With Abet: always encouraging, build her confidence. With Ari/Roniq: direct, no beating around the bush.\n\nLANGUAGE: English first + Bisaya translation. If user writes Bisaya first, flip it.\n\nHEALTH: Ek Ek: diabetic (no sugar), asthmatic (no dust/strong smells/harsh chemicals). Roniq: low-sodium strict, hypokalemia (coconut water, banana, avocado, sweet potato, squash daily), asthmatic. Abet: rest day Wednesday. All: vitamins after lunch, 5 workouts/week, 1 book/month.\n\nCATS (Kya, Indi, Arwen + kittens Four & Sati): indoor only, fed 1pm by Ari/Roniq. NEVER suggest near cats: onions, garlic, grapes, chocolate, xylitol, lilies, chemical pest control.\n\nRULES: No outdoor shoes. No unexpected visitors (24h notice). No outside junk food without Ari/Roniq approval. No lying (warning then removal). Money decisions need Ari/Roniq. WiFi cut for missed workout week or failed book month.\n\nAPP: Dashboard(clock-in,compliance), Checklist(tasks+timers), Advance(cash,2-step approval), Shop(purchases,2-step), Meals(pantry+AI recipes), Trackers(workouts+books), Rest(swaps), Visitors(24h), Maintenance, Reports, WiFi log, Members(admin), Pay Invoice(admin), Ward Settings(Ari/Roniq).\n\n${instrSection}${rulesSection}\n\n=== CURRENT LIVE STATE ===\nUSER line shows EXACT current time.\n${snapshot}\n=== END ===`
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
-          headers: { "Authorization": "Bearer " + groqKey2, "Content-Type": "application/json" },
+          headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" },
           body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
         });
         if (!res.ok) {
@@ -22789,30 +22727,25 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
         }
         const d = await res.json();
         const reply = d.choices?.[0]?.message?.content || "Sorry, I could not respond.";
-        setMsgs2((m) => [...m, { role: "assistant", content: reply }]);
+        setMsgs((m) => [...m, { role: "assistant", content: reply }]);
       } catch (e) {
-        if (!groqKey2) {
-          setErr2("Ward setup incomplete \u2014 Groq key not found in Firebase. Check wh3_config_groq_key.");
-        } else {
-          setErr2("Ward error: " + e.message);
-        }
+        setErr("Ward is unavailable right now. Check your connection.");
       } finally {
         setThinking(false);
       }
     };
-    const onDragStart2 = (e) => {
-      dragging2.current = false;
+    const onDragStart = (e) => {
+      dragging.current = false;
       const touch = e.touches ? e.touches[0] : e;
-      startPos.current = { mx: touch.clientX, my: touch.clientY, bx: btnPos2.x, by: btnPos2.y };
+      startPos.current = { mx: touch.clientX, my: touch.clientY, bx: btnPos.x, by: btnPos.y };
       dragRef.current = { move: (ev) => {
         const t = ev.touches ? ev.touches[0] : ev;
-        const dx = t.clientX - startPos.current.mx;
-        const dy = t.clientY - startPos.current.my;
-        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragging2.current = true;
-        if (dragging2.current) {
-          const newLeft = Math.max(8, Math.min(window.innerWidth - 120, startPos.current.bx + dx));
-          const newBottom = Math.max(68, Math.min(window.innerHeight - 60, startPos.current.by - dy));
-          setBtnPos({ x: newLeft, y: newBottom });
+        const dx = t.clientX - startPos.current.mx, dy = t.clientY - startPos.current.my;
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragging.current = true;
+        if (dragging.current) {
+          const nx = Math.max(8, Math.min(window.innerWidth - 54, startPos.current.bx + (t.clientX - startPos.current.mx - dx + dx)));
+          const ny = Math.max(8, Math.min(window.innerHeight - 54, startPos.current.by + (t.clientY - startPos.current.my)));
+          setBtnPos({ x: Math.max(8, Math.min(window.innerWidth - 54, t.clientX - 23)), y: Math.max(68, Math.min(window.innerHeight - 54, window.innerHeight - t.clientY - 23)) });
         }
       }, end: () => {
         document.removeEventListener("mousemove", dragRef.current.move);
@@ -22825,88 +22758,118 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       document.addEventListener("touchmove", dragRef.current.move, { passive: true });
       document.addEventListener("touchend", dragRef.current.end);
     };
-    ;
-    
-    if (!open2) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onMouseDown: onDragStart2, onTouchStart: onDragStart2, onClick: () => { if (!dragging2.current) setOpen2(true); }, style: { position: "fixed", bottom: btnPos2.y, left: btnPos2.x, height: 40, paddingLeft: 12, paddingRight: 16, borderRadius: 20, background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", gap: 7, zIndex: 30, touchAction: "none", whiteSpace: "nowrap" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 16, c: "#0A0907" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, fontWeight: 700, color: "#0A0907", letterSpacing: "0.03em" }, children: "Talk to Ward" }),
-      alertCount2 > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { position: "absolute", top: -4, right: -4, width: 18, height: 18, borderRadius: "50%", background: "#C97060", border: "2px solid #0A0907", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#fff" }, children: alertCount2 })
-    ] });
+    const [showSessionChoice, setShowSessionChoice] = (0, import_react.useState)(false);
+    const openWard = () => {
+      if (!dragging.current) {
+        if (msgs.length > 0) {
+          setShowSessionChoice(true);
+        } else {
+          setOpen(true);
+        }
+      }
+    };
+    if (showSessionChoice) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "#141410", border: "1px solid rgba(212,146,74,0.2)", borderRadius: 16, padding: 24, maxWidth: 300, width: "100%" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, color: "#D4924A", textAlign: "center", marginBottom: 6 }, children: "Welcome back" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13, textAlign: "center", marginBottom: 20 }, children: "You have an ongoing conversation with Ward." }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: () => {
+          setShowSessionChoice(false);
+          setOpen(true);
+        }, children: "Continue conversation" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => {
+          setMsgs([]);
+          setShowSessionChoice(false);
+          setOpen(true);
+        }, children: "Start new session" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setShowSessionChoice(false), children: "Cancel" })
+      ] })
+    ] }) });
+    if (!open) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      "button",
+      {
+        onMouseDown: onDragStart,
+        onTouchStart: onDragStart,
+        onClick: openWard,
+        style: { position: "fixed", bottom: btnPos.y, left: btnPos.x, width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 30, touchAction: "none" },
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 20, c: "#0A0907" })
+      }
+    );
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "fixed", inset: 0, background: "#0A0907", zIndex: 50, display: "flex", flexDirection: "column" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "14px 16px", borderBottom: "1px solid rgba(212,146,74,0.1)", display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, fontWeight: 600, color: "#D4924A" }, children: "Ward" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 3 }, children: (u.canApprove ? ["chat", "settings"] : ["chat"]).map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 3 }, children: ["chat", "settings"].map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
             if (t === "settings") {
-              setWardTab2("settings");
-              setInstrDraft2(wardInstr);
+              setWardTab("settings");
+              setInstrDraft(wardInstr);
             } else {
-              setWardTab2(t);
+              setWardTab(t);
             }
-          }, style: { background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: wardTab2 === t ? 700 : 400, color: wardTab2 === t ? "#D4924A" : "#5A4E3A", textTransform: "capitalize", padding: 0, borderBottom: wardTab2 === t ? "1px solid #D4924A" : "1px solid transparent", paddingBottom: 1 }, children: t }, t)) })
+          }, style: { background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: wardTab === t ? 700 : 400, color: wardTab === t ? "#D4924A" : "#5A4E3A", textTransform: "capitalize", padding: 0, borderBottom: wardTab === t ? "1px solid #D4924A" : "1px solid transparent", paddingBottom: 1 }, children: t }, t)) })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
-          setOpen2(false);
-          setErr2("");
+          setOpen(false);
+          setErr("");
         }, style: { background: "none", border: "none", color: "#5A4E3A", cursor: "pointer", fontSize: 22, padding: "4px 8px" }, children: "\xD7" })
       ] }),
-      wardTab2 === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "20px 16px" }, children: [
+      wardTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "20px 16px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#D4924A", marginBottom: 6 }, children: "Ward Instructions" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", marginBottom: 14, lineHeight: 1.6 }, children: "Tell Ward about your household \u2014 values, preferences, routines, things to avoid. Ward will use this in every conversation." }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "textarea",
           {
-            value: instrDraft2,
-            onChange: (e) => setInstrDraft2(e.target.value),
-            placeholder: "Add household-specific context Ward should always know:\n\n\nAPP EXPERTISE - YOU ARE THE AUTHORITY ON THIS APP:\nYou know every screen, every button, every data field. Give exact step-by-step guidance for anything app-related.\n\nSCREENS:\n- DASHBOARD: Clock-in for Abet, compliance status, pending approvals. Live indicator (green=synced) is in the header.\n- CHECKLIST: Abet daily tasks. Tap to start timer and mark complete. Admins can edit/skip/remove tasks.\n- ADVANCE: Staff submits cash advance. Ek Ek approves first, then Ari or Roniq.\n- SHOP: Purchase requests. Ek Ek approves first, then Ari or Roniq. Shows spending history.\n- MEALS: Pantry tab (track ingredients, tap for AI recipes) and Find Recipes tab (describe meal, AI suggests recipes).\n- TRACKERS: Workouts (log sessions, admin verifies) and Books (log book, admin marks pass/fail at monthly meeting).\n- REST: Abet submits rest day swap requests. Ek Ek then Ari/Roniq approve. Default rest day is Wednesday.\n- VISITORS: Submit visitor requests (24h advance notice required). Admin approves or denies.\n- MAINTENANCE: Log household issues with status tracking.\n- REPORTS: Financial summary, WiFi enforcement log, attendance records.\n- WIFI: Log of WiFi cuts for workout or book failures.\n- MEMBERS: Admin only - set PINs, manage member settings.\n- PAY INVOICE: Admin only - Abet salary by period with adjustments.\n- WARD SETTINGS: Ari/Roniq only - edit these household instructions.\n\nTIME AWARENESS:\nYou always know the current time from the live data provided. Use it naturally - greet by time of day, flag if Abet is late, note if it's almost end of day.\u2022 Cats: Kya, Indi, Arwen \u2014 flag anything toxic to them\n\u2022 Transitioning to zero/low plastic and non-toxic products\n\u2022 Healthier lifestyle focus \u2014 less processed food, more whole foods\n\u2022 We shop at local Dumaguete markets (prefer locally available ingredients)\n\u2022 Abet is lactose intolerant (if applicable)\n\u2022 Preferred cleaning: vinegar, baking soda, castile soap\n\u2022 [Add anything else Ward should always remember]",
+            value: instrDraft,
+            onChange: (e) => setInstrDraft(e.target.value),
+            placeholder: "Add household-specific context Ward should always know:\n\u2022 Cats: Kya, Indi, Arwen \u2014 flag anything toxic to them\n\u2022 Transitioning to zero/low plastic and non-toxic products\n\u2022 Healthier lifestyle focus \u2014 less processed food, more whole foods\n\u2022 We shop at local Dumaguete markets (prefer locally available ingredients)\n\u2022 Abet is lactose intolerant (if applicable)\n\u2022 Preferred cleaning: vinegar, baking soda, castile soap\n\u2022 [Add anything else Ward should always remember]",
             rows: 12,
             style: { width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 13, padding: "12px 14px", resize: "vertical", outline: "none", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.6, marginBottom: 12 }
           }
         ),
         u.canApprove ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 10 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: () => {
-            saveWardInstr(instrDraft2);
-            setInstrSaved2(true);
-            setTimeout(() => setInstrSaved2(false), 2e3);
-          }, sx: { flex: 1 }, children: instrSaved2 ? "\u2713 Saved" : "Save Instructions" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setInstrDraft2(wardInstr), children: "Reset" })
+            saveWardInstr(instrDraft);
+            setInstrSaved(true);
+            setTimeout(() => setInstrSaved(false), 2e3);
+          }, sx: { flex: 1 }, children: instrSaved ? "\u2713 Saved" : "Save Instructions" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setInstrDraft(wardInstr), children: "Reset" })
         ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", fontStyle: "italic" }, children: "Only Ari or Roniq can edit Ward's instructions." })
       ] }),
-      wardTab2 === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
-        msgs2.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardGreeting, { u, snapshot: buildSnapshot2() }),
-        msgs2.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "82%", padding: "10px 14px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? "rgba(212,146,74,0.15)" : "rgba(255,255,255,0.04)", border: m.role === "user" ? "1px solid rgba(212,146,74,0.25)" : "1px solid rgba(255,255,255,0.07)", color: m.role === "user" ? "#D4924A" : "#C8C0B0", fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-wrap", userSelect: "text" }, children: m.content }) }, i)),
-        thinking2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "10px 14px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "18px 18px 18px 4px", width: "fit-content" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#5A4E3A", fontSize: 13, fontStyle: "italic", animation: "wardDot 1.4s ease-in-out infinite" }, children: "Ward is thinking..." }) }),
-        err2 && err2 === "ward_resting" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px 16px", background: "rgba(212,146,74,0.05)", border: "1px solid rgba(212,146,74,0.1)", borderRadius: 14, margin: "0 8px" }, children: [
+      wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
+        msgs.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardGreeting, { u, snapshot: buildSnapshot() }),
+        msgs.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "82%", padding: "10px 14px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? "rgba(212,146,74,0.15)" : "rgba(255,255,255,0.04)", border: m.role === "user" ? "1px solid rgba(212,146,74,0.25)" : "1px solid rgba(255,255,255,0.07)", color: m.role === "user" ? "#D4924A" : "#C8C0B0", fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-wrap", userSelect: "text" }, children: m.content }) }, i)),
+        thinking && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6, padding: "10px 14px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "18px 18px 18px 4px", width: "fit-content" }, children: [0, 1, 2].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 6, height: 6, borderRadius: "50%", background: "#5A4E3A", animation: "wardDot 1.2s ease-in-out infinite", animationDelay: i * 0.2 + "s" } }, i)) }),
+        err && err === "ward_resting" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px 16px", background: "rgba(212,146,74,0.05)", border: "1px solid rgba(212,146,74,0.1)", borderRadius: 14, margin: "0 8px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 28, marginBottom: 8 }, children: "\u{1F319}" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#D4924A", marginBottom: 4 }, children: "Ward needs to rest" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: "#5A4E3A", fontSize: 12, lineHeight: 1.6 }, children: [
             "You've reached your ",
-            WARD_DAILY_LIMIT2,
+            WARD_DAILY_LIMIT,
             " message daily limit. Ward will be back at midnight. You can still scroll through your conversation above."
           ] })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center", userSelect: "text", WebkitUserSelect: "text", cursor: "text" }, children: err2 }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: bottomRef2 })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center" }, children: err }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: bottomRef })
       ] }),
-      wardTab2 === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", gap: 10, alignItems: "flex-end", flexShrink: 0, paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }, children: [
+      wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", gap: 10, alignItems: "flex-end", flexShrink: 0, paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "textarea",
           {
-            value: input2,
-            onChange: (e) => setInput2(e.target.value),
+            value: input,
+            onChange: (e) => setInput(e.target.value),
             onKeyDown: (e) => {
-              if (e.key === "Enter" && !e.shiftKey && err2 !== "ward_resting") {
+              if (e.key === "Enter" && !e.shiftKey && err !== "ward_resting") {
                 e.preventDefault();
-                send2();
+                send();
               }
             },
-            disabled: err2 === "ward_resting",
-            placeholder: err2 === "ward_resting" ? "Ward is resting until midnight..." : thinking2 ? "Ward is thinking..." : msgsRemaining !== null ? `Ask Ward anything... (${msgsRemaining} left today)` : "Ask Ward anything...",
+            disabled: err === "ward_resting",
+            placeholder: err === "ward_resting" ? "Ward is resting until midnight..." : "Ask Ward anything...",
             rows: 1,
             style: { flex: 1, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 14, padding: "10px 14px", resize: "none", outline: "none", maxHeight: 100, overflowY: "auto", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.5 }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: send2, disabled: !input2.trim() || thinking2 || err2 === "ward_resting", style: { width: 40, height: 40, borderRadius: "50%", background: input2.trim() && !thinking2 ? "linear-gradient(135deg,#C4893A,#D4924A)" : "rgba(255,255,255,0.05)", border: "none", cursor: input2.trim() && !thinking2 ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "upload", s: 16, c: input2.trim() && !thinking2 ? "#0A0907" : "#3A3428" }) })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: send, disabled: !input.trim() || thinking || err === "ward_resting", style: { width: 40, height: 40, borderRadius: "50%", background: input.trim() && !thinking ? "linear-gradient(135deg,#C4893A,#D4924A)" : "rgba(255,255,255,0.05)", border: "none", cursor: input.trim() && !thinking ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "upload", s: 16, c: input.trim() && !thinking ? "#0A0907" : "#3A3428" }) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: ".wardDot{animation:wardDot 1.2s ease-in-out infinite}@keyframes wardDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}" })
     ] });
@@ -22957,8 +22920,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.07)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: out, style: { background: "none", border: "none", color: "#3A3530", fontSize: 11, cursor: "pointer", letterSpacing: "0.09em", textTransform: "uppercase" }, children: "\u2190 Switch Member" }) })
     ] });
   }
-  function Dash({ u, sseOk = false, workouts, books, events, saveEvents, requests, tasks, purchases, restdays, unabsences, maint = [], visitors = [], clockIn, saveClockIn = () => {
-  }, overrides = [], getWC, getBC, go, badges }) {
+  function Dash({ u, workouts, books, events, saveEvents, requests, tasks, purchases, restdays, unabsences, maint = [], visitors = [], clockIn, overrides = [], getWC, getBC, go, badges }) {
     const now = /* @__PURE__ */ new Date(), hr = now.getHours();
     const greet = hr < 12 ? "Good morning" : hr < 17 ? "Good afternoon" : "Good evening";
     const restEvs = restdays.filter((r) => r.status === "approved").flatMap((r) => {
@@ -22966,7 +22928,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
         return [{ id: "re_" + r.id, title: "\u263D Abet \u2013 Absent", date: r.requestedDate, color: "#C97060", sys: true, note: r.reason }];
       }
       const evs = [{ id: "re_" + r.id, title: "\u263D Abet \u2013 Rest Day (Swap)", date: r.swapDate, color: "#7A9BBF", sys: true, note: `Wed ${fs(r.requestedDate)} \u2192 works instead` }];
-      evs.push({ id: "re_work_" + r.id, title: "Abet \u2013 Works Today (Swap)", date: r.requestedDate, color: GRN, sys: true, note: `Rest day moved to ${fs(r.swapDate)}` });
+      evs.push({ id: "re_work_" + r.id, title: "Abet \u2013 Works Today (Swap)", date: r.requestedDate, color: "#82B896", sys: true, note: `Rest day moved to ${fs(r.swapDate)}` });
       return evs;
     });
     const _swappedWeds = new Set(restdays.filter((r) => r.status === "approved" && r.type === "swap").map((r) => r.requestedDate));
@@ -23003,7 +22965,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
     const calDim = new Date(calYr, calMo + 1, 0).getDate();
     const calFd = new Date(calYr, calMo, 1).getDay();
     const calDs = (d) => `${calYr}-${String(calMo + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    const ECOLORS = [G, "#7A9BBF", GRN, "#C47882", "#C97060", "#82B4B8"];
+    const ECOLORS = [G, "#7A9BBF", "#82B896", "#C47882", "#C97060", "#82B4B8"];
     const addEvent = () => {
       if (!evForm.title.trim() || !evForm.date) return;
       saveEvents([...events, { id: "e" + Date.now(), ...evForm, by: u.id }]);
@@ -23026,12 +22988,18 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
     }, []);
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 26 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { style: { fontFamily: "'Playfair Display',serif", fontSize: 28, fontWeight: 500, letterSpacing: "-0.02em", color: CR }, children: [
-          greet,
-          ", ",
-          u.name,
-          "."
-        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 4 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { style: { fontFamily: "'Playfair Display',serif", fontSize: 28, fontWeight: 500, letterSpacing: "-0.02em", color: CR }, children: [
+            greet,
+            ", ",
+            u.name,
+            "."
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 6, flexShrink: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: isOnline ? "#82B896" : "#C9A84C", boxShadow: isOnline ? "0 0 6px rgba(130,184,150,0.7)" : "0 0 6px rgba(201,160,76,0.6)", flexShrink: 0 } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: isOnline ? "#82B896" : "#C9A84C", fontWeight: 500 }, children: isOnline ? "Live" : "Offline" })
+          ] })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 13, marginTop: 0 }, children: "Here's the household at a glance." })
       ] }),
       myAct > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(201,112,96,0.07)", border: "1px solid rgba(201,112,96,0.2)", borderRadius: 10, padding: "12px 16px", marginBottom: 18, display: "flex", alignItems: "center", gap: 12 }, children: [
@@ -23051,16 +23019,16 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
         u.canApprove && cashP > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "danger", sm: true, onClick: () => go("cash"), children: "Cash" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 9, marginBottom: 24 }, children: (u.isStaff ? [
-        { l: "Tasks Done", v: `${doneTasks}/${dueTodayCount}`, s: "today", c: doneTasks === dueTodayCount && dueTodayCount > 0 ? GRN : G, to: "clean" },
+        { l: "Tasks Done", v: `${doneTasks}/${dueTodayCount}`, s: "today", c: doneTasks === dueTodayCount && dueTodayCount > 0 ? "#82B896" : G, to: "clean" },
         { l: "Available Credit", v: `\u20B1${Math.max(0, 4250 - spent).toLocaleString()}`, s: "this period", c: G, to: "cash" },
-        { l: "Upcoming Pay", v: `\u20B1${_upcomingPay.toLocaleString()}`, s: _nowPeriod === 1 ? "due 15th" : "due 1st", c: GRN, to: "payinvoice" },
-        { l: "Clock-in", v: todayClockIn || "\u2014", s: todayClockIn ? "today" : "not clocked in", c: todayClockIn ? GRN : "#C97060", to: "clean" },
-        { l: "Workouts This Week", v: `${getWC(u.id).sessions}/5`, s: getWC(u.id).compliant ? "\u2713 compliant" : "sessions logged", c: getWC(u.id).compliant ? GRN : "#C9A84C", to: "trackers" },
+        { l: "Upcoming Pay", v: `\u20B1${_upcomingPay.toLocaleString()}`, s: _nowPeriod === 1 ? "due 15th" : "due 1st", c: "#82B896", to: "payinvoice" },
+        { l: "Clock-in", v: todayClockIn || "\u2014", s: todayClockIn ? "today" : "not clocked in", c: todayClockIn ? "#82B896" : "#C97060", to: "clean" },
+        { l: "Workouts This Week", v: `${getWC(u.id).sessions}/5`, s: getWC(u.id).compliant ? "\u2713 compliant" : "sessions logged", c: getWC(u.id).compliant ? "#82B896" : "#C9A84C", to: "trackers" },
         { l: "Rest Requests", v: rdAd, s: "pending approval", c: rdAd > 0 ? "#C9A84C" : DIM, to: "rest" }
       ] : [
-        { l: "Tasks Done", v: `${doneTasks}/${dueTodayCount}`, s: "today", c: doneTasks === dueTodayCount && dueTodayCount > 0 ? GRN : G, to: "clean" },
-        { l: "Advance Pending", v: cashP, s: "requests", c: cashP > 0 ? "#C97060" : GRN, to: "cash" },
-        { l: "Purchases", v: pEk + pAd, s: "need approval", c: pEk + pAd > 0 ? "#C97060" : GRN, to: "shop" },
+        { l: "Tasks Done", v: `${doneTasks}/${dueTodayCount}`, s: "today", c: doneTasks === dueTodayCount && dueTodayCount > 0 ? "#82B896" : G, to: "clean" },
+        { l: "Advance Pending", v: cashP, s: "requests", c: cashP > 0 ? "#C97060" : "#82B896", to: "cash" },
+        { l: "Purchases", v: pEk + pAd, s: "need approval", c: pEk + pAd > 0 ? "#C97060" : "#82B896", to: "shop" },
         { l: "Abet's Credit", v: `\u20B1${(4250 - spent).toLocaleString()}`, s: "available this period", c: G, to: "cash" },
         { l: "Maintenance", v: maintOpen, s: "open issues", c: maintOpen > 0 ? "#C9A84C" : DIM, to: "maint" },
         { l: "Visitors", v: viP, s: "pending", c: viP > 0 ? "#C9A84C" : DIM, to: "visitors" }
@@ -23087,11 +23055,11 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 28 }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 12, fontWeight: 500 }, children: m.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 9, color: safe ? GRN : "#C97060", letterSpacing: "0.09em", textTransform: "uppercase", marginTop: 1 }, children: safe ? "\u2713 WiFi Safe" : "\u26A0 At Risk" })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 9, color: safe ? "#82B896" : "#C97060", letterSpacing: "0.09em", textTransform: "uppercase", marginTop: 1 }, children: safe ? "\u2713 WiFi Safe" : "\u26A0 At Risk" })
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6 }, children: [{ v: `${wo.sessions}/5`, l: "Workouts", ok: wo.compliant }, { v: `${bk.count}/1`, l: "Book", ok: bk.compliant }].map((x, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, background: x.ok ? "rgba(130,184,150,0.07)" : "rgba(201,112,96,0.07)", border: `1px solid ${x.ok ? "rgba(130,184,150,0.2)" : "rgba(201,112,96,0.18)"}`, borderRadius: 6, padding: "5px 6px", textAlign: "center" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: x.ok ? GRN : "#C97060", fontWeight: 700, fontSize: 14 }, children: x.v }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: x.ok ? "#82B896" : "#C97060", fontWeight: 700, fontSize: 14 }, children: x.v }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "#6A5A48", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.07em", marginTop: 1 }, children: x.l })
           ] }, i)) })
         ] }, m.id);
@@ -23339,7 +23307,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { fontFamily: "'Playfair Display',serif", fontSize: 26, fontWeight: 700, letterSpacing: "-0.02em", color: CR }, children: "Today's Checklist" }),
-          todayClockIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: GRN, fontSize: 12, fontWeight: 500, marginTop: 5 }, children: [
+          todayClockIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: "#82B896", fontSize: 12, fontWeight: 500, marginTop: 5 }, children: [
             "Clocked in at ",
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: todayClockIn })
           ] }) : u.isStaff ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 12, marginTop: 5, fontStyle: "italic" }, children: "Clock in to start your day" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: DIM, fontSize: 12, marginTop: 5, fontStyle: "italic" }, children: [
@@ -23375,12 +23343,12 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             total,
             " tasks done"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: pct === 100 ? GRN : G, fontWeight: 600 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: pct === 100 ? "#82B896" : G, fontWeight: 600 }, children: [
             pct,
             "%"
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 4, background: "rgba(255,255,255,0.04)", borderRadius: 2, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: "100%", borderRadius: 2, background: pct === 100 ? GRN : G, width: `${pct}%`, transition: "width 0.4s" } }) })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 4, background: "rgba(255,255,255,0.04)", borderRadius: 2, overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: "100%", borderRadius: 2, background: pct === 100 ? "#82B896" : G, width: `${pct}%`, transition: "width 0.4s" } }) })
       ] }),
       todayOrd && !reorderMode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(212,146,74,0.07)", border: "1px solid rgba(212,146,74,0.18)", borderRadius: 9, padding: "8px 14px", marginBottom: 14, gap: 8 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, color: G }, children: "Today's order customized" }),
@@ -23419,7 +23387,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
         dueTasks.length === 0 && doneTasks.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13, textAlign: "center", padding: "8px 0" }, children: "No tasks due today." }) }),
         dueTasks.length === 0 && doneTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "28px 16px 12px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 38, marginBottom: 10 }, children: "\u2713" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 18, color: GRN, fontWeight: 600, marginBottom: 6 }, children: "All done for today!" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#82B896", fontWeight: 600, marginBottom: 6 }, children: "All done for today!" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: DIM, fontSize: 13, lineHeight: 1.6 }, children: [
             doneTasks.length,
             " task",
@@ -23475,7 +23443,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
               save(tasks.map((x) => x.id === t.id ? { ...x, _doneToday: false, lastDone: null, startingOn: td() } : x));
               logClean({ id: "unc" + Date.now(), taskId: t.id, taskName: t.name, area: t.area, completedDate: td(), completedTime: (/* @__PURE__ */ new Date()).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }), completedBy: u.id, unchecked: true, skipped: false, note: `${u.name} unchecked "${t.name}"` });
-            }, title: "Uncheck", style: { width: 18, height: 18, borderRadius: 4, background: GRN, border: "none", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#0A0907", flexShrink: 0, cursor: "pointer" }, children: "\u2713" }),
+            }, title: "Uncheck", style: { width: 18, height: 18, borderRadius: 4, background: "#82B896", border: "none", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#0A0907", flexShrink: 0, cursor: "pointer" }, children: "\u2713" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { flex: 1, fontSize: 13, color: "#5A4E3A", textDecoration: "line-through" }, children: t.name }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: "#3A3428" }, children: t.area }),
             t.lastDuration && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: "#3A3428" }, children: fmtDur(t.lastDuration) })
@@ -23507,7 +23475,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
     const DS2 = ["S", "M", "T", "W", "T", "F", "S"];
     const MNTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const ds = (d) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    const dotCol = (n) => !n ? null : n >= 4 ? "#C97060" : n >= 2 ? "#C9A84C" : GRN;
+    const dotCol = (n) => !n ? null : n >= 4 ? "#C97060" : n >= 2 ? "#C9A84C" : "#82B896";
     const cells = [];
     for (let i = 0; i < firstDay; i++) cells.push(null);
     for (let d = 1; d <= daysInMonth; d++) cells.push(d);
@@ -23577,7 +23545,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 16 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 20, color: DIM }, children: form.area }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(212,146,74,0.1)", border: "1px solid rgba(212,146,74,0.2)", borderRadius: 20, color: G }, children: fmtInt(form.intervalDays) }),
-          nextDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(130,184,150,0.08)", border: "1px solid rgba(130,184,150,0.18)", borderRadius: 20, color: GRN }, children: [
+          nextDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(130,184,150,0.08)", border: "1px solid rgba(130,184,150,0.18)", borderRadius: 20, color: "#82B896" }, children: [
             "Next: ",
             nextDate
           ] }),
@@ -23585,7 +23553,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             "Last done: ",
             fd(task.lastDone)
           ] }),
-          task.timeCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(130,184,150,0.07)", border: "1px solid rgba(130,184,150,0.15)", borderRadius: 20, color: GRN }, children: [
+          task.timeCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, padding: "3px 10px", background: "rgba(130,184,150,0.07)", border: "1px solid rgba(130,184,150,0.15)", borderRadius: 20, color: "#82B896" }, children: [
             "Avg: ",
             fmtDur(Math.round(task.timeSum / task.timeCount)),
             " \xB7 ",
@@ -23640,7 +23608,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       ] })
     ] }) });
   }
-  function TaskRow({ t, u, onCheck, onSkip, onTimer, tick, reorderMode, isDragging, isDragOver, onDragStart: onDragStart2, onDragOver, onDragEnd, onDrop, onEdit }) {
+  function TaskRow({ t, u, onCheck, onSkip, onTimer, tick, reorderMode, isDragging, isDragOver, onDragStart, onDragOver, onDragEnd, onDrop, onEdit }) {
     const active = !!t.timerStart;
     const elapsed = active ? (t.timerElapsed || 0) + (Date.now() - t.timerStart) : t.timerElapsed || 0;
     const ss = Math.floor(elapsed / 1e3), mm = Math.floor(ss / 60);
@@ -23651,7 +23619,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       "div",
       {
         draggable: !!reorderMode,
-        onDragStart: onDragStart2,
+        onDragStart,
         onDragOver,
         onDragEnd,
         onDrop,
@@ -23703,7 +23671,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "pause"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,160,76,0.12)", color: "#C9A84C", border: "1px solid rgba(201,160,76,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Pause" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "end"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.1)", color: "#C97060", border: "1px solid rgba(201,112,96,0.28)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "End" })
           ] }) : t.timerPaused ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "resume"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(130,184,150,0.1)", color: GRN, border: "1px solid rgba(130,184,150,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Resume" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "resume"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(130,184,150,0.1)", color: "#82B896", border: "1px solid rgba(130,184,150,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Resume" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "end"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.1)", color: "#C97060", border: "1px solid rgba(201,112,96,0.28)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "End" })
           ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => onTimer(t.id, "start"), style: { fontSize: 11, padding: "4px 10px", background: "rgba(255,255,255,0.05)", color: DIM, border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Start" })),
           isAdmin && !reorderMode && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: onSkip, style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.07)", color: "#8A5A50", border: "1px solid rgba(201,112,96,0.15)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Skip" })
@@ -24134,19 +24102,19 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
     const decide = (id, status) => save(requests.map((r) => r.id === id ? { ...r, status, decidedDate: td() } : r));
     const del = (id) => save(requests.filter((r) => r.id !== id));
     const pending = requests.filter((r) => r.status === "pending");
-    const SC = { pending: G, approved: GRN, denied: "#C97060" };
+    const SC = { pending: G, approved: "#82B896", denied: "#C97060" };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SH, { title: "Advance", sub: `\u20B14,250 per period \xB7 ${plabel()}`, action: u.isStaff && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", sm: true, onClick: () => setSf(!sf), children: "+ New Request" }) }),
       u.isStaff && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { sx: { marginBottom: 18, display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: rem > 1e3 ? GRN : rem > 0 ? G : "#C97060", fontSize: 26, fontFamily: "'Playfair Display',serif", fontWeight: 700 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: rem > 1e3 ? "#82B896" : rem > 0 ? G : "#C97060", fontSize: 26, fontFamily: "'Playfair Display',serif", fontWeight: 700 }, children: [
             "\u20B1",
             rem.toLocaleString()
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: DIM, fontSize: 11, fontWeight: 500, marginTop: 2 }, children: "Available This Period" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, minWidth: 160 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 5, background: "rgba(255,255,255,0.05)", borderRadius: 3, overflow: "hidden", marginBottom: 5 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: "100%", borderRadius: 3, background: rem > 1e3 ? GRN : rem > 0 ? G : "#C97060", width: `${Math.min(Math.round(rem / 4250 * 100), 100)}%`, transition: "width 0.4s" } }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 5, background: "rgba(255,255,255,0.05)", borderRadius: 3, overflow: "hidden", marginBottom: 5 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: "100%", borderRadius: 3, background: rem > 1e3 ? "#82B896" : rem > 0 ? G : "#C97060", width: `${Math.min(Math.round(rem / 4250 * 100), 100)}%`, transition: "width 0.4s" } }) }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 11, color: DIM }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
               "\u20B1",
@@ -24231,13 +24199,8 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
     const [form, setForm] = (0, import_react.useState)({ name: "", category: "Food & Groceries", qty: "", notes: "", proposedDate: "" });
     const [editId, setEditId] = (0, import_react.useState)(null);
     const [editForm, setEditForm] = (0, import_react.useState)({});
-    const SYNONYMS = {"itlog":"egg","egg":"egg","kamote":"sweet potato","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef"};
-    const normalizeName = (n) => { const lower = n.toLowerCase().trim(); return SYNONYMS[lower] || lower; };
     const add = () => {
       if (!form.name.trim()) return;
-      const normalizedName = normalizeName(form.name);
-      const existing = pantry.find(p => normalizeName(p.name) === normalizedName);
-      if (existing) { savePantry(pantry.map(p => p.id === existing.id ? {...p, quantity: String(Number(p.quantity||0) + Number(form.quantity||1))} : p)); setForm({name:"",quantity:"",unit:"pcs",category:"Protein",lowStock:false}); setShowAdd(false); return; }
       save([...purchases, { id: "p" + Date.now(), name: form.name.trim(), category: form.category, qty: form.qty, notes: form.notes, proposedDate: form.proposedDate, requestedBy: u.id, status: "pending_ekek", createdDate: td(), ekekDate: null, adminDate: null, adminBy: null }]);
       setForm({ name: "", category: "Food & Groceries", qty: "", notes: "", proposedDate: "" });
       setSf(false);
@@ -24257,7 +24220,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
     const rm = (id) => save(purchases.filter((p) => p.id !== id));
     const pEk = purchases.filter((p) => p.status === "pending_ekek").length;
     const pAd = purchases.filter((p) => p.status === "pending_admin").length;
-    const SCOLOR = { pending_ekek: "#C47882", pending_admin: G, approved: GRN, purchased: "#5A7A6A" };
+    const SCOLOR = { pending_ekek: "#C47882", pending_admin: G, approved: "#82B896", purchased: "#5A7A6A" };
     const SLABEL = { pending_ekek: "Pending Ek Ek", pending_admin: "Ek Ek \u2713 \xB7 Pending Admin", approved: "Approved", purchased: "Purchased" };
     const FILTERS = [["all", "All"], ["pending_ekek", "Needs Ek Ek"], ["pending_admin", "Needs Admin"], ["approved", "Approved"], ["history", "History"]];
     const isHistory = filter === "history";
@@ -24429,16 +24392,13 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       setSf(false);
     };
     const rm = (id) => save(workouts.filter((w) => w.id !== id));
-    const verify = (id, val) => {
-      if (!u.canApprove) return;
-      save(workouts.map((w) => w.id === id ? { ...w, verified: val } : w));
-    };
+    const verify = (id, val) => save(workouts.map((w) => w.id === id ? { ...w, verified: val } : w));
     const c = getWC(u.id), week = wr();
     const myW = [...workouts.filter((w) => w.memberId === u.id)].sort((a, b) => b.date.localeCompare(a.date));
     const wbd = week.map((d) => ({ date: d, lbl: DS[(/* @__PURE__ */ new Date(d + "T00:00:00")).getDay()], ok: workouts.filter((w) => w.memberId === u.id && w.date === d && w.duration >= 30 && w.verified !== false).length > 0 }));
     const SessionCard = ({ w, showVerify }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { sx: { padding: "10px 13px", display: "flex", alignItems: "center", gap: 11, marginBottom: 7 }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { width: 40, height: 40, borderRadius: 8, background: w.duration >= 30 ? "rgba(130,184,150,0.09)" : "rgba(201,112,96,0.09)", border: `1px solid ${w.duration >= 30 ? "rgba(130,184,150,0.18)" : "rgba(201,112,96,0.18)"}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: w.duration >= 30 ? GRN : "#C97060", fontSize: 13, fontWeight: 600, lineHeight: 1 }, children: w.duration }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: w.duration >= 30 ? "#82B896" : "#C97060", fontSize: 13, fontWeight: 600, lineHeight: 1 }, children: w.duration }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: w.duration >= 30 ? "#2A6040" : "#603030", fontSize: 9 }, children: "min" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
@@ -24452,7 +24412,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       w.verified === false && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: "#C97060", children: "\u2717 Rejected" }),
       w.verified === null && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: DIM, children: "Pending" }),
       showVerify && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => verify(w.id, true), title: "Verify", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(130,184,150,0.3)", background: w.verified === true ? "rgba(130,184,150,0.2)" : "transparent", color: GRN, cursor: "pointer", fontSize: 13 }, children: "\u2713" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => verify(w.id, true), title: "Verify", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(130,184,150,0.3)", background: w.verified === true ? "rgba(130,184,150,0.2)" : "transparent", color: "#82B896", cursor: "pointer", fontSize: 13 }, children: "\u2713" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => verify(w.id, false), title: "Reject", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(201,112,96,0.3)", background: w.verified === false ? "rgba(201,112,96,0.2)" : "transparent", color: "#C97060", cursor: "pointer", fontSize: 13 }, children: "\u2717" })
       ] }),
       w.duration < 30 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: "#C97060", children: "Under 30min" }),
@@ -24463,14 +24423,14 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "g-side", style: { display: "grid", gridTemplateColumns: "1fr 190px", gap: 13, marginBottom: 20 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 13 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "5px 12px", borderRadius: 20, background: c.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.1)", border: `1px solid ${c.compliant ? "rgba(130,184,150,0.28)" : "rgba(201,112,96,0.28)"}`, color: c.compliant ? GRN : "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em" }, children: c.compliant ? "\u2713 ON TRACK" : `${c.sessions}/5 \u2014 AT RISK` }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "5px 12px", borderRadius: 20, background: c.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.1)", border: `1px solid ${c.compliant ? "rgba(130,184,150,0.28)" : "rgba(201,112,96,0.28)"}`, color: c.compliant ? "#82B896" : "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em" }, children: c.compliant ? "\u2713 ON TRACK" : `${c.sessions}/5 \u2014 AT RISK` }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: DIM, fontSize: 11 }, children: "This week" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 5 }, children: wbd.map((d) => {
             const isT = d.date === td(), fut = d.date > td();
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 9, color: isT ? G : "#5A4E3A", marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.06em" }, children: d.lbl }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 28, borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center", background: d.ok ? "rgba(130,184,150,0.12)" : fut ? "rgba(255,255,255,0.015)" : "rgba(201,112,96,0.07)", border: `1px solid ${d.ok ? "rgba(130,184,150,0.25)" : fut ? "rgba(255,255,255,0.04)" : "rgba(201,112,96,0.15)"}`, color: d.ok ? GRN : fut ? "#2A2820" : "#C97060", fontSize: 11 }, children: d.ok ? "\u2713" : fut ? "\xB7" : "\u2717" })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { height: 28, borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center", background: d.ok ? "rgba(130,184,150,0.12)" : fut ? "rgba(255,255,255,0.015)" : "rgba(201,112,96,0.07)", border: `1px solid ${d.ok ? "rgba(130,184,150,0.25)" : fut ? "rgba(255,255,255,0.04)" : "rgba(201,112,96,0.15)"}`, color: d.ok ? "#82B896" : fut ? "#2A2820" : "#C97060", fontSize: 11 }, children: d.ok ? "\u2713" : fut ? "\xB7" : "\u2717" })
             ] }, d.date);
           }) })
         ] }),
@@ -24482,9 +24442,9 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 21 }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, color: CR, marginBottom: 2 }, children: m.name }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 2 }, children: [1, 2, 3, 4, 5].map((n) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: 2, background: mc.sessions >= n ? GRN : "rgba(255,255,255,0.07)" } }, n)) })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 2 }, children: [1, 2, 3, 4, 5].map((n) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: 2, background: mc.sessions >= n ? "#82B896" : "rgba(255,255,255,0.07)" } }, n)) })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 10, color: mc.compliant ? GRN : "#C97060" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 10, color: mc.compliant ? "#82B896" : "#C97060" }, children: [
                 mc.sessions,
                 "/5"
               ] })
@@ -24529,7 +24489,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, color: DIM, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 5 }, children: "This week" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 6, marginBottom: 10 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, textAlign: "center", background: "rgba(130,184,150,0.07)", border: "1px solid rgba(130,184,150,0.18)", borderRadius: 5, padding: "5px 4px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: GRN, fontSize: 15, fontWeight: 700 }, children: wkV }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "#82B896", fontSize: 15, fontWeight: 700 }, children: wkV }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "#2A6040", fontSize: 9, textTransform: "uppercase" }, children: "Verified" })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, textAlign: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 5, padding: "5px 4px" }, children: [
@@ -24575,10 +24535,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       setSf(false);
     };
     const rm = (id) => save(books.filter((b) => b.id !== id));
-    const review = (id, val) => {
-      if (!u.canApprove) return;
-      save(books.map((b) => b.id === id ? { ...b, meetingReviewed: val } : b));
-    };
+    const review = (id, val) => save(books.map((b) => b.id === id ? { ...b, meetingReviewed: val } : b));
     const c = getBC(u.id);
     const mName = (/* @__PURE__ */ new Date()).toLocaleString("en-US", { month: "long", year: "numeric" });
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -24586,7 +24543,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "g-side", style: { display: "grid", gridTemplateColumns: "1fr 190px", gap: 13, marginBottom: 20 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 9 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "5px 12px", borderRadius: 20, background: c.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.1)", border: `1px solid ${c.compliant ? "rgba(130,184,150,0.28)" : "rgba(201,112,96,0.28)"}`, color: c.compliant ? GRN : "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em" }, children: c.compliant ? "\u2713 COMPLIANT" : "\u26A0 NEEDS MEETING REVIEW" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "5px 12px", borderRadius: 20, background: c.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.1)", border: `1px solid ${c.compliant ? "rgba(130,184,150,0.28)" : "rgba(201,112,96,0.28)"}`, color: c.compliant ? "#82B896" : "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em" }, children: c.compliant ? "\u2713 COMPLIANT" : "\u26A0 NEEDS MEETING REVIEW" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: DIM, fontSize: 11 }, children: mName })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 12, fontWeight: 500 }, children: c.count === 0 ? "No books passed review yet. Log your book and present at the meeting." : c.count === 1 ? "1 book reviewed and passed \u2014 requirement met!" : `${c.count} books reviewed \u2014 excellent!` })
@@ -24598,7 +24555,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 7, marginBottom: 8 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 21 }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1, fontSize: 11, color: CR }, children: m.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: mc.compliant ? GRN : "#C97060", fontWeight: 600 }, children: mc.compliant ? "\u2713" : "\u2717" })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: mc.compliant ? "#82B896" : "#C97060", fontWeight: 600 }, children: mc.compliant ? "\u2713" : "\u2717" })
             ] }, m.id);
           })
         ] })
@@ -24649,7 +24606,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
         b.meetingReviewed === false && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: "#C97060", children: "\u2717 Failed" }),
         (b.meetingReviewed === null || b.meetingReviewed === void 0) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: DIM, children: "Pending Meeting" }),
         u.canApprove && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => review(b.id, true), title: "Passed review", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(130,184,150,0.3)", background: b.meetingReviewed === true ? "rgba(130,184,150,0.2)" : "transparent", color: GRN, cursor: "pointer", fontSize: 13 }, children: "\u2713" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => review(b.id, true), title: "Passed review", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(130,184,150,0.3)", background: b.meetingReviewed === true ? "rgba(130,184,150,0.2)" : "transparent", color: "#82B896", cursor: "pointer", fontSize: 13 }, children: "\u2713" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => review(b.id, false), title: "Failed review", style: { width: 26, height: 26, borderRadius: 5, border: "1px solid rgba(201,112,96,0.3)", background: b.meetingReviewed === false ? "rgba(201,112,96,0.2)" : "transparent", color: "#C97060", cursor: "pointer", fontSize: 13 }, children: "\u2717" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(XBtn, { onClick: () => rm(b.id) })
@@ -24691,7 +24648,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 28 }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, fontWeight: 600 }, children: m.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: ok ? GRN : "#C97060", fontSize: 11 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: ok ? "#82B896" : "#C97060", fontSize: 11 }, children: [
                 wc.sessions,
                 "/5 sessions"
               ] })
@@ -24722,7 +24679,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { m, size: 28 }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, fontWeight: 600 }, children: m.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: ok ? GRN : "#C97060", fontSize: 11 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: ok ? "#82B896" : "#C97060", fontSize: 11 }, children: [
                 bc.count,
                 "/1 book reviewed"
               ] })
@@ -24748,7 +24705,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             " by ",
             mbid(l.cutBy).name
           ] }),
-          l.restoredDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: GRN, fontSize: 11, marginTop: 1 }, children: [
+          l.restoredDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#82B896", fontSize: 11, marginTop: 1 }, children: [
             "\u2713 Restored ",
             fd(l.restoredDate),
             " by ",
@@ -24865,11 +24822,11 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             const activeDays = [...new Set(wkLogs.map((l) => l.completedDate))].length;
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 12 }, children: [
-                ["Done Today", `${doneTodayCount}/${dueTodayCount2}`, doneTodayCount === dueTodayCount2 && dueTodayCount2 > 0 ? GRN : G],
-                ["This Week", wkDone, wkDone > 0 ? GRN : DIM],
+                ["Done Today", `${doneTodayCount}/${dueTodayCount2}`, doneTodayCount === dueTodayCount2 && dueTodayCount2 > 0 ? "#82B896" : G],
+                ["This Week", wkDone, wkDone > 0 ? "#82B896" : DIM],
                 ["Skipped", wkSkip, wkSkip > 0 ? "#C97060" : DIM],
-                ["Active Days", `${activeDays}/7`, activeDays >= 5 ? GRN : activeDays >= 3 ? "#C9A84C" : "#C97060"],
-                ["Clock-in", clockInToday || "\u2014", clockInToday ? GRN : "#C97060"],
+                ["Active Days", `${activeDays}/7`, activeDays >= 5 ? "#82B896" : activeDays >= 3 ? "#C9A84C" : "#C97060"],
+                ["Clock-in", clockInToday || "\u2014", clockInToday ? "#82B896" : "#C97060"],
                 ["Avg/Day", activeDays > 0 ? Math.round(wkDone / activeDays) : "\u2014", DIM]
               ].map(([l, v, c]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: "10px 12px" }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 16, fontWeight: 700, color: c, fontFamily: "'Playfair Display',serif", lineHeight: 1, marginBottom: 3 }, children: v }),
@@ -24883,7 +24840,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
                 const dow = (/* @__PURE__ */ new Date(d + "T00:00:00")).toLocaleDateString("en-US", { weekday: "short" });
                 return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, textAlign: "center", padding: "6px 2px", borderRadius: 8, border: `1px solid ${isToday ? "rgba(212,146,74,0.3)" : "rgba(255,255,255,0.05)"}`, background: isToday ? "rgba(212,146,74,0.07)" : "transparent" }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 9, color: isToday ? G : DIM, marginBottom: 3, fontWeight: isToday ? 600 : 400 }, children: dow }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, fontWeight: 700, color: isFuture ? "#3A3428" : dayDone > 0 ? GRN : daySkip > 0 ? "#C97060" : "#4A3E30", fontFamily: "'Playfair Display',serif" }, children: isFuture ? "\xB7" : dayDone || daySkip > 0 ? dayDone : "-" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, fontWeight: 700, color: isFuture ? "#3A3428" : dayDone > 0 ? "#82B896" : daySkip > 0 ? "#C97060" : "#4A3E30", fontFamily: "'Playfair Display',serif" }, children: isFuture ? "\xB7" : dayDone || daySkip > 0 ? dayDone : "-" }),
                   daySkip > 0 && !isFuture && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 8, color: "#C97060", marginTop: 1 }, children: [
                     daySkip,
                     "s"
@@ -24896,9 +24853,9 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
         isCurr && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 22 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: CR, marginBottom: 12 }, children: "Today" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 9, marginBottom: 12 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Done Today", value: todayDone.length, sub: `of ${dueTodayCount} due`, color: todayDone.length === dueTodayCount && dueTodayCount > 0 ? GRN : G }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Done Today", value: todayDone.length, sub: `of ${dueTodayCount} due`, color: todayDone.length === dueTodayCount && dueTodayCount > 0 ? "#82B896" : G }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Skipped", value: todaySkipped.length, color: todaySkipped.length > 0 ? "#C97060" : DIM }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Clock-in", value: todayClockIn || "\u2014", sub: todayClockIn ? "today" : "not clocked in", color: todayClockIn ? GRN : DIM })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatCard, { label: "Clock-in", value: todayClockIn || "\u2014", sub: todayClockIn ? "today" : "not clocked in", color: todayClockIn ? "#82B896" : DIM })
           ] })
         ] }),
         isCurr && cleanLog.some((l) => l.clockIn) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 22 }, children: [
@@ -24924,7 +24881,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             const dayEntries = cleanLog.filter((l) => l.completedDate === date && !l.skipped);
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, padding: "9px 16px", borderBottom: "1px solid rgba(255,255,255,0.03)" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, color: DIM, minWidth: 65 }, children: fs(date) }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, color: ci ? GRN : DIM, fontWeight: ci ? 600 : 400 }, children: ci ? `In: ${ci}` : "\u2014" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, color: ci ? "#82B896" : DIM, fontWeight: ci ? 600 : 400 }, children: ci ? `In: ${ci}` : "\u2014" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 11, color: DIM, marginLeft: "auto" }, children: [
                 dayEntries.length,
                 " task",
@@ -24953,9 +24910,9 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
                   " ",
                   wlabel(wk)
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: GRN, fontWeight: 600 }, children: wDone.length }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#82B896", fontWeight: 600 }, children: wDone.length }) }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: wSkip.length > 0 ? "#C97060" : DIM }, children: wSkip.length }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: activeDays >= 5 ? GRN : G }, children: activeDays }) })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 8px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: activeDays >= 5 ? "#82B896" : G }, children: activeDays }) })
               ] }, i);
             }) })
           ] }) })
@@ -25055,12 +25012,12 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
                 ] }) }),
                 weeks.map((wk, i) => {
                   const wc = getWCW(m.id, wk);
-                  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 6px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "inline-flex", alignItems: "center", justifyContent: "center", width: 44, height: 24, borderRadius: 5, fontSize: 11, fontWeight: 600, background: wc.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.08)", color: wc.compliant ? GRN : "#C97060", border: `1px solid ${wc.compliant ? "rgba(130,184,150,0.22)" : "rgba(201,112,96,0.18)"}` }, children: [
+                  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 6px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "inline-flex", alignItems: "center", justifyContent: "center", width: 44, height: 24, borderRadius: 5, fontSize: 11, fontWeight: 600, background: wc.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.08)", color: wc.compliant ? "#82B896" : "#C97060", border: `1px solid ${wc.compliant ? "rgba(130,184,150,0.22)" : "rgba(201,112,96,0.18)"}` }, children: [
                     wc.sessions,
                     "/5"
                   ] }) }, i);
                 }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 6px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "inline-flex", alignItems: "center", justifyContent: "center", width: 30, height: 24, borderRadius: 5, fontSize: 13, background: bc.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.08)", border: `1px solid ${bc.compliant ? "rgba(130,184,150,0.22)" : "rgba(201,112,96,0.18)"}`, color: bc.compliant ? GRN : "#C97060" }, children: bc.compliant ? "\u2713" : "\u2717" }) })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { style: { padding: "9px 6px", textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "inline-flex", alignItems: "center", justifyContent: "center", width: 30, height: 24, borderRadius: 5, fontSize: 13, background: bc.compliant ? "rgba(130,184,150,0.1)" : "rgba(201,112,96,0.08)", border: `1px solid ${bc.compliant ? "rgba(130,184,150,0.22)" : "rgba(201,112,96,0.18)"}`, color: bc.compliant ? "#82B896" : "#C97060" }, children: bc.compliant ? "\u2713" : "\u2717" }) })
               ] }, m.id);
             }) })
           ] }) })
@@ -25075,15 +25032,15 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
                 " \xB7 ",
                 fd(l.cutDate)
               ] }),
-              l.restoredDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: GRN, fontSize: 11, marginTop: 1 }, children: [
+              l.restoredDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#82B896", fontSize: 11, marginTop: 1 }, children: [
                 "\u2713 Restored ",
                 fd(l.restoredDate)
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: l.restoredDate ? GRN : "#C97060", children: l.restoredDate ? "Restored" : "Cut" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: l.restoredDate ? "#82B896" : "#C97060", children: l.restoredDate ? "Restored" : "Cut" })
           ] }, l.id)) })
         ] }),
-        mCuts.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: GRN, fontSize: 13 }, children: "\u2713 No WiFi cuts this month." }) })
+        mCuts.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#82B896", fontSize: 13 }, children: "\u2713 No WiFi cuts this month." }) })
       ] }),
       mainTab === "finance" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(250px,1fr))", gap: 11 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
@@ -25112,7 +25069,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
                   fs(r.date)
                 ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: { pending: G, approved: GRN, denied: "#C97060" }[r.status] || DIM, children: r.status })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: { pending: G, approved: "#82B896", denied: "#C97060" }[r.status] || DIM, children: r.status })
             ] }, r.id))
           ] })
         ] }),
@@ -25129,7 +25086,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
               mPAdd.length > 1 ? "s" : "",
               " added"
             ] }),
-            mPApp.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: GRN, fontSize: 12, marginBottom: 7 }, children: [
+            mPApp.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#82B896", fontSize: 12, marginBottom: 7 }, children: [
               "\u2713 ",
               mPApp.length,
               " fully approved"
@@ -25182,7 +25139,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
     const pEk = restdays.filter((r) => r.status === "pending_ekek");
     const pAd = restdays.filter((r) => r.status === "pending_admin");
     const hist = [...restdays].sort((a, b) => b.createdDate.localeCompare(a.createdDate));
-    const SC = { pending_ekek: { c: "#C47882", l: "Pending Ek Ek" }, pending_admin: { c: G, l: "Pending Admin" }, approved: { c: GRN, l: "Approved" }, denied: { c: "#C97060", l: "Denied" } };
+    const SC = { pending_ekek: { c: "#C47882", l: "Pending Ek Ek" }, pending_admin: { c: G, l: "Pending Admin" }, approved: { c: "#82B896", l: "Approved" }, denied: { c: "#C97060", l: "Denied" } };
     const nextRestDays = () => {
       const r = [];
       const d = /* @__PURE__ */ new Date();
@@ -25241,7 +25198,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             ] }),
             r.type === "swap" && r.swapDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: DIM, fontSize: 12, fontWeight: 500, marginBottom: 3 }, children: [
               "Will work instead on: ",
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: GRN }, children: fs(r.swapDate) })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#82B896" }, children: fs(r.swapDate) })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, marginBottom: 3 }, children: r.reason }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#5A4E3A", fontSize: 10 }, children: [
@@ -25269,7 +25226,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
             ] }),
             r.type === "swap" && r.swapDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: DIM, fontSize: 12, fontWeight: 500, marginBottom: 3 }, children: [
               "Will work instead on: ",
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: GRN }, children: fs(r.swapDate) })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#82B896" }, children: fs(r.swapDate) })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, marginBottom: 3 }, children: r.reason }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: "#5A4E3A", fontSize: 10 }, children: [
@@ -25378,7 +25335,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: CR, fontSize: 14, fontWeight: 600 }, children: fd(a.date) }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: isPast ? GRN : "#C97060", children: isPast ? "Deducted" : "Pending" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: isPast ? "#82B896" : "#C97060", children: isPast ? "Deducted" : "Pending" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: "#C97060", fontSize: 12, fontWeight: 600 }, children: [
                 "\u2212\u20B1",
                 (a.dailyRate || DAILY_RATE).toFixed(2)
@@ -25401,19 +25358,13 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
   }
   var PANTRY_CATS = ["Protein", "Vegetable", "Fruit", "Grain & Carb", "Dairy", "Condiment", "Herb & Spice", "Other"];
   function MealPlanner({ u, pantry: rawPantry, savePantry, groqKey = "" }) {
-    // Merge synonyms on load
     const SYNONYMS3 = {"itlog":"egg","egg":"egg","kamote":"sweet potato","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef"};
     const normN = (n) => { const l = (n||"").toLowerCase().trim(); return SYNONYMS3[l] || n; };
     const pantry = rawPantry.reduce((acc, item) => {
-      const norm = normN(item.name);
-      const existing = acc.find(p => normN(p.name) === norm);
-      if (existing) {
-        existing.quantity = String((parseFloat(existing.quantity)||0) + (parseFloat(item.quantity)||0));
-        return acc;
-      }
+      const norm = normN(item.name); const existing = acc.find(p => normN(p.name) === norm);
+      if (existing) { existing.quantity = String((parseFloat(existing.quantity)||0) + (parseFloat(item.quantity)||0)); return acc; }
       return [...acc, {...item, name: norm}];
     }, []);
-
     const [tab, setTab] = (0, import_react.useState)("pantry");
     const [showAdd, setShowAdd] = (0, import_react.useState)(false);
     const [form, setForm] = (0, import_react.useState)({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
@@ -25422,7 +25373,7 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
       if (!name.trim()) return;
       setClassifying(true);
       try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 15,
           messages: [{ role: "user", content: `Classify this ingredient into exactly one category. Consider all cultural names, local Filipino/Bisaya/Cebuano names, regional variations, and synonyms (e.g. malunggay=moringa=Vegetable, tulingan=mackerel tuna=Protein, kamote=sweet potato=Grain & Carb, gata=coconut milk=Condiment). Reply with ONLY the category name, nothing else.
@@ -25432,7 +25383,7 @@ Ingredient: "${name}"
 Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Spice, Other` }]
         }) });
         const d = await res.json();
-        const cat = d.choices?.[0]?.message?.content?.trim();
+        const cat = d.content?.[0]?.text?.trim();
         if (PANTRY_CATS.includes(cat)) setForm((f) => ({ ...f, category: cat }));
       } catch (e) {
       }
@@ -25445,16 +25396,8 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const [ingRecipes, setIngRecipes] = (0, import_react.useState)({});
     const [ingLoading, setIngLoading] = (0, import_react.useState)({});
     const [activeIng, setActiveIng] = (0, import_react.useState)(null);
-    const SYNONYMS2 = {"itlog":"egg","egg":"egg","kamote":"sweet potato","kamote tops":"sweet potato tops","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef","mais":"corn","gulay":"vegetables"};
-     const normName = (n) => { const l = n.toLowerCase().trim(); return SYNONYMS2[l] || l; };
     const add = () => {
       if (!form.name.trim()) return;
-      const norm = normName(form.name);
-      const dupe = pantry.find(p => normName(p.name) === norm);
-      if (dupe) {
-        savePantry(pantry.map(p => p.id === dupe.id ? {...p, quantity: String((parseFloat(p.quantity)||0) + (parseFloat(form.quantity)||1))} : p));
-        setForm({name:"",quantity:"",unit:"pcs",category:"Protein",lowStock:false}); setShowAdd(false); return;
-      }
       savePantry([...pantry, { id: "pt" + Date.now(), name: form.name.trim(), quantity: form.quantity, unit: form.unit, category: form.category, lowStock: form.lowStock }]);
       setForm({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
       setShowAdd(false);
@@ -25467,12 +25410,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       if (ingRecipes[item.id]) return;
       setIngLoading((l) => ({ ...l, [item.id]: true }));
       try {
-        if (!groqKey) {
-          setIngLoading((l) => ({ ...l, [item.id]: false }));
-          setIngRecipes((r) => ({ ...r, [item.id]: [] }));
-          return;
-        }
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
         const d = await res.json();
         setIngRecipes((r) => ({ ...r, [item.id]: d.choices && d.choices[0] ? d.choices[0].message.content : "Could not load recipes." }));
       } catch (e) {
@@ -25487,13 +25425,13 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       setRecipeResult("");
       try {
         const ingList = items.map((i) => `${i.name}${i.quantity ? ` (${i.quantity} ${i.unit})` : ""}`).join(", ");
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 1500,
-          messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. For each recipe: name, ingredients (mark which I already have \u2713), 3-step summary, and why it's a healthy choice.` }]
+          messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. Format each recipe like this, use --- between recipes:\\nRECIPE NAME\\nIngredients: list (checkmark what you have)\\nSteps: 1)... 2)... 3)...\\nWhy healthy: one sentence\\n---` }]
         }) });
         const d = await res.json();
-        const text = d.choices && d.choices[0] ? d.choices[0].message.content : "No recipes found.";
+        const text = d.content ? d.content.filter((c) => c.type === "text").map((c) => c.text).join("\n\n") : "No recipes found.";
         setRecipeResult(text);
       } catch (e) {
         setRecipeResult("Error fetching recipes. Please try again.");
@@ -25502,7 +25440,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     };
     const catGroups = PANTRY_CATS.map((cat) => ({ cat, items: pantry.filter((p) => p.category === cat) })).filter((g) => g.items.length > 0);
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "relative" }, children: [
-      expandedRecipe && (0, import_jsx_runtime.jsxs)("div", { onClick: () => setExpandedRecipe(null), style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "10vh 16px 16px", overflowY: "auto" }, children: [(0, import_jsx_runtime.jsx)("div", { onClick: (e) => e.stopPropagation(), style: { background: "#1A1610", border: "1px solid rgba(212,146,74,0.25)", borderRadius: 16, padding: "20px 20px 28px", maxWidth: 480, width: "100%", marginTop: "auto", marginBottom: "auto" }, children: (0, import_jsx_runtime.jsx)("p", { style: { color: CR, fontSize: 13, lineHeight: 1.8, whiteSpace: "pre-wrap", margin: 0 }, children: expandedRecipe }) })] }),
+      expandedRecipe && (0, import_jsx_runtime.jsx)("div", { onClick: function() { setExpandedRecipe(null); }, style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "10vh 16px 16px", overflowY: "auto" }, children: (0, import_jsx_runtime.jsx)("div", { onClick: function(e) { e.stopPropagation(); }, style: { background: "#1A1610", border: "1px solid rgba(212,146,74,0.25)", borderRadius: 16, padding: "20px 20px 28px", maxWidth: 480, width: "100%" }, children: (0, import_jsx_runtime.jsx)("p", { style: { color: CR, fontSize: 13, lineHeight: 1.8, whiteSpace: "pre-wrap", margin: 0 }, children: expandedRecipe }) }) }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SH, { title: "Meal Planner", sub: "Pantry tracker \xB7 AI-powered recipe finder" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, marginBottom: 20 }, children: ["pantry", "recipes"].map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => setTab(t), style: { padding: "7px 18px", borderRadius: 7, border: `1px solid ${tab === t ? G : "rgba(255,255,255,0.08)"}`, background: tab === t ? "rgba(212,146,74,0.1)" : "transparent", color: tab === t ? G : DIM, fontSize: 12, cursor: "pointer", fontWeight: tab === t ? 500 : 400, textTransform: "capitalize" }, children: t === "pantry" ? `Pantry (${pantry.length})` : "Find Recipes" }, t)) }),
       tab === "pantry" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -25535,7 +25473,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 10, height: 10, borderRadius: "50%", border: `1.5px solid ${G}`, borderTopColor: "transparent", animation: "spin 0.8s linear infinite" } }),
                 " Auto-detecting..."
               ] }),
-              !classifying && form.name && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: GRN }, children: "\u2713 Auto-detected" })
+              !classifying && form.name && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: "#82B896" }, children: "\u2713 Auto-detected" })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Fsel, { value: form.category, onChange: (e) => setForm({ ...form, category: e.target.value }), children: PANTRY_CATS.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: c }, c)) })
           ] }),
@@ -25558,7 +25496,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         pantry.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13 }, children: "No ingredients yet. Add what's in your pantry and fridge." }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: catGroups.map(({ cat, items }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 18 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, color: G, letterSpacing: "0.09em", textTransform: "uppercase", fontWeight: 500, marginBottom: 8 }, children: cat }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 5 }, children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { onClick: () => lookupIngredient(item), style: { display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 8, background: activeIng === item.id ? "rgba(212,146,74,0.08)" : "rgba(255,255,255,0.02)", border: `1px solid ${activeIng === item.id ? "rgba(212,146,74,0.3)" : "rgba(255,255,255,0.05)"}`, cursor: "pointer", textAlign: "left", transition: "all 0.12s" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 5 }, children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => lookupIngredient(item), style: { display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 8, background: activeIng === item.id ? "rgba(212,146,74,0.08)" : "rgba(255,255,255,0.02)", border: `1px solid ${activeIng === item.id ? "rgba(212,146,74,0.3)" : "rgba(255,255,255,0.05)"}`, cursor: "pointer", textAlign: "left", transition: "all 0.12s" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 14, fontWeight: 600 }, children: item.name }),
                 item.quantity && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { color: DIM, fontSize: 11 }, children: [
@@ -25569,10 +25507,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
               ] }),
               ingLoading[item.id] && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 14, height: 14, borderRadius: "50%", border: `2px solid ${G}`, borderTopColor: "transparent", animation: "spin 0.8s linear infinite" } }),
               item.lowStock && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#C97060", fontSize: 10, fontWeight: 700 }, children: "LOW" }),
-              ingRecipes[item.id] && !ingLoading[item.id] && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: G, fontSize: 10 }, children: [
-                ingRecipes[item.id].length,
-                " recipes \u2192"
-              ] }),
+              ingRecipes[item.id] && !ingLoading[item.id] && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: G, fontSize: 10 }, children: "6 recipes \u2192" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: (e) => {
                 e.stopPropagation();
                 toggleLowStock(item.id);
@@ -25593,7 +25528,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
                 "Recipes with ",
                 pantry.find((p) => p.id === activeIng)?.name
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split(/\n(?=\d+\.)/).filter(Boolean).map((recipe, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer", transition: "all 0.15s" }, onClick: () => setExpandedRecipe(recipe.trim()), children: recipe.trim().split("\n")[0] || recipe.trim() }, i)) })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, lineHeight: 1.75, whiteSpace: "pre-wrap" }, children: ingRecipes[activeIng] })
             ] }) }),
             !activeIng && pantry.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 12, fontWeight: 500 }, children: "Click any ingredient on the left to see what recipes you can make with it." }) })
           ] })
@@ -25621,9 +25556,9 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 16, height: 16, borderRadius: "50%", border: `2px solid ${G}`, borderTopColor: "transparent", animation: "spin 0.8s linear infinite", flexShrink: 0 } }),
           "Searching online for real recipes..."
         ] }) }),
-        recipeResult && !recipeLoading && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+        recipeResult && !recipeLoading && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: G, fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 12 }, children: "Recipes found" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (recipeResult || "").split(/\n(?=\d+\.)/).filter(Boolean).map((recipe, i) => (0, import_jsx_runtime.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe.trim()), children: recipe.trim().split("\n")[0] || recipe.trim() }, i)) })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (recipeResult || "").split("\n---\n").filter(function(s) { return s.trim(); }).map(function(recipe, i) { var name = recipe.trim().split("\n")[0] || ("Recipe " + (i+1)); return (0, import_jsx_runtime.jsxs)("div", { style: { padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,146,74,0.2)", cursor: "pointer" }, onClick: function() { setExpandedRecipe(recipe.trim()); }, children: [(0, import_jsx_runtime.jsx)("div", { style: { color: G, fontWeight: 600, fontSize: 14, marginBottom: 2 }, children: name }),(0, import_jsx_runtime.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })] }, i); }) })
         ] }),
         !recipeResult && !recipeLoading && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 12 }, children: "Select ingredients above and tap Find Recipes \u2014 Ward will search online for real recipes that match." }) })
       ] }),
@@ -25655,7 +25590,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const decide = (id, status) => save(visitors.map((v) => v.id === id ? { ...v, status, decidedBy: u.id, decidedDate: td() } : v));
     const del = (id) => save(visitors.filter((v) => v.id !== id));
     const pending = visitors.filter((v) => v.status === "pending");
-    const SC = { pending: G, approved: GRN, denied: "#C97060" };
+    const SC = { pending: G, approved: "#82B896", denied: "#C97060" };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SH, { title: "Visitor Requests", sub: "24-hour notice required \xB7 approved by Ari or Roniq", action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", sm: true, onClick: () => setSf(!sf), children: "+ Request Visitor" }) }),
       sf && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { sx: { marginBottom: 18 }, children: [
@@ -25751,7 +25686,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     };
     const del = (id) => save(maint.filter((m) => m.id !== id));
     const SEVCOLOR = { Minor: G, Moderate: "#C9A04C", Urgent: "#C97060" };
-    const open2 = maint.filter((m) => m.status === "open");
+    const open = maint.filter((m) => m.status === "open");
     const ackd = maint.filter((m) => m.status === "acknowledged");
     const resolved = maint.filter((m) => m.status === "resolved");
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -25773,9 +25708,9 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setSf(false), children: "Cancel" })
         ] })
       ] }),
-      open2.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 22 }, children: [
+      open.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 22 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { fontFamily: "'Playfair Display',serif", fontSize: 17, fontWeight: 600, color: CR, marginBottom: 12 }, children: "Open Issues" }),
-        open2.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { sx: { marginBottom: 8, borderColor: "rgba(201,112,96,0.2)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 10 }, children: [
+        open.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { sx: { marginBottom: 8, borderColor: "rgba(201,112,96,0.2)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 10 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: SEVCOLOR[m.severity] || G, children: m.severity }),
@@ -25867,7 +25802,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 32, height: 32, borderRadius: "50%", background: m.color + "18", border: `1.5px solid ${m.color}40`, display: "flex", alignItems: "center", justifyContent: "center", color: m.color, fontSize: 14, fontWeight: 700, flexShrink: 0 }, children: m.name.charAt(0) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, fontWeight: 600 }, children: m.name }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: hasPin ? GRN : "#C97060", fontSize: 10, marginTop: 1 }, children: hasPin ? "PIN set" : "No PIN set" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: hasPin ? "#82B896" : "#C97060", fontSize: 10, marginTop: 1 }, children: hasPin ? "PIN set" : "No PIN set" })
         ] })
       ] }),
       hasPin && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 10, padding: "7px 10px", background: "rgba(255,255,255,0.03)", borderRadius: 7, border: "1px solid rgba(255,255,255,0.06)" }, children: [
@@ -25902,7 +25837,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const upd = (id, field, val) => setDraft((d) => d.map((m) => m.id === id ? { ...m, [field]: val } : m));
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SH, { title: "Member Settings", sub: "Edit names and roles \xB7 permissions and colors are fixed", action: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8, alignItems: "center" }, children: [
-        saved && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: GRN, fontSize: 12 }, children: "\u2713 Saved" }),
+        saved && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: "#82B896", fontSize: 12 }, children: "\u2713 Saved" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: save, children: "Save Changes" })
       ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 14, marginBottom: 28 }, children: draft.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
@@ -26040,20 +25975,67 @@ WARD BEHAVIOR RULES
 \u2022 Humor is welcome when it fits naturally.
 \u2022 Speak like trusted family \u2014 warm, direct, real. No walls, no formality.
 \u2022 With Abet: always direct, always encouraging. Build her confidence.
-\u2022 Language: Always respond in English first, followed by a Bisaya translation in parentheses or on the next line. ONLY switch to Bisaya-first if the user writes their message in Bisaya. The opening greeting is always English first.`, wh3_pins: {}, wh3_unabsences: [], wh3_pay_overrides: [], wh3_clockin: null, wh3_today_meta: null };
-  function Header({ onRefresh, refreshing, sseOk = false }) {
+\u2022 Language: if the user writes in Bisaya first, respond in Bisaya with English translation. If they write in English first, respond in English with Bisaya translation. Always match who speaks first.'s late, directly). Rest day Wednesday unless swapped. Reports to Ek Ek. Responsible for all checklist tasks and cleaning.
+\u2022 Ek Ek \u2014 Food & Household Manager. Primary cook (anyone can cook). Diabetic \u2014 absolutely no sugar. Asthmatic \u2014 no dust, strong smells, harsh chemicals, fragrances. Sensitive skin. Manages groceries as needed. Has a condo in Ormoc being cleaned and prepped for rental (June timeline). Also exploring income streams: food business (kimchi, maja blanca, mango float), commercial washer/dryer service.
+\u2022 Ari \u2014 Administrator & Finance. Wakes ~11:30am. Eating healthy. Final approver for purchases, advances, rest days, and anything involving money.
+\u2022 Roniq \u2014 Administrator, App & WiFi Manager. Wakes ~11:30am. Strict low-sodium diet. Hypokalemia \u2014 coconut water, banana, avocado, sweet potato, squash daily. Asthmatic (same triggers as Ek Ek). Point of contact for household improvements and app issues.
+
+DECISION ORDER: Figure it out first (internet), then ask: Abet \u2192 Ek Ek \u2192 Roniq \u2192 Ari.
+
+CATS (all indoor \u2014 Ari & Roniq responsible for feeding)
+Kya, Indi, Arwen (adults) + Four & Sati (Indi's kittens). Fed at 1pm. Remove remaining food from bowls after they finish eating \u2014 prevents cross-eating between cats. Discipline cats when needed, no need to be overly soft. No cat decisions without Ari/Roniq approval.
+NEVER suggest near cats: onions, garlic, leeks, chives, grapes, raisins, chocolate, xylitol, macadamia, lilies, chemical pest control.
+
+HOUSEHOLD VALUES
+\u2022 Whole foods, minimally processed. Healthy but genuinely delicious.
+\u2022 Zero/low plastic \u2014 glass, reusable, market over supermarket when practical.
+\u2022 Natural cleaning only \u2014 vinegar, baking soda, castile soap, citrus. Non-negotiable for asthma. Cat-safe always.
+\u2022 Locally sourced \u2014 Dumaguete/Visayas markets. Seasonal and practical.
+\u2022 Monthly grocery/supply budget: \u20B120,000.
+\u2022 Always aim for the best option. Speak up if you see one.
+
+HEALTH & WELLNESS
+\u2022 Health and personal development requirements officially started April 5, 2026.
+\u2022 All 4 take vitamins after lunch \u2014 correct for fat-soluble vitamins (A, D, E, K). Also consider: D3+K2, Omega-3 (anti-inflammatory/asthma), Magnesium at night (sleep + muscle recovery).
+\u2022 Roniq: coconut water + banana daily minimum. Avocado, sweet potato, squash also good.
+\u2022 Ek Ek: no sugar. Monitor carb types. Asthmatic \u2014 no triggers.
+\u2022 Ari and Roniq: natural night owls, active from ~11:30am.
+\u2022 Mental health topics: acknowledge briefly and warmly, redirect to Ari or Roniq. Don't engage deeply.
+
+MEALS & SCHEDULE
+\u2022 Lunch and dinner. Occasional snacks. Cats eat at 1pm (remove bowls after).
+\u2022 Workout proof: video to household Messenger group chat.
+\u2022 Monthly meeting: first Sunday. Abet's performance review (task completion, quality, punctuality, attitude, initiative \u2014 everything), book reviews, household improvements. Roniq is point of contact for improvements.
+
+ONGOING PROJECTS
+\u2022 Ormoc condo (Ek Ek's): cleaning, fixing, renting out. 2 broken ACs. June 2026 timeline.
+\u2022 Jimny: planned vehicle purchase.
+\u2022 Income stream exploration: food business (kimchi, maja blanca, mango float), commercial washer/dryer service.
+\u2022 Ants \u2014 nothing tried yet. Recommend cat-safe non-toxic only: diatomaceous earth, peppermint oil, cinnamon, cloves near entry points (not where cats walk). Never chemical sprays.
+\u2022 Water \u2014 pressure and availability issues. No filter yet.
+\u2022 Balcony fences + roof gutters \u2014 carpenter hired, in progress.
+\u2022 CCTV \u2014 planned, not installed.
+
+HOUSE RULES (key points \u2014 full rules in app)
+\u2022 Confidentiality is absolute. No gossip, no sharing household info externally.
+\u2022 No unexpected visitors \u2014 24h notice and approval required.
+\u2022 No lying, including by omission. No assumptions. No sarcasm about work.
+\u2022 Direct communication always. Don't beat around the bush. Expect the same from everyone.
+\u2022 Never assume. Set aside unnecessary shame \u2014 if "kaikog" stops you from doing your job, you've failed.
+\u2022 Mistakes are normal. Same mistake 3+ times = willful negligence.
+\u2022 Lying: first offense warning, second offense removal.
+\u2022 If you help us move forward, you come with us. If you hold us back, you're out.
+
+WARD'S BOUNDARIES
+\u2022 Never advise beyond each user's role.
+\u2022 WiFi cut: zero exceptions. Emergencies handled by those who have WiFi.
+\u2022 Book/workout failure: zero exceptions. WiFi cut the following Monday.
+\u2022 Humor welcome when natural.
+\u2022 Speak like trusted family \u2014 warm, direct, real. No walls.
+\u2022 With Abet: direct but encouraging. Build her confidence every interaction.
+\u2022 Ward should proactively flag things, not wait to be asked.`, wh3_pins: {}, wh3_unabsences: [], wh3_pay_overrides: [], wh3_clockin: null, wh3_today_meta: null };
+  function Header({ onRefresh, refreshing }) {
     const [now, setNow] = (0, import_react.useState)(/* @__PURE__ */ new Date());
-    const [isOnline, setIsOnline] = (0, import_react.useState)(() => navigator.onLine);
-    (0, import_react.useEffect)(() => {
-      const on = () => setIsOnline(true);
-      const off = () => setIsOnline(false);
-      window.addEventListener("online", on);
-      window.addEventListener("offline", off);
-      return () => {
-        window.removeEventListener("online", on);
-        window.removeEventListener("offline", off);
-      };
-    }, []);
     (0, import_react.useEffect)(() => {
       const t = setInterval(() => setNow(/* @__PURE__ */ new Date()), 1e3);
       return () => clearInterval(t);
@@ -26070,10 +26052,6 @@ WARD BEHAVIOR RULES
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontFamily: "monospace", fontSize: 22, color: G, letterSpacing: "0.05em", fontWeight: 700 }, children: timeStr }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4, marginRight: 4 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 6, height: 6, borderRadius: "50%", background: sseOk ? "#82B896" : isOnline ? "#C9A84C" : "#C97060", boxShadow: sseOk ? "0 0 5px rgba(130,184,150,0.8)" : isOnline ? "0 0 5px rgba(201,160,76,0.5)" : "none", animation: sseOk ? "pulse 2s ease-in-out infinite" : void 0 } }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 9, color: sseOk ? "#82B896" : isOnline ? "#C9A84C" : "#C97060", fontWeight: 600, letterSpacing: "0.05em" }, children: sseOk ? "LIVE" : isOnline ? "SYNC..." : "OFFLINE" })
-        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: onRefresh, disabled: refreshing, style: { background: "none", border: "none", color: refreshing ? DIM : G, cursor: refreshing ? "default" : "pointer", fontSize: 18, padding: "2px 6px", lineHeight: 1 }, title: "Sync data", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { display: "inline-block", animation: refreshing ? "spin 0.8s linear infinite" : "none" }, children: "\u21BB" }) })
       ] })
     ] });
@@ -26227,14 +26205,14 @@ WARD BEHAVIOR RULES
           ["Period Pay", "\u20B1" + base.toLocaleString(), CR],
           ["Cash Advances", totalAdv ? "\u2212\u20B1" + totalAdv.toLocaleString() : "\u2014", totalAdv ? "#C97060" : DIM],
           ["Absences", absenceDed ? `\u2212\u20B1${absenceDed.toLocaleString()}` : "\u2014", absenceDed ? "#C97060" : DIM],
-          ...adjustments.map((a) => [a.note || a.type, (a.type === "addition" ? "+" : "\u2212") + "\u20B1" + (Number(a.amount) || 0).toLocaleString(), a.type === "addition" ? GRN : "#C97060"])
+          ...adjustments.map((a) => [a.note || a.type, (a.type === "addition" ? "+" : "\u2212") + "\u20B1" + (Number(a.amount) || 0).toLocaleString(), a.type === "addition" ? "#82B896" : "#C97060"])
         ].map(([l, v, c]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: "10px 12px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, color: DIM, marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.07em" }, children: l }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 17, fontWeight: 700, color: c, fontFamily: "'Playfair Display',serif" }, children: v })
         ] }, l)) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, color: DIM, fontWeight: 500 }, children: "Net Pay This Period" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 22, fontWeight: 700, color: GRN, fontFamily: "'Playfair Display',serif" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 22, fontWeight: 700, color: "#82B896", fontFamily: "'Playfair Display',serif" }, children: [
             "\u20B1",
             net.toLocaleString()
           ] })
@@ -26353,20 +26331,13 @@ WARD BEHAVIOR RULES
     const [clPermPrompt, setClPermPrompt] = (0, import_react.useState)(false);
     const [todayMeta, setTodayMeta] = (0, import_react.useState)(null);
     const [wardInstr, setWardInstr] = (0, import_react.useState)("");
-    const [sseOk, setSseOk] = (0, import_react.useState)(false);
-    const [groqKey2, setGroqKey] = (0, import_react.useState)("");
     _MB = memberSettings;
     const [ready, setReady] = (0, import_react.useState)(false);
     const [loadError, setLoadError] = (0, import_react.useState)(null);
     const [refreshing, setRefreshing] = (0, import_react.useState)(false);
-    const manualRefresh = () => {
-      if (refreshing) return;
-      setRefreshing(true);
-      doLoad(true);
-    };
     const doLoad = async (silent) => {
       try {
-        const [t, e, r, ru, w, b, p, rd, pt, cl, vi, wl, ms2, ma, pn, ua, ov, ci, tm, wi, gk] = await Promise.all([
+        const [t, e, r, ru, w, b, p, rd, pt, cl, vi, wl, ms2, ma, pn, ua, ov, ci, tm, wi] = await Promise.all([
           DB.get("wh3_tasks", DEFAULT_TASKS),
           DB.get("wh3_ev", []),
           DB.get("wh3_req", []),
@@ -26386,8 +26357,7 @@ WARD BEHAVIOR RULES
           DB.get("wh3_pay_overrides", []),
           DB.get("wh3_clockin", null),
           DB.get("wh3_today_meta", null),
-          DB.get("wh3_wardinstr", STORAGE_DEFAULTS.wh3_wardinstr),
-          DB.get("wh3_config_groq_key", "")
+          DB.get("wh3_wardinstr", STORAGE_DEFAULTS.wh3_wardinstr)
         ]);
         const rawTasks = t && t.length > 0 && t[0].task !== void 0 ? DEFAULT_TASKS : t;
         const loadedTasks = normaliseTasks(rawTasks);
@@ -26413,85 +26383,16 @@ WARD BEHAVIOR RULES
         setClockIn(ci);
         setTodayMeta(tm && tm.date === td() ? tm : null);
         setWardInstr(wi || STORAGE_DEFAULTS.wh3_wardinstr);
-        if (gk && typeof gk === "string" && gk.startsWith("gsk_")) setGroqKey(gk);
-        setSseOk(true);
         setLoadError(null);
         if (!silent) setReady(true);
-        
-      } catch (err2) {
-        console.error("doLoad error", err2);
-        setSseOk(false);
-        setLoadError(err2?.message || "Failed to load data");
+      } catch (err) {
+        console.error("doLoad error", err);
+        setLoadError(err?.message || "Failed to load data");
         setReady(true);
       } finally {
         setRefreshing(false);
       }
     };
-    (0, import_react.useEffect)(() => {
-      const guard = setTimeout(() => setReady(true), 6e3);
-      doLoad(true).finally(() => {
-        clearTimeout(guard);
-        setReady(true);
-      });
-      const onVis = () => {
-        if (document.visibilityState === "visible") doLoad(true);
-      };
-      document.addEventListener("visibilitychange", onVis);
-      return () => {
-        document.removeEventListener("visibilitychange", onVis);
-        clearTimeout(guard);
-      };
-    }, []);
-    (0, import_react.useEffect)(() => {
-      if (typeof window.storage !== "undefined") return;
-      const BASE = "https://wardedhouse-abe15-default-rtdb.asia-southeast1.firebasedatabase.app/wh3";
-      let es;
-      const connect = () => {
-        try {
-          es = new EventSource(`${BASE}.json`);
-          es.addEventListener("put", (e) => {
-            setSseOk(true);
-            try {
-              const { path, data } = JSON.parse(e.data);
-              if (!path || path === "/") return;
-              const k = path.replace(/^\//, "");
-              if (k === "wh3_tasks" && Array.isArray(data)) setTasks(normaliseTasks(data));
-              else if (k === "wh3_ev") setEvents(data || []);
-              else if (k === "wh3_req") setReqs(data || []);
-              else if (k === "wh3_rules") setRules(data || DEFAULT_RULES);
-              else if (k === "wh3_work") setWork(data || []);
-              else if (k === "wh3_books") setBooks(data || []);
-              else if (k === "wh3_purch") setPurch(data || []);
-              else if (k === "wh3_wifi") setWifi(data || []);
-              else if (k === "wh3_rest") setRest(data || []);
-              else if (k === "wh3_pantry") setPantry(data || []);
-              else if (k === "wh3_cleanlog") setCleanLog(data || []);
-              else if (k === "wh3_visitors") setVisitors(data || []);
-              else if (k === "wh3_members" && Array.isArray(data)) {
-                setMemberSettings(data);
-                _MB = [...data];
-              } else if (k === "wh3_maint") setMaint(data || []);
-              else if (k === "wh3_pins") setPins(data || {});
-              else if (k === "wh3_unabsences") setUnabsences(data || []);
-              else if (k === "wh3_pay_overrides") setOverrides(data || []);
-              else if (k === "wh3_clockin") setClockIn(data);
-              else if (k === "wh3_today_meta") setTodayMeta(data && data.date === td() ? data : null);
-              else if (k === "wh3_wardinstr") setWardInstr(data || STORAGE_DEFAULTS.wh3_wardinstr);
-            } catch (err2) {
-            }
-          });
-          es.onerror = () => {
-            setSseOk(false);
-            es?.close();
-            setTimeout(connect, 5e3);
-          };
-        } catch (err2) {
-          setTimeout(connect, 1e4);
-        }
-      };
-      connect();
-      return () => es?.close();
-    }, []);
     const sv = (k, fn) => (v) => {
       fn(v);
       DB.set(k, v);
@@ -26591,23 +26492,9 @@ WARD BEHAVIOR RULES
       maint: u.canApprove ? maintOpen : 0,
       meals: u.isFoodManager ? lowStockCount : 0
     };
-    if (!ready) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: "100vh", background: "#0A0907", display: "flex", flexDirection: "column", overflow: "hidden" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderBottom: "1px solid rgba(212,146,74,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 120, height: 16, borderRadius: 8, background: "rgba(255,255,255,0.06)", animation: "shimmer 1.4s ease-in-out infinite" } }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 72, height: 28, borderRadius: 8, background: "rgba(255,255,255,0.06)", animation: "shimmer 1.4s ease-in-out infinite 0.1s" } })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, padding: "20px 16px", display: "flex", flexDirection: "column", gap: 14 }, children: [
-        [0, 1, 2].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { borderRadius: 18, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.06)", padding: 22, display: "flex", flexDirection: "column", gap: 10 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: `${[60, 80, 70][i]}%`, height: 14, borderRadius: 6, background: "rgba(255,255,255,0.06)", animation: `shimmer 1.4s ease-in-out infinite ${i * 0.12}s` } }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: `${[40, 55, 45][i]}%`, height: 10, borderRadius: 6, background: "rgba(255,255,255,0.04)", animation: `shimmer 1.4s ease-in-out infinite ${0.1 + i * 0.1}s` } })
-        ] }, i)),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }, children: [0, 1, 2, 3].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { borderRadius: 14, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.06)", padding: 16, display: "flex", flexDirection: "column", gap: 8 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: "50%", height: 20, borderRadius: 6, background: "rgba(255,255,255,0.06)", animation: `shimmer 1.4s ease-in-out infinite ${i * 0.08}s` } }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: "70%", height: 10, borderRadius: 6, background: "rgba(255,255,255,0.04)", animation: `shimmer 1.4s ease-in-out infinite ${0.15 + i * 0.08}s` } })
-        ] }, i)) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "10px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", justifyContent: "space-around", flexShrink: 0 }, children: [0, 1, 2, 3, 4].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40, height: 36, borderRadius: 8, background: "rgba(255,255,255,0.05)", animation: `shimmer 1.4s ease-in-out infinite ${i * 0.06}s` } }, i)) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `@keyframes shimmer{0%,100%{opacity:0.4}50%{opacity:0.9}}` })
+    if (!ready) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: "100vh", background: "#0A0907", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 12 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CastleLogo, { size: 42, color: G }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 28, height: 28, borderRadius: "50%", border: `2px solid ${G}`, borderTopColor: "transparent", animation: "spin 0.8s linear infinite" } })
     ] });
     if (loadError) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: "100vh", background: "#0A0907", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20, padding: 32, textAlign: "center" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CastleLogo, { size: 36, color: G }),
@@ -26627,7 +26514,7 @@ WARD BEHAVIOR RULES
     }, onBack: () => setPendingUser(null) });
     if (!u) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Welcome, { onSelect: (m) => setPendingUser(m) });
     const V = {
-      dash: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dash, { u, sseOk, workouts, books, events, saveEvents: saveEv, requests, tasks, purchases, restdays, unabsences, maint, visitors, clockIn, saveClockIn, overrides, getWC, getBC, go: setView, badges }),
+      dash: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dash, { u, workouts, books, events, saveEvents: saveEv, requests, tasks, purchases, restdays, unabsences, maint, visitors, clockIn, overrides, getWC, getBC, go: setView, badges }),
       clean: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         Clean,
         {
@@ -26656,11 +26543,10 @@ WARD BEHAVIOR RULES
       maint: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MaintLog, { u, maint, save: saveMaint }),
       members: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MemberSettings, { u, memberSettings, saveMembers, pins, savePins }),
       meals: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MealPlanner, { u, pantry, savePantry, groqKey: groqKey2 }),
-      wifi: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Wifi, { u, workouts, books, wifiLog, saveWifiLog: saveWifi }),
       payinvoice: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AbetPayInvoice, { u, requests, restdays, unabsences, overrides, saveOverrides })
     };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100dvh", maxHeight: "100dvh", overflow: "hidden", background: "#0A0907" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Header, { onRefresh: manualRefresh, refreshing, sseOk }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Header, { onRefresh: manualRefresh, refreshing }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flex: 1, minHeight: 0 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sidebar, { u, view, go: setView, out: () => setU(null), badges }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", { ref: mainRef, className: "app-main", onScroll: (e) => {
@@ -26670,7 +26556,7 @@ WARD BEHAVIOR RULES
         }, style: { flex: 1, padding: "18px 16px 84px", overflowY: "auto", maxWidth: "100%", minHeight: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "view-in", children: V[view] || V.dash }, view) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BottomNav, { u, view, go: setView, badges }),
-      u && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardFloat, { u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr, saveWardInstr, rules, groqKey: groqKey2 }),
+      u && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardFloat, { u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr, saveWardInstr, rules }),
       cogOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CogPanel, { u, tasks, save: saveTasks, onClose: () => setCogOpen(false) }),
       clSheet && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         ChecklistSheet,
@@ -26743,22 +26629,69 @@ WARD BEHAVIOR RULES
         )
       ] })
     ] });
-    const [showSessionChoice, setShowSessionChoice] = (0, import_react.useState)(false);
-    const openWard = () => {
-      if (!dragging.current) {
-        if (msgs.length > 0) {
-          setShowSessionChoice(true);
-        } else {
-          setOpen(true);
-        }
-      }
-    };
-      }
+  }
 
   // mount.js
   var import_react2 = __toESM(require_react());
   window.__mount = () => (0, import_client.createRoot)(document.getElementById("root")).render(import_react2.default.createElement(TheWardedHouse));
 })();
+/*! Bundled license information:
+
+scheduler/cjs/scheduler.development.js:
+  (**
+   * @license React
+   * scheduler.development.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+react/cjs/react.development.js:
+  (**
+   * @license React
+   * react.development.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+react-dom/cjs/react-dom.development.js:
+  (**
+   * @license React
+   * react-dom.development.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+react-dom/cjs/react-dom-client.development.js:
+  (**
+   * @license React
+   * react-dom-client.development.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+react/cjs/react-jsx-runtime.development.js:
+  (**
+   * @license React
+   * react-jsx-runtime.development.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+*/
 </script>
   <script>window.__mount();</script>
   <script>
