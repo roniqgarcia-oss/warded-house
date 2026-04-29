@@ -22765,7 +22765,7 @@ IMPORTANT BEHAVIOR RULES:
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" },
-          body: JSON.stringify({ model: "meta-llama/llama-4-scout-17b-16e-instruct", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
+          body: JSON.stringify({ model: "llama3-70b-8192", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
         });
         if (!res.ok) {
           const t = await res.text();
@@ -25437,7 +25437,7 @@ IMPORTANT BEHAVIOR RULES:
       setClassifying(true);
       try {
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
-          model: "meta-llama/llama-4-maverick-17b-128e-instruct",
+          model: "llama3-8b-8192",
           max_tokens: 15,
           messages: [{ role: "user", content: `Classify this ingredient into exactly one category. Consider all cultural names, local Filipino/Bisaya/Cebuano names, regional variations, and synonyms (e.g. malunggay=moringa=Vegetable, tulingan=mackerel tuna=Protein, kamote=sweet potato=Grain & Carb, gata=coconut milk=Condiment). Reply with ONLY the category name, nothing else.
 
@@ -25472,7 +25472,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       if (ingRecipes[item.id]) return;
       setIngLoading((l) => ({ ...l, [item.id]: true }));
       try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({ model: "meta-llama/llama-4-maverick-17b-128e-instruct", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama3-8b-8192", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
         const d = await res.json();
         setIngRecipes((r) => ({ ...r, [item.id]: d.content && d.content[0] ? d.content[0].text : "Could not load recipes." }));
       } catch (e) {
@@ -25488,7 +25488,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       try {
         const ingList = items.map((i) => `${i.name}${i.quantity ? ` (${i.quantity} ${i.unit})` : ""}`).join(", ");
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer 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", "Content-Type": "application/json" }, body: JSON.stringify({
-          model: "meta-llama/llama-4-maverick-17b-128e-instruct",
+          model: "llama3-8b-8192",
           max_tokens: 1500,
           tools: [{ "type": "web_search_20250305", "name": "web_search" }],
           messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. For each recipe: name, source URL, ingredients (mark which I already have \u2713), 3-step summary, and why it's a healthy choice.` }]
@@ -26428,8 +26428,8 @@ WARD BEHAVIOR RULES
       const connect = () => {
         try {
           es = new EventSource(`${BASE}.json`);
-          es.onopen = () => setSseOk(true);
           es.addEventListener("put", (e) => {
+            setSseOk(true);
             try {
               const { path, data } = JSON.parse(e.data);
               if (!path || path === "/") return;
