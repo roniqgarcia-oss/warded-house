@@ -26334,10 +26334,11 @@ WARD'S BOUNDARIES
     _MB = memberSettings;
     const [ready, setReady] = (0, import_react.useState)(false);
     const [loadError, setLoadError] = (0, import_react.useState)(null);
+    const [groqKey2, setGroqKey2] = (0, import_react.useState)("");
     const [refreshing, setRefreshing] = (0, import_react.useState)(false);
     const doLoad = async (silent) => {
       try {
-        const [t, e, r, ru, w, b, p, rd, pt, cl, vi, wl, ms2, ma, pn, ua, ov, ci, tm, wi] = await Promise.all([
+        const [t, e, r, ru, w, b, p, rd, pt, cl, vi, wl, ms2, ma, pn, ua, ov, ci, tm, wi, gk] = await Promise.all([
           DB.get("wh3_tasks", DEFAULT_TASKS),
           DB.get("wh3_ev", []),
           DB.get("wh3_req", []),
@@ -26357,7 +26358,8 @@ WARD'S BOUNDARIES
           DB.get("wh3_pay_overrides", []),
           DB.get("wh3_clockin", null),
           DB.get("wh3_today_meta", null),
-          DB.get("wh3_wardinstr", STORAGE_DEFAULTS.wh3_wardinstr)
+          DB.get("wh3_wardinstr", STORAGE_DEFAULTS.wh3_wardinstr),
+          DB.get("wh3_config_groq_key", "")
         ]);
         const rawTasks = t && t.length > 0 && t[0].task !== void 0 ? DEFAULT_TASKS : t;
         const loadedTasks = normaliseTasks(rawTasks);
@@ -26383,6 +26385,8 @@ WARD'S BOUNDARIES
         setClockIn(ci);
         setTodayMeta(tm && tm.date === td() ? tm : null);
         setWardInstr(wi || STORAGE_DEFAULTS.wh3_wardinstr);
+        if (gk && typeof gk === "string" && gk.startsWith("gsk_")) setGroqKey2(gk);
+        setSseOk(true);
         setLoadError(null);
         if (!silent) setReady(true);
       } catch (err) {
