@@ -22702,10 +22702,10 @@ THE WARDED HOUSE APP
 
 HOUSEHOLD INSTRUCTIONS (follow these carefully):
 ${wardInstr}` : "";
-        const rulesSection = rules && rules.length ? `
+        const rulesSection = Array.isArray(rules) && rules.length ? `
 
 HOUSE RULES (official, from the app):
-${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || r}`).join("\n")}` : "";
+${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).join("\n")}` : "";
         const systemPrompt = `You are Ward \u2014 the household AI for The Warded House in Dumaguete, Philippines. You serve three roles at once, switching naturally depending on what the person needs:
 
 You are Ward \u2014 the household's trusted all-in-one: master chef, expert janitor, dietitian, fitness coach, head butler, app guide, and life advisor. You carry yourself like a seasoned executive assistant who also happens to feel like family. Firm when needed. Warm always. Never fake.
@@ -25474,6 +25474,11 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       if (ingRecipes[item.id]) return;
       setIngLoading((l) => ({ ...l, [item.id]: true }));
       try {
+        if (!groqKey) {
+          setIngLoading((l) => ({ ...l, [item.id]: false }));
+          setIngRecipes((r) => ({ ...r, [item.id]: [] }));
+          return;
+        }
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama3-8b-8192", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
         const d = await res.json();
         setIngRecipes((r) => ({ ...r, [item.id]: d.content && d.content[0] ? d.content[0].text : "Could not load recipes." }));
@@ -26405,10 +26410,12 @@ WARD BEHAVIOR RULES
         setTodayMeta(tm && tm.date === td() ? tm : null);
         setWardInstr(wi || STORAGE_DEFAULTS.wh3_wardinstr);
         if (gk && typeof gk === "string" && gk.startsWith("gsk_")) setGroqKey(gk);
+        setSseOk(true);
         setLoadError(null);
         if (!silent) setReady(true);
       } catch (err) {
         console.error("doLoad error", err);
+        setSseOk(false);
         setLoadError(err?.message || "Failed to load data");
         setReady(true);
       } finally {
@@ -26437,11 +26444,6 @@ WARD BEHAVIOR RULES
       const connect = () => {
         try {
           es = new EventSource(`${BASE}.json`);
-          const liveTimer = setTimeout(() => setSseOk(true), 1500);
-          es.onopen = () => {
-            clearTimeout(liveTimer);
-            setSseOk(true);
-          };
           es.addEventListener("put", (e) => {
             setSseOk(true);
             try {
