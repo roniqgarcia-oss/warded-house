@@ -22680,6 +22680,10 @@ THE WARDED HOUSE APP
     const send = async () => {
       const text = input.trim();
       if (!text || thinking) return;
+      if (!groqKey2) {
+        setErr("Ward setup incomplete \u2014 Groq key missing from Firebase.");
+        return;
+      }
       setInput("");
       setErr("");
       const userMsg = { role: "user", content: text };
@@ -22775,7 +22779,11 @@ IMPORTANT BEHAVIOR RULES:
         const reply = d.choices?.[0]?.message?.content || "Sorry, I could not respond.";
         setMsgs((m) => [...m, { role: "assistant", content: reply }]);
       } catch (e) {
-        setErr("Ward is unavailable right now. Check your connection.");
+        if (!groqKey2) {
+          setErr("Ward setup incomplete \u2014 Groq key not found in Firebase. Check wh3_config_groq_key.");
+        } else {
+          setErr("Ward error: " + e.message);
+        }
       } finally {
         setThinking(false);
       }
@@ -23060,8 +23068,9 @@ IMPORTANT BEHAVIOR RULES:
             "."
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 6, flexShrink: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: isOnline ? GRN : "#C9A84C", boxShadow: isOnline ? "0 0 6px rgba(130,184,150,0.7)" : "0 0 6px rgba(201,160,76,0.6)", flexShrink: 0 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: sseOk ? GRN : isOnline ? "#C9A84C" : "#C97060", fontWeight: 500 }, children: sseOk ? "Live" : isOnline ? "Connecting..." : "Offline" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: sseOk ? GRN : isOnline ? "#C9A84C" : "#C97060", boxShadow: sseOk ? "0 0 6px rgba(130,184,150,0.7)" : isOnline ? "0 0 6px rgba(201,160,76,0.5)" : "0 0 6px rgba(201,112,96,0.5)", flexShrink: 0, animation: sseOk ? "pulse 2s ease-in-out infinite" : void 0 } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: sseOk ? GRN : isOnline ? "#C9A84C" : "#C97060", fontWeight: 500 }, children: sseOk ? "\u25CF Live" : isOnline ? "Connecting..." : "Offline" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}` })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 13, marginTop: 0 }, children: "Here's the household at a glance." })
@@ -26041,7 +26050,7 @@ WARD BEHAVIOR RULES
 \u2022 Speak like trusted family \u2014 warm, direct, real. No walls, no formality.
 \u2022 With Abet: always direct, always encouraging. Build her confidence.
 \u2022 Language: if the user writes in Bisaya first, respond in Bisaya with English translation. If they write in English first, respond in English with Bisaya translation. Always match who speaks first.`, wh3_pins: {}, wh3_unabsences: [], wh3_pay_overrides: [], wh3_clockin: null, wh3_today_meta: null };
-  function Header({ onRefresh, refreshing }) {
+  function Header({ onRefresh, refreshing, sseOk = false, isOnline = true }) {
     const [now, setNow] = (0, import_react.useState)(/* @__PURE__ */ new Date());
     (0, import_react.useEffect)(() => {
       const t = setInterval(() => setNow(/* @__PURE__ */ new Date()), 1e3);
@@ -26059,6 +26068,10 @@ WARD BEHAVIOR RULES
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontFamily: "monospace", fontSize: 22, color: G, letterSpacing: "0.05em", fontWeight: 700 }, children: timeStr }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4, marginRight: 4 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 6, height: 6, borderRadius: "50%", background: sseOk ? GRN : isOnline ? "#C9A84C" : "#C97060", boxShadow: sseOk ? "0 0 5px rgba(130,184,150,0.8)" : isOnline ? "0 0 5px rgba(201,160,76,0.5)" : "none", animation: sseOk ? "pulse 2s ease-in-out infinite" : void 0 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 9, color: sseOk ? GRN : isOnline ? "#C9A84C" : "#C97060", fontWeight: 600, letterSpacing: "0.05em" }, children: sseOk ? "LIVE" : isOnline ? "SYNC..." : "OFFLINE" })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: onRefresh, disabled: refreshing, style: { background: "none", border: "none", color: refreshing ? DIM : G, cursor: refreshing ? "default" : "pointer", fontSize: 18, padding: "2px 6px", lineHeight: 1 }, title: "Sync data", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { display: "inline-block", animation: refreshing ? "spin 0.8s linear infinite" : "none" }, children: "\u21BB" }) })
       ] })
     ] });
@@ -26430,6 +26443,7 @@ WARD BEHAVIOR RULES
       const connect = () => {
         try {
           es = new EventSource(`${BASE}.json`);
+          es.onopen = () => setSseOk(true);
           es.addEventListener("put", (e) => {
             setSseOk(true);
             try {
@@ -26641,7 +26655,7 @@ WARD BEHAVIOR RULES
       payinvoice: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AbetPayInvoice, { u, requests, restdays, unabsences, overrides, saveOverrides })
     };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100dvh", maxHeight: "100dvh", overflow: "hidden", background: "#0A0907" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Header, { onRefresh: manualRefresh, refreshing }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Header, { onRefresh: manualRefresh, refreshing, sseOk, isOnline: navigator.onLine }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flex: 1, minHeight: 0 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sidebar, { u, view, go: setView, out: () => setU(null), badges }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", { ref: mainRef, className: "app-main", onScroll: (e) => {
