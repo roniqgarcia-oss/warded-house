@@ -22689,7 +22689,7 @@ THE WARDED HOUSE APP
         return `User: ${u.name}`;
       }
     };
-    const WARD_DAILY_LIMIT2 = 200;
+    const WARD_DAILY_LIMIT2 = u.id === "roniq" ? 20 : u.id === "ari" ? 80 : 100;
     const getUsageKey = () => `wh3_ward_usage_${u.id}_${td()}`;
     const checkAndIncrLimit = async () => {
       try {
