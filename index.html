@@ -22794,7 +22794,7 @@ IMPORTANT BEHAVIOR RULES:
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": "Bearer " + groqKey2, "Content-Type": "application/json" },
-          body: JSON.stringify({ model: "llama-3.3-70b-versatile", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
+          body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
         });
         if (!res.ok) {
           const t = await res.text();
@@ -25445,7 +25445,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const [ingLoading, setIngLoading] = (0, import_react.useState)({});
     const [activeIng, setActiveIng] = (0, import_react.useState)(null);
     const SYNONYMS2 = {"itlog":"egg","egg":"egg","kamote":"sweet potato","kamote tops":"sweet potato tops","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef","mais":"corn","gulay":"vegetables"};
-    const normName = (n) => { const l = n.toLowerCase().trim(); return SYNONYMS2[l] || l; };
+    const SYNONYMS2 = {"itlog":"egg","egg":"egg","kamote":"sweet potato","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef"}; const normName = (n) => { const l = n.toLowerCase().trim(); return SYNONYMS2[l] || l; };
     const add = () => {
       if (!form.name.trim()) return;
       const norm = normName(form.name);
