@@ -22859,7 +22859,7 @@ IMPORTANT BEHAVIOR RULES:
           {
             value: instrDraft2,
             onChange: (e) => setInstrDraft2(e.target.value),
-            placeholder: "Add household-specific context Ward should always know:\n\u2022 Cats: Kya, Indi, Arwen \u2014 flag anything toxic to them\n\u2022 Transitioning to zero/low plastic and non-toxic products\n\u2022 Healthier lifestyle focus \u2014 less processed food, more whole foods\n\u2022 We shop at local Dumaguete markets (prefer locally available ingredients)\n\u2022 Abet is lactose intolerant (if applicable)\n\u2022 Preferred cleaning: vinegar, baking soda, castile soap\n\u2022 [Add anything else Ward should always remember]",
+            placeholder: "Add household-specific context Ward should always know:\n\n\nAPP EXPERTISE:\nYou are the expert on The Warded House app. You know every feature, every tab, every button. When users ask how to do something in the app, give them exact step-by-step guidance. Key features:\n- Dashboard: overview, clock-in, compliance status\n- Checklist: daily tasks with timers and checklists\n- Advance: cash advance requests and approval flow\n- Shop: purchase requests, two-step approval (Ek Ek then Ari/Roniq)\n- Meals: pantry tracker and AI recipe finder\n- Trackers: workouts and books compliance\n- Rest: rest day swap requests\n- Visitors: visitor approval (24h notice required)\n- Maintenance: open issues tracking\n- Reports: finance, WiFi, attendance\n- WiFi: enforcement log\n- Members: PIN management, member settings (admins only)\n- Pay Invoice: Abet's salary periods and deductions (admins only)\n- Ward Settings: edit household instructions (Ari/Roniq only)\n\nTIME AWARENESS:\nYou always know the current time from the live data provided. Use it naturally - greet by time of day, flag if Abet is late, note if it's almost end of day.\u2022 Cats: Kya, Indi, Arwen \u2014 flag anything toxic to them\n\u2022 Transitioning to zero/low plastic and non-toxic products\n\u2022 Healthier lifestyle focus \u2014 less processed food, more whole foods\n\u2022 We shop at local Dumaguete markets (prefer locally available ingredients)\n\u2022 Abet is lactose intolerant (if applicable)\n\u2022 Preferred cleaning: vinegar, baking soda, castile soap\n\u2022 [Add anything else Ward should always remember]",
             rows: 12,
             style: { width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 13, padding: "12px 14px", resize: "vertical", outline: "none", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.6, marginBottom: 12 }
           }
@@ -25395,7 +25395,7 @@ IMPORTANT BEHAVIOR RULES:
     ] });
   }
   var PANTRY_CATS = ["Protein", "Vegetable", "Fruit", "Grain & Carb", "Dairy", "Condiment", "Herb & Spice", "Other"];
-  function MealPlanner({ u, pantry, savePantry }) {
+  function MealPlanner({ u, pantry, savePantry, groqKey = "" }) {
     const [tab, setTab] = (0, import_react.useState)("pantry");
     const [showAdd, setShowAdd] = (0, import_react.useState)(false);
     const [form, setForm] = (0, import_react.useState)({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
