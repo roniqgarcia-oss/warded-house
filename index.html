@@ -22588,6 +22588,18 @@ THE WARDED HOUSE APP
       if (atRisk) {
         msg += "\u26A0 You're at risk for WiFi cut this Monday \u2014 you need more workouts this week. ";
       }
+      if (u.canApprove || u.isFoodManager) {
+        var advLine = lines.find(function(l){return l.startsWith("PENDING ADVANCES:");});
+        var purchLine = lines.find(function(l){return l.startsWith("PENDING PURCHASES:");});
+        var pending = [];
+        if (advLine && advLine.includes("pending")) pending.push("cash advance");
+        if (purchLine && purchLine.includes("pending")) pending.push("purchase request");
+        if (pending.length) msg += "\uD83D\uDD14 Needs approval: " + pending.join(", ") + ". ";
+      }
+      if (u.isStaff) {
+        var rd = lines.find(function(l){return l.startsWith("ABET REST DAY:");});
+        if (rd) msg += "Rest day: " + rd.replace("ABET REST DAY: ", "") + ". ";
+      }
       msg = msg.trim();
       setGreeting(msg);
       setLoading(false);
@@ -22670,7 +22682,8 @@ THE WARDED HOUSE APP
           pendingRest.length ? `PENDING REST REQUESTS: ${pendingRest.length}` : "",
           openMaint.length ? `OPEN MAINTENANCE: ${openMaint.map((m) => m.title).join(", ")}` : "",
           pendingVis.length ? `PENDING VISITORS: ${pendingVis.length}` : "",
-          unabsences.filter((a) => a.date?.startsWith(mk)).length ? `UNEXCUSED ABSENCES THIS MONTH: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : ""
+          unabsences.filter((a) => a.date?.startsWith(mk)).length ? `UNEXCUSED ABSENCES THIS MONTH: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : "",
+          (function() { var t2=td(); var d2=new Date(t2); var dow=d2.getDay(); var dw=(3-dow+7)%7||7; var nw=new Date(d2); nw.setDate(d2.getDate()+dw); var nws=nw.toISOString().slice(0,10); var aS=restdays.find(function(r2){return r2.status==="approved"&&r2.date>t2;}); if(aS) return "ABET REST DAY: Swapped to "+aS.date+" (approved)"; var pS=restdays.find(function(r2){return r2.status==="pending_ekek"||r2.status==="pending_admin";}); if(pS) return "ABET REST DAY: Next Wednesday "+nws+" (swap pending for "+pS.date+")"; return "ABET REST DAY: Next Wednesday "+nws; })()
         ].filter(Boolean).join("\n");
       } catch (e) {
         return `User: ${u.name}`;
@@ -25534,7 +25547,15 @@ IMPORTANT BEHAVIOR RULES:
     ] });
   }
   var PANTRY_CATS = ["Protein", "Vegetable", "Fruit", "Grain & Carb", "Dairy", "Condiment", "Herb & Spice", "Other"];
-  function MealPlanner({ u, pantry: pantry2, savePantry: savePantry2, groqKey = "" }) {
+  function MealPlanner({ u, pantry: rawPantry2, savePantry: savePantry2, groqKey = "" }) {
+    const SYNONYMS3 = {"itlog":"egg","egg":"egg","kamote":"sweet potato","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef"};
+    const normN = (n) => { const l = (n||"").toLowerCase().trim(); return SYNONYMS3[l] || n; };
+    const pantry2 = rawPantry2.reduce((acc, item) => {
+      const norm = normN(item.name);
+      const existing = acc.find(p => normN(p.name) === norm);
+      if (existing) { existing.quantity = String((parseFloat(existing.quantity)||0) + (parseFloat(item.quantity)||0)); return acc; }
+      return [...acc, {...item, name: norm}];
+    }, []);
     const [tab, setTab] = (0, import_react.useState)("pantry");
     const [showAdd, setShowAdd2] = (0, import_react.useState)(false);
     const [form, setForm] = (0, import_react.useState)({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
@@ -25616,8 +25637,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 1500,
-          tools: [{ "type": "web_search_20250305", "name": "web_search" }],
-          messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. For each recipe: name, source URL, ingredients (mark which I already have \u2713), 3-step summary, and why it's a healthy choice.` }]
+          messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. Format each recipe like this, use --- between recipes:\\nRECIPE NAME\\nIngredients: (checkmark what you have)\\nSteps: 1)... 2)... 3)...\\nWhy healthy: one sentence\\n---` }]
         }) });
         const d = await res.json();
         const text = d.choices && d.choices[0] ? d.choices[0].message.content : "No recipes found.";
