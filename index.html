@@ -25619,7 +25619,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           setIngRecipes((r) => ({ ...r, [item.id]: [] }));
           return;
         }
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `List 6 healthy recipes that feature ${item.name} as a key ingredient. Format: numbered list, Recipe Name \u2014 one sentence description. Practical for Philippines, cat-safe preparation (no onions/garlic near cat food prep), low plastic.` }] }) });
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `Return ONLY a numbered list of 6 recipe names that include ${item.name} as one of the ingredients. No intro, no preamble, no asterisks, no descriptions. Just the names:\\n1. Name\\n2. Name\\n(etc)` }] }) });
         const d = await res.json();
         setIngRecipes((r) => ({ ...r, [item.id]: d.choices && d.choices[0] ? d.choices[0].message.content : "Could not load recipes." }));
       } catch (e) {
