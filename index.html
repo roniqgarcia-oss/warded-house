@@ -22677,6 +22677,8 @@ THE WARDED HOUSE APP
       }
     };
     const WARD_DAILY_LIMIT = u.id === "roniq" ? 20 : u.id === "ari" ? 40 : 60;
+    const [usageCount, setUsageCount] = (0, import_react.useState)(0);
+    (0, import_react.useEffect)(function() { DB.get(getUsageKey(), 0).then(function(n) { setUsageCount(n || 0); }); }, [open]);
     const getUsageKey = () => `wh3_ward_usage_${u.id}_${td()}`;
     const checkAndIncrLimit = async () => {
       try {
@@ -22684,6 +22686,7 @@ THE WARDED HOUSE APP
         const cur = await DB.get(key, 0);
         if (cur >= WARD_DAILY_LIMIT) return false;
         await DB.set(key, cur + 1);
+        setUsageCount(cur + 1);
         return true;
       } catch {
         return true;
@@ -22833,7 +22836,6 @@ IMPORTANT BEHAVIOR RULES:
       document.addEventListener("touchmove", dragRef.current.move, { passive: true });
       document.addEventListener("touchend", dragRef.current.end);
     };
-    ;
     const [showSessionChoice, setShowSessionChoice] = (0, import_react.useState)(false);
     const openWard = () => {
       if (!dragging2.current) {
@@ -23359,6 +23361,260 @@ IMPORTANT BEHAVIOR RULES:
             ev.date === td() && (0, import_jsx_runtime2.jsx)(Bdg, { color: G, children: "Today" })
           ] }, ev.id);
         })
+      ] })
+    ] });
+  }
+  function TaskRow({ t, u, onCheck, onSkip, onTimer, tick, reorderMode, isDragging, isDragOver, onDragStart, onDragOver, onDragEnd, onDrop, onEdit }) {
+    const active = !!t.timerStart;
+    const elapsed = active ? (t.timerElapsed || 0) + (Date.now() - t.timerStart) : t.timerElapsed || 0;
+    const ss = Math.floor(elapsed / 1e3), mm = Math.floor(ss / 60);
+    const timerStr = active || t.timerPaused ? mm > 0 ? `${mm}:${String(ss % 60).padStart(2, "0")}` : `0:${String(ss % 60).padStart(2, "0")}` : null;
+    const isAdmin = !u.isStaff;
+    const nextDate = fmtNextDate(t);
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+      "div",
+      {
+        draggable: !!reorderMode,
+        onDragStart,
+        onDragOver,
+        onDragEnd,
+        onDrop,
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 9,
+          padding: "10px 12px",
+          borderRadius: 8,
+          background: isDragOver ? "rgba(212,146,74,0.07)" : "rgba(255,255,255,0.02)",
+          border: `1px solid ${isDragOver ? "rgba(212,146,74,0.35)" : "rgba(255,255,255,0.04)"}`,
+          marginBottom: 5,
+          opacity: isDragging ? 0.35 : 1,
+          cursor: reorderMode ? "grab" : "default",
+          transition: "all 0.12s"
+        },
+        children: [
+          reorderMode && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 2.5, flexShrink: 0, opacity: 0.4, userSelect: "none" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 13, borderTop: `1.5px solid ${CR}` } }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 13, borderTop: `1.5px solid ${CR}` } }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 13, borderTop: `1.5px solid ${CR}` } })
+          ] }),
+          !reorderMode && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            "button",
+            {
+              onClick: () => onCheck(t.id, isAdmin),
+              style: { width: 20, height: 20, borderRadius: 5, border: "1.5px solid rgba(212,146,74,0.35)", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.12s" }
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, minWidth: 0, cursor: "pointer" }, onClick: () => !reorderMode && onEdit && onEdit(), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 13, color: CR, lineHeight: 1.35 }, children: [
+              t.name,
+              t.adhoc && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, marginLeft: 6, color: "#C9A84C", background: "rgba(201,160,76,0.12)", padding: "1px 6px", borderRadius: 9, fontWeight: 600 }, children: "TODAY" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 6, alignItems: "center", marginTop: 3, flexWrap: "wrap" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, color: "#4A4030", background: "rgba(255,255,255,0.06)", padding: "1px 7px", borderRadius: 9 }, children: t.area }),
+              !t.adhoc && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, color: "#3A3428" }, children: fmtInt(t.intervalDays) }),
+              nextDate && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 9, color: "#3A5A3A", background: "rgba(130,184,150,0.08)", padding: "1px 7px", borderRadius: 9 }, children: [
+                "Next: ",
+                nextDate
+              ] }),
+              timerStr && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 11, color: t.timerPaused ? "rgba(201,160,76,0.7)" : "#C9A84C", fontWeight: 600 }, children: [
+                timerStr,
+                t.timerPaused ? " \u23F8" : ""
+              ] })
+            ] })
+          ] }),
+          u.isStaff && !reorderMode && (active ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "pause"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,160,76,0.12)", color: "#C9A84C", border: "1px solid rgba(201,160,76,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Pause" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "end"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.1)", color: "#C97060", border: "1px solid rgba(201,112,96,0.28)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "End" })
+          ] }) : t.timerPaused ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "resume"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(130,184,150,0.1)", color: "#82B896", border: "1px solid rgba(130,184,150,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Resume" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "end"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.1)", color: "#C97060", border: "1px solid rgba(201,112,96,0.28)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "End" })
+          ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "start"), style: { fontSize: 11, padding: "4px 10px", background: "rgba(255,255,255,0.05)", color: DIM, border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Start" })),
+          isAdmin && !reorderMode && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: onSkip, style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.07)", color: "#8A5A50", border: "1px solid rgba(201,112,96,0.15)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Skip" })
+        ]
+      }
+    );
+  }
+  function CalendarPicker({ value, onChange, dayCounts = {} }) {
+    const [cur, setCur] = (0, import_react.useState)(() => {
+      const d = /* @__PURE__ */ new Date((value || td()) + "T00:00:00");
+      return { y: d.getFullYear(), m: d.getMonth() };
+    });
+    const { y, m } = cur;
+    const firstDay = new Date(y, m, 1).getDay(), daysInMonth = new Date(y, m + 1, 0).getDate();
+    const DS2 = ["S", "M", "T", "W", "T", "F", "S"];
+    const MNTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const ds = (d) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const dotCol = (n) => !n ? null : n >= 4 ? "#C97060" : n >= 2 ? "#C9A84C" : "#82B896";
+    const cells = [];
+    for (let i = 0; i < firstDay; i++) cells.push(null);
+    for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { background: "rgba(0,0,0,0.25)", border: "1px solid rgba(212,146,74,0.12)", borderRadius: 14, padding: "12px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => setCur((c) => {
+          const d = new Date(c.y, c.m - 1);
+          return { y: d.getFullYear(), m: d.getMonth() };
+        }), style: { border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.06)", color: CR, cursor: "pointer", borderRadius: 7, padding: "3px 10px", fontSize: 16 }, children: "\u2039" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 13, fontWeight: 600, color: CR }, children: [
+          MNTHS[m],
+          " ",
+          y
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => setCur((c) => {
+          const d = new Date(c.y, c.m + 1);
+          return { y: d.getFullYear(), m: d.getMonth() };
+        }), style: { border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.06)", color: CR, cursor: "pointer", borderRadius: 7, padding: "3px 10px", fontSize: 16 }, children: "\u203A" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(7,1fr)", marginBottom: 4 }, children: DS2.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { textAlign: "center", fontSize: 10, fontWeight: 600, color: DIM, padding: "2px 0" }, children: d }, i)) }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2 }, children: cells.map((d, i) => {
+        if (!d) return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {}, i);
+        const dateStr = ds(d);
+        const sel = dateStr === value, isToday = dateStr === td(), isSun1 = isFirstSunday(dateStr);
+        const cnt = dayCounts[dateStr] || 0, col = dotCol(cnt);
+        return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { onClick: () => !isSun1 && onChange(dateStr), style: { position: "relative", textAlign: "center", padding: "6px 2px 10px", borderRadius: 7, cursor: isSun1 ? "not-allowed" : "pointer", background: sel ? G : isToday ? "rgba(255,255,255,0.08)" : isSun1 ? "rgba(201,160,76,0.05)" : "transparent", border: `1px solid ${sel ? G : isToday ? "rgba(255,255,255,0.15)" : isSun1 ? "rgba(201,160,76,0.15)" : "transparent"}`, opacity: isSun1 ? 0.5 : 1, transition: "background 0.1s" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 13, fontWeight: sel ? 700 : 400, color: sel ? "#0A0907" : isSun1 ? "#C9A84C" : CR }, children: d }),
+          cnt > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { position: "absolute", bottom: 2, left: "50%", transform: "translateX(-50%)", fontSize: 9, fontWeight: 700, color: col, lineHeight: 1 }, children: cnt }),
+          isSun1 && !cnt && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { position: "absolute", bottom: 3, left: "50%", transform: "translateX(-50%)", width: 4, height: 4, borderRadius: "50%", background: "#C9A84C", display: "block" } })
+        ] }, i);
+      }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 9, paddingTop: 9, borderTop: "1px solid rgba(255,255,255,0.06)", flexWrap: "wrap" }, children: [[G, "1\u20133 tasks"], ["#C9A84C", "3 tasks"], ["#C97060", "4+ tasks"], ["#C9A84C", "1st Sun (free"]].map(([c, l], i) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: c, flexShrink: 0 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, color: DIM }, children: l })
+      ] }, i)) })
+    ] });
+  }
+  function ScheduleTab({ tasks }) {
+    const [daysAhead, setDaysAhead] = (0, import_react.useState)(14);
+    const nonDaily = [...tasks].filter((t) => !t.adhoc && !t.paused && t.intervalDays > 1).sort((a, b) => a.order - b.order);
+    const byDate = (0, import_react.useMemo)(() => {
+      const map = {};
+      const limit = /* @__PURE__ */ new Date();
+      limit.setDate(limit.getDate() + daysAhead);
+      nonDaily.forEach((t) => {
+        let d = /* @__PURE__ */ new Date(nextDueTask(t) + "T00:00:00");
+        while (d <= limit) {
+          const ds = skipFirstSunday(d.toISOString().split("T")[0], t.intervalDays);
+          const dAdj = /* @__PURE__ */ new Date(ds + "T00:00:00");
+          if (dAdj <= limit) {
+            if (!map[ds]) map[ds] = [];
+            map[ds].push(t);
+          }
+          d = /* @__PURE__ */ new Date(ds + "T00:00:00");
+          d.setDate(d.getDate() + t.intervalDays);
+        }
+      });
+      return Object.entries(map).sort(([a], [b]) => a.localeCompare(b));
+    }, [tasks, daysAhead]);
+    const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: { fontSize: 11, color: DIM, margin: 0 }, children: "Non-daily tasks \xB7 1st Sunday of each month is always free" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("select", { value: daysAhead, onChange: (e) => setDaysAhead(+e.target.value), style: { background: "rgba(0,0,0,0.3)", border: "1px solid rgba(212,146,74,0.15)", color: CR, padding: "4px 8px", borderRadius: 7, fontSize: 12, fontFamily: "'Plus Jakarta Sans',sans-serif", outline: "none" }, children: [[7, "7 days"], [14, "14 days"], [30, "30 days"], [60, "60 days"]].map(([v, l]) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { value: v, children: l }, v)) })
+      ] }),
+      byDate.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { textAlign: "center", padding: "20px", color: DIM, fontSize: 13 }, children: "No non-daily tasks scheduled in this window." }),
+      byDate.map(([dateStr, dayTasks]) => {
+        const d = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
+        const isToday = dateStr === td();
+        const isSun1 = isFirstSunday(dateStr);
+        const busy = dayTasks.length >= 4;
+        return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 14 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 12, fontWeight: 600, color: isToday ? G : CR, minWidth: 90 }, children: isToday ? "Today" : DAY_NAMES[d.getDay()] + ", " + d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) }),
+            isSun1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, color: "#C9A84C", background: "rgba(201,160,76,0.12)", padding: "1px 7px", borderRadius: 9, fontWeight: 600 }, children: "1ST SUN \xB7 FREE DAY" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 10, padding: "1px 8px", borderRadius: 9, fontWeight: 500, background: busy ? "rgba(201,112,96,0.12)" : "rgba(255,255,255,0.06)", color: busy ? "#C97060" : DIM }, children: [
+              dayTasks.length,
+              " task",
+              dayTasks.length !== 1 ? "s" : "",
+              busy ? " \xB7 busy" : ""
+            ] })
+          ] }),
+          dayTasks.map((t) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", marginBottom: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, color: CR, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: t.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 10, color: DIM, marginTop: 2, display: "flex", gap: 5 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { background: "rgba(255,255,255,0.07)", padding: "1px 6px", borderRadius: 8 }, children: t.area }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: "#3A3428" }, children: fmtInt(t.intervalDays) })
+            ] })
+          ] }) }, t.id))
+        ] }, dateStr);
+      })
+    ] });
+  }
+  function AreaManager({ areas, tasks, onUpdate, newArea, setNewArea }) {
+    const [editingIdx, setEditingIdx] = (0, import_react.useState)(null);
+    const [editVal, setEditVal] = (0, import_react.useState)("");
+    const startEdit = (i) => {
+      setEditingIdx(i);
+      setEditVal(areas[i]);
+    };
+    const saveEdit = (i) => {
+      const oldName = areas[i];
+      const trimmed = editVal.trim();
+      if (!trimmed || trimmed === oldName) {
+        setEditingIdx(null);
+        return;
+      }
+      const newAreas = areas.map((a, j) => j === i ? trimmed : a);
+      const updatedTasks = tasks.map((t) => t.area === oldName ? { ...t, area: trimmed } : t);
+      onUpdate(newAreas, updatedTasks);
+      setEditingIdx(null);
+    };
+    const delArea = (i) => {
+      const name = areas[i];
+      const hasTasks = tasks.some((t) => t.area === name);
+      if (hasTasks) return;
+      onUpdate(areas.filter((_, j) => j !== i), tasks);
+    };
+    const addArea = () => {
+      if (!newArea.trim() || areas.includes(newArea.trim())) return;
+      onUpdate([...areas, newArea.trim()], tasks);
+      setNewArea("");
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: { fontSize: 11, color: DIM, marginBottom: 12 }, children: "Renaming an area updates all tasks assigned to it." }),
+      areas.map((area, i) => {
+        const count = tasks.filter((t) => t.area === area).length;
+        if (editingIdx === i) return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 7, alignItems: "center", marginBottom: 5 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            "input",
+            {
+              value: editVal,
+              onChange: (e) => setEditVal(e.target.value),
+              onKeyDown: (e) => {
+                if (e.key === "Enter") saveEdit(i);
+                if (e.key === "Escape") setEditingIdx(null);
+              },
+              autoFocus: true,
+              style: { flex: 1, background: "rgba(0,0,0,0.3)", border: "1px solid rgba(212,146,74,0.3)", color: CR, padding: "7px 10px", borderRadius: 8, fontSize: 13, fontFamily: "'Plus Jakarta Sans',sans-serif", outline: "none" }
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "gold", sm: true, onClick: () => saveEdit(i), children: "Save" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", sm: true, onClick: () => setEditingIdx(null), children: "\u2715" })
+        ] }, area);
+        return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderRadius: 7, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", marginBottom: 5 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { flex: 1, fontSize: 13, color: CR }, children: area }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 10, color: "#3A3428" }, children: [
+            count,
+            " task",
+            count !== 1 ? "s" : ""
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => startEdit(i), style: { fontSize: 11, padding: "3px 9px", border: "1px solid rgba(255,255,255,0.08)", background: "transparent", color: DIM, borderRadius: 6, cursor: "pointer" }, children: "Rename" }),
+          count === 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => delArea(i), style: { fontSize: 11, padding: "3px 9px", border: "1px solid rgba(201,112,96,0.2)", background: "transparent", color: "#C97060", borderRadius: 6, cursor: "pointer" }, children: "Del" })
+        ] }, area);
+      }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 8, marginTop: 12 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "input",
+          {
+            placeholder: "New area name...",
+            value: newArea,
+            onChange: (e) => setNewArea(e.target.value),
+            onKeyDown: (e) => {
+              if (e.key === "Enter") addArea();
+            },
+            style: { width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(212,146,74,0.15)", color: CR, padding: "8px 12px", borderRadius: 8, fontSize: 13, fontFamily: "'Plus Jakarta Sans',sans-serif", outline: "none" }
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "gold", sm: true, onClick: addArea, disabled: !newArea.trim(), children: "Add" })
       ] })
     ] });
   }
@@ -24114,25 +24370,13 @@ IMPORTANT BEHAVIOR RULES:
     const [form, setForm] = (0, import_react.useState)({ name: "", category: "Food & Groceries", qty: "", notes: "", proposedDate: "" });
     const [editId, setEditId] = (0, import_react.useState)(null);
     const [editForm, setEditForm] = (0, import_react.useState)({});
-    const SYNONYMS = { "itlog": "egg", "egg": "egg", "kamote": "sweet potato", "gata": "coconut milk", "malunggay": "moringa", "kangkong": "water spinach", "talong": "eggplant", "ampalaya": "bitter melon", "sibuyas": "onion", "bawang": "garlic", "luya": "ginger", "saging": "banana", "mangga": "mango", "isda": "fish", "manok": "chicken", "baboy": "pork", "baka": "beef" };
-    const normalizeName = (n) => {
-      const lower = n.toLowerCase().trim();
-      return SYNONYMS[lower] || lower;
-    };
     const add = () => {
       if (!form.name.trim()) return;
-      const normalizedName = normalizeName(form.name);
-      const existing = pantry.find((p) => normalizeName(p.name) === normalizedName);
-      if (existing) {
-        savePantry(pantry.map((p) => p.id === existing.id ? { ...p, quantity: String(Number(p.quantity || 0) + Number(form.quantity || 1)) } : p));
-        setForm({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
-        setShowAdd(false);
-        return;
-      }
       save([...purchases, { id: "p" + Date.now(), name: form.name.trim(), category: form.category, qty: form.qty, notes: form.notes, proposedDate: form.proposedDate, requestedBy: u.id, status: "pending_ekek", createdDate: td(), ekekDate: null, adminDate: null, adminBy: null }]);
       setForm({ name: "", category: "Food & Groceries", qty: "", notes: "", proposedDate: "" });
       setSf(false);
     };
+
     const startEdit = (p) => {
       setEditId(p.id);
       setEditForm({ name: p.name, category: p.category, qty: p.qty || "", notes: p.notes || "", proposedDate: p.proposedDate || "" });
@@ -24652,6 +24896,101 @@ IMPORTANT BEHAVIOR RULES:
       ] }, l.id))
     ] });
   }
+  function UnabsencesSection({ u, unabsences = [], saveUnabsences }) {
+    const [sf, setSf] = (0, import_react.useState)(false);
+    const [form, setForm] = (0, import_react.useState)({ date: td(), reason: "" });
+    const canLog = u.canApprove || u.isFoodManager;
+    const add = () => {
+      if (!form.date || !form.reason.trim()) return;
+      const entry = { id: "ua" + Date.now(), date: form.date, reason: form.reason.trim(), loggedBy: u.id, loggedDate: td(), dailyRate: DAILY_RATE };
+      saveUnabsences([...unabsences, entry]);
+      setForm({ date: td(), reason: "" });
+      setSf(false);
+    };
+    const del = (id) => saveUnabsences(unabsences.filter((a) => a.id !== id));
+    const sorted = [...unabsences].sort((a, b) => b.date.localeCompare(a.date));
+    const pending = unabsences.filter((a) => {
+      const np = nextPaydayAfter(a.date);
+      return np > td();
+    });
+    const totalPending = Math.round(pending.length * DAILY_RATE * 100) / 100;
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginTop: 28 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { style: { fontFamily: "'Playfair Display',serif", fontSize: 17, fontWeight: 600, color: CR }, children: "Unapproved Absences" }),
+          pending.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(Bdg, { color: "#C97060", children: [
+            pending.length,
+            " pending"
+          ] })
+        ] }),
+        canLog && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "danger", sm: true, onClick: () => setSf(!sf), children: "+ Log Absence" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Card, { sx: { marginBottom: 14, background: "rgba(201,112,96,0.05)", borderColor: "rgba(201,112,96,0.15)" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: 14, flexWrap: "wrap" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 3 }, children: "Daily Rate" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 20, color: CR, fontWeight: 700 }, children: [
+            "\u20B1",
+            DAILY_RATE.toFixed(2)
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 10, marginTop: 1 }, children: "\u20B18,500 \xF7 24 days" })
+        ] }),
+        pending.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 3 }, children: "Pending Deductions" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 20, color: "#C97060", fontWeight: 700 }, children: [
+            "\u2212\u20B1",
+            totalPending.toLocaleString()
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 10, marginTop: 1 }, children: "from next payday" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, minWidth: 180, color: DIM, fontSize: 12, lineHeight: 1.65, alignSelf: "center" }, children: [
+          "Unapproved absences are deducted from Abet's next nearest payday at \u20B1",
+          DAILY_RATE.toFixed(2),
+          "/day. Approved rest day requests are not affected."
+        ] })
+      ] }) }),
+      sf && canLog && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(Card, { sx: { marginBottom: 14 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h4", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, fontWeight: 600, color: CR, marginBottom: 12 }, children: "Log Unapproved Absence" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Fi, { label: "Date of Absence", type: "date", value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }), sx: { marginBottom: 10 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Fi, { label: "Reason (required)", placeholder: "e.g. No show, left early without notice...", value: form.reason, onChange: (e) => setForm({ ...form, reason: e.target.value }), sx: { marginBottom: 10 } }),
+        form.date && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { background: "rgba(201,112,96,0.07)", border: "1px solid rgba(201,112,96,0.18)", borderRadius: 8, padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#C97060" }, children: [
+          "\u20B1",
+          DAILY_RATE.toFixed(2),
+          " will be deducted on ",
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { children: fd(nextPaydayAfter(form.date)) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 7 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "danger", onClick: add, disabled: !form.date || !form.reason.trim(), children: "Log Absence" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", onClick: () => setSf(false), children: "Cancel" })
+        ] })
+      ] }),
+      sorted.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13 }, children: "No unapproved absences on record." }) }) : sorted.map((a) => {
+        const np = nextPaydayAfter(a.date);
+        const isPast = np <= td();
+        return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Card, { sx: { padding: "11px 14px", marginBottom: 7, borderColor: isPast ? "rgba(130,184,150,0.15)" : "rgba(201,112,96,0.18)" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: CR, fontSize: 14, fontWeight: 600 }, children: fd(a.date) }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Bdg, { color: isPast ? "#82B896" : "#C97060", children: isPast ? "Deducted" : "Pending" }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { color: "#C97060", fontSize: 12, fontWeight: 600 }, children: [
+                "\u2212\u20B1",
+                (a.dailyRate || DAILY_RATE).toFixed(2)
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11, fontWeight: 500 }, children: a.reason }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { color: "#4A3E30", fontSize: 10, marginTop: 2 }, children: [
+              "Logged by ",
+              mbid(a.loggedBy).name,
+              " \xB7 ",
+              fd(a.loggedDate),
+              " \xB7 Deducts on ",
+              fd(np)
+            ] })
+          ] }),
+          canLog && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(XBtn, { onClick: () => del(a.id) })
+        ] }) }, a.id);
+      })
+    ] });
+  }
   function Report({ u, tasks, workouts, books, requests, purchases, wifiLog, saveWifiLog = () => {
   }, events, cleanLog = [], restdays = [], unabsences = [], saveUnabsences = () => {
   }, clockIn }) {
@@ -25084,7 +25423,6 @@ IMPORTANT BEHAVIOR RULES:
           r.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
         }
       }
-      ;
       return r;
     };
     const wedList = nextRestDays();
@@ -25195,6 +25533,7 @@ IMPORTANT BEHAVIOR RULES:
       ] }) }, r.id))
     ] });
   }
+  var PANTRY_CATS = ["Protein", "Vegetable", "Fruit", "Grain & Carb", "Dairy", "Condiment", "Herb & Spice", "Other"];
   function MealPlanner({ u, pantry: pantry2, savePantry: savePantry2, groqKey = "" }) {
     const [tab, setTab] = (0, import_react.useState)("pantry");
     const [showAdd, setShowAdd2] = (0, import_react.useState)(false);
@@ -25639,6 +25978,38 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         ] }),
         u.canApprove && (0, import_jsx_runtime2.jsx)(XBtn, { onClick: () => del(m.id) })
       ] }) }, m.id))
+    ] });
+  }
+  function PinCard({ m, pins, savePins }) {
+    const [show, setShow] = (0, import_react.useState)(false);
+    const [confirming, setConfirming] = (0, import_react.useState)(false);
+    const hasPin = !!(pins && pins[m.id]);
+    const doReset = () => {
+      savePins({ ...pins, [m.id]: null });
+      setConfirming(false);
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(Card, { sx: { padding: "14px 16px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 32, height: 32, borderRadius: "50%", background: m.color + "18", border: `1.5px solid ${m.color}40`, display: "flex", alignItems: "center", justifyContent: "center", color: m.color, fontSize: 14, fontWeight: 700, flexShrink: 0 }, children: m.name.charAt(0) }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: CR, fontSize: 13, fontWeight: 600 }, children: m.name }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: hasPin ? "#82B896" : "#C97060", fontSize: 10, marginTop: 1 }, children: hasPin ? "PIN set" : "No PIN set" })
+        ] })
+      ] }),
+      hasPin && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 10, padding: "7px 10px", background: "rgba(255,255,255,0.03)", borderRadius: 7, border: "1px solid rgba(255,255,255,0.06)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: CR, fontSize: 15, letterSpacing: "0.18em", flex: 1, fontFamily: "monospace" }, children: show ? pins[m.id] || "----" : "\u2022\u2022\u2022\u2022" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => setShow((s) => !s), style: { background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 11, padding: "2px 6px", borderRadius: 4 }, children: show ? "Hide" : "Show" })
+      ] }),
+      confirming ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { background: "rgba(201,112,96,0.08)", border: "1px solid rgba(201,112,96,0.25)", borderRadius: 8, padding: "10px 12px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("p", { style: { color: "#C97060", fontSize: 12, fontWeight: 500, marginBottom: 8 }, children: [
+          m.name,
+          " will need to create a new PIN on next login."
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 7 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "danger", sm: true, onClick: doReset, children: "Yes, Reset" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", sm: true, onClick: () => setConfirming(false), children: "Cancel" })
+        ] })
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "danger", sm: true, onClick: () => hasPin ? setConfirming(true) : null, disabled: !hasPin, children: hasPin ? "Reset PIN" : "No PIN" })
     ] });
   }
   function MemberSettings({ u, memberSettings, saveMembers, pins, savePins }) {
