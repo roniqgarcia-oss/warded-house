@@ -25637,7 +25637,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 1500,
-          messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. Format each recipe like this, use --- between recipes:\\nRECIPE NAME\\nIngredients: (checkmark what you have)\\nSteps: 1)... 2)... 3)...\\nWhy healthy: one sentence\\n---` }]
+          messages: [{ role: "user", content: `You are a recipe assistant. Return ONLY the recipes with NO introduction, preamble, or commentary. Use exactly this format, separated by ---:\nRECIPE NAME\nIngredients: (checkmark what user has)\nSteps: 1)... 2)... 3)...\nWhy healthy: one sentence\n---\nUser has these ingredients: ${ingList}. Find 3 healthy practical recipes for a household in Dumaguete Philippines. No onions/garlic/grapes/chocolate near cats. Prefer low-plastic local sourcing.` }]
         }) });
         const d = await res.json();
         const text = d.choices && d.choices[0] ? d.choices[0].message.content : "No recipes found.";
@@ -25648,7 +25648,26 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       setRecipeLoading(false);
     };
     const catGroups = PANTRY_CATS.map((cat) => ({ cat, items: pantry2.filter((p) => p.category === cat) })).filter((g) => g.items.length > 0);
-    return (0, import_jsx_runtime2.jsxs)("div", { children: [
+    return (0, import_jsx_runtime2.jsxs)("div", { style: { position: "relative" }, children: [
+      expandedRecipe && (0, import_jsx_runtime2.jsx)("div", {
+        onClick: function() { setExpandedRecipe(null); },
+        style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 100,
+          display: "flex", alignItems: "flex-start", justifyContent: "center",
+          padding: "10vh 16px 16px", overflowY: "auto" },
+        children: (0, import_jsx_runtime2.jsx)("div", {
+          onClick: function(ev) { ev.stopPropagation(); },
+          style: { background: "#1A1610", border: "1px solid rgba(212,146,74,0.25)",
+            borderRadius: 16, padding: "20px 20px 28px", maxWidth: 480, width: "100%",
+            marginBottom: 40 },
+          children: (0, import_jsx_runtime2.jsxs)("div", { children: [
+            (0, import_jsx_runtime2.jsx)("div", { style: { color: "#D4924A", fontWeight: 700, fontSize: 15, marginBottom: 12 },
+              children: expandedRecipe.split("\n")[0] }),
+            (0, import_jsx_runtime2.jsx)("p", { style: { color: "#C8C0B0", fontSize: 13, lineHeight: 1.8,
+              whiteSpace: "pre-wrap", margin: 0 },
+              children: expandedRecipe.split("\n").slice(1).join("\n").trim() })
+          ] })
+        })
+      }),
       (0, import_jsx_runtime2.jsx)(SH, { title: "Meal Planner", sub: "Pantry tracker \xB7 AI-powered recipe finder" }),
       (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: 8, marginBottom: 20 }, children: ["pantry", "recipes"].map((t) => (0, import_jsx_runtime2.jsx)("button", { onClick: () => setTab(t), style: { padding: "7px 18px", borderRadius: 7, border: `1px solid ${tab === t ? G : "rgba(255,255,255,0.08)"}`, background: tab === t ? "rgba(212,146,74,0.1)" : "transparent", color: tab === t ? G : DIM, fontSize: 12, cursor: "pointer", fontWeight: tab === t ? 500 : 400, textTransform: "capitalize" }, children: t === "pantry" ? `Pantry (${pantry2.length})` : "Find Recipes" }, t)) }),
       tab === "pantry" && (0, import_jsx_runtime2.jsxs)("div", { children: [
