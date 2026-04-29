@@ -22826,20 +22826,6 @@ IMPORTANT BEHAVIOR RULES:
       document.addEventListener("touchend", dragRef.current.end);
     };
     ;
-    if (!open2) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-      "button",
-      {
-        onMouseDown: onDragStart2,
-        onTouchStart: onDragStart2,
-        onClick: openWard,
-        style: { position: "fixed", bottom: btnPos2.y, left: btnPos2.x, height: 40, paddingLeft: 12, paddingRight: 16, borderRadius: 20, background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", gap: 7, zIndex: 30, touchAction: "none", whiteSpace: "nowrap" },
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 16, c: "#0A0907" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, fontWeight: 700, color: "#0A0907", letterSpacing: "0.03em" }, children: "Talk to Ward" }),
-          alertCount2 > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { position: "absolute", top: -4, right: -4, width: 18, height: 18, borderRadius: "50%", background: "#C97060", border: "2px solid #0A0907", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#fff" }, children: alertCount2 })
-        ]
-      }
-    );
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "fixed", inset: 0, background: "#0A0907", zIndex: 50, display: "flex", flexDirection: "column" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "14px 16px", borderBottom: "1px solid rgba(212,146,74,0.1)", display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
@@ -26724,7 +26710,7 @@ WARD BEHAVIOR RULES
       ] })
     ] });
     const [showSessionChoice, setShowSessionChoice] = (0, import_react.useState)(false);
-    const openWard2 = () => {
+    const openWard = () => {
       if (!dragging.current) {
         if (msgs.length > 0) {
           setShowSessionChoice(true);
@@ -26755,7 +26741,7 @@ WARD BEHAVIOR RULES
       {
         onMouseDown: onDragStart,
         onTouchStart: onDragStart,
-        onClick: openWard2,
+        onClick: openWard,
         style: { position: "fixed", bottom: btnPos.y, left: btnPos.x, height: 40, paddingLeft: 12, paddingRight: 16, borderRadius: 20, background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", gap: 7, zIndex: 30, touchAction: "none", whiteSpace: "nowrap" },
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 16, c: "#0A0907" }),
