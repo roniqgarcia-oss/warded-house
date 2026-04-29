@@ -23060,19 +23060,12 @@ IMPORTANT BEHAVIOR RULES:
     }, []);
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 26 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 4 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { style: { fontFamily: "'Playfair Display',serif", fontSize: 28, fontWeight: 500, letterSpacing: "-0.02em", color: CR }, children: [
-            greet,
-            ", ",
-            u.name,
-            "."
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 6, flexShrink: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: sseOk ? GRN : isOnline ? "#C9A84C" : "#C97060", boxShadow: sseOk ? "0 0 6px rgba(130,184,150,0.7)" : isOnline ? "0 0 6px rgba(201,160,76,0.5)" : "0 0 6px rgba(201,112,96,0.5)", flexShrink: 0, animation: sseOk ? "pulse 2s ease-in-out infinite" : void 0 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: sseOk ? GRN : isOnline ? "#C9A84C" : "#C97060", fontWeight: 500 }, children: sseOk ? "\u25CF Live" : isOnline ? "Connecting..." : "Offline" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}` })
-          ] })
-        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { style: { fontFamily: "'Playfair Display',serif", fontSize: 28, fontWeight: 500, letterSpacing: "-0.02em", color: CR }, children: [
+          greet,
+          ", ",
+          u.name,
+          "."
+        ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 13, marginTop: 0 }, children: "Here's the household at a glance." })
       ] }),
       myAct > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(201,112,96,0.07)", border: "1px solid rgba(201,112,96,0.2)", borderRadius: 10, padding: "12px 16px", marginBottom: 18, display: "flex", alignItems: "center", gap: 12 }, children: [
@@ -26411,6 +26404,7 @@ WARD BEHAVIOR RULES
         setClockIn(ci);
         setTodayMeta(tm && tm.date === td() ? tm : null);
         setWardInstr(wi || STORAGE_DEFAULTS.wh3_wardinstr);
+        if (gk && typeof gk === "string" && gk.startsWith("gsk_")) setGroqKey(gk);
         setLoadError(null);
         if (!silent) setReady(true);
       } catch (err) {
@@ -26443,7 +26437,11 @@ WARD BEHAVIOR RULES
       const connect = () => {
         try {
           es = new EventSource(`${BASE}.json`);
-          es.onopen = () => setSseOk(true);
+          const liveTimer = setTimeout(() => setSseOk(true), 1500);
+          es.onopen = () => {
+            clearTimeout(liveTimer);
+            setSseOk(true);
+          };
           es.addEventListener("put", (e) => {
             setSseOk(true);
             try {
