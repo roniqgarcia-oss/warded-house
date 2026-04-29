@@ -22720,6 +22720,10 @@ THE WARDED HOUSE APP
       }
     };
     const WARD_DAILY_LIMIT2 = u.id === "roniq" ? 20 : u.id === "ari" ? 40 : 60;
+    const [usageCount2, setUsageCount2] = (0, import_react.useState)(0);
+    (0, import_react.useEffect)(() => {
+      DB.get(getUsageKey(), 0).then(n => setUsageCount2(n || 0));
+    }, [open2]);
     const getUsageKey = () => `wh3_ward_usage_${u.id}_${td()}`;
     const checkAndIncrLimit = async () => {
       try {
@@ -22765,7 +22769,7 @@ THE WARDED HOUSE APP
       }
       try {
         const snapshot = buildSnapshot2();
-        const instrSection = (wardInstr && newMsgs.length <= 2) ? `
+        const instrSection = (wardInstr && rawMsgs.length <= 1) ? `
 
 HOUSEHOLD INSTRUCTIONS (follow these carefully):
 ${wardInstr}` : "";
@@ -26399,24 +26403,7 @@ WARD BEHAVIOR RULES
         setSseOk(true);
         setLoadError(null);
         if (!silent) setReady(true);
-        // Register for push notifications (FCM)
-        if (!silent && "serviceWorker" in navigator && "PushManager" in window) {
-          try {
-            const reg = await navigator.serviceWorker.ready;
-            const VAPID = ""; // Set after getting key from Firebase Console
-            if (VAPID) {
-              const sub = await reg.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: VAPID
-              });
-              await fetch(\`${fb}/wh3_fcm_tokens/$\{u?.id || "unknown"\}.json\`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(JSON.stringify(sub))
-              });
-            }
-          } catch(e) { /* push not supported or denied */ }
-        }
+        
       } catch (err2) {
         console.error("doLoad error", err2);
         setSseOk(false);
