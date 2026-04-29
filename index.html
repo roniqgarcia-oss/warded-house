@@ -25440,6 +25440,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     };
     const [selected, setSelected] = (0, import_react.useState)([]);
     const [recipeResult, setRecipeResult] = (0, import_react.useState)("");
+    const [expandedRecipe, setExpandedRecipe] = (0, import_react.useState)(null);
     const [recipeLoading, setRecipeLoading] = (0, import_react.useState)(false);
     const [ingRecipes, setIngRecipes] = (0, import_react.useState)({});
     const [ingLoading, setIngLoading] = (0, import_react.useState)({});
@@ -25500,7 +25501,8 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       setRecipeLoading(false);
     };
     const catGroups = PANTRY_CATS.map((cat) => ({ cat, items: pantry.filter((p) => p.category === cat) })).filter((g) => g.items.length > 0);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "relative" }, children: [
+      expandedRecipe && (0, import_jsx_runtime.jsxs)("div", { onClick: () => setExpandedRecipe(null), style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }, children: [(0, import_jsx_runtime.jsx)("div", { onClick: (e) => e.stopPropagation(), style: { background: "#1A1610", border: "1px solid rgba(212,146,74,0.25)", borderRadius: 16, padding: 20, maxWidth: 480, width: "100%", maxHeight: "80vh", overflowY: "auto" }, children: (0, import_jsx_runtime.jsx)("p", { style: { color: CR, fontSize: 13, lineHeight: 1.8, whiteSpace: "pre-wrap", margin: 0 }, children: expandedRecipe }) })] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SH, { title: "Meal Planner", sub: "Pantry tracker \xB7 AI-powered recipe finder" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, marginBottom: 20 }, children: ["pantry", "recipes"].map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => setTab(t), style: { padding: "7px 18px", borderRadius: 7, border: `1px solid ${tab === t ? G : "rgba(255,255,255,0.08)"}`, background: tab === t ? "rgba(212,146,74,0.1)" : "transparent", color: tab === t ? G : DIM, fontSize: 12, cursor: "pointer", fontWeight: tab === t ? 500 : 400, textTransform: "capitalize" }, children: t === "pantry" ? `Pantry (${pantry.length})` : "Find Recipes" }, t)) }),
       tab === "pantry" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -25591,7 +25593,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
                 "Recipes with ",
                 pantry.find((p) => p.id === activeIng)?.name
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split(/\n(?=\d+\.)/).filter(Boolean).map((recipe, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR }, children: recipe.trim() }, i)) })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split(/\n(?=\d+\.)/).filter(Boolean).map((recipe, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer", transition: "all 0.15s" }, onClick: () => setExpandedRecipe(recipe.trim()), children: recipe.trim().split("\n")[0] || recipe.trim() }, i)) })
             ] }) }),
             !activeIng && pantry.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: DIM, fontSize: 12, fontWeight: 500 }, children: "Click any ingredient on the left to see what recipes you can make with it." }) })
           ] })
@@ -25621,7 +25623,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         ] }) }),
         recipeResult && !recipeLoading && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: G, fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 12 }, children: "Recipes found" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: CR, fontSize: 13, lineHeight: 1.8, whiteSpace: "pre-wrap" }, children: recipeResult })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (recipeResult || "").split(/\n(?=\d+\.)/).filter(Boolean).map((recipe, i) => (0, import_jsx_runtime.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe.trim()), children: recipe.trim().split("\n")[0] || recipe.trim() }, i)) })
         ] }),
         !recipeResult && !recipeLoading && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 12 }, children: "Select ingredients above and tap Find Recipes \u2014 Ward will search online for real recipes that match." }) })
       ] }),

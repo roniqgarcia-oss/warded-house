@@ -1,5 +1,5 @@
 // The Warded House — Service Worker v1777473520
-const CACHE = 'warded-house-1777479513';
+const CACHE = 'warded-house-1777480189';
 const SHELL = ['/warded-house/', '/warded-house/index.html'];
 
 self.addEventListener('install', e => {
