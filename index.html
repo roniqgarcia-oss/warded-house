@@ -1338,10 +1338,10 @@
             implementation
           };
         }
-        function getCrossOriginStringAs(as, input) {
+        function getCrossOriginStringAs(as, input2) {
           if ("font" === as) return "";
-          if ("string" === typeof input)
-            return "use-credentials" === input ? input : "";
+          if ("string" === typeof input2)
+            return "use-credentials" === input2 ? input2 : "";
         }
         function getValueDescriptorExpectingObjectForWarning(thing) {
           return null === thing ? "`null`" : void 0 === thing ? "`undefined`" : "" === thing ? "an empty string" : 'something with type "' + typeof thing + '"';
@@ -2341,8 +2341,8 @@
             ), true;
           try {
             rendererID = hook.inject(internals), injectedHook = hook;
-          } catch (err) {
-            console.error("React instrumentation encountered an error: %o.", err);
+          } catch (err2) {
+            console.error("React instrumentation encountered an error: %o.", err2);
           }
           return hook.checkDCE ? true : false;
         }
@@ -2351,10 +2351,10 @@
           if (injectedHook && "function" === typeof injectedHook.setStrictMode)
             try {
               injectedHook.setStrictMode(rendererID, newIsStrictMode);
-            } catch (err) {
+            } catch (err2) {
               hasLoggedError || (hasLoggedError = true, console.error(
                 "React instrumentation encountered an error: %o",
-                err
+                err2
               ));
             }
         }
@@ -4170,7 +4170,7 @@
           for (var element = getActiveElement(containerInfo.document); element instanceof containerInfo.HTMLIFrameElement; ) {
             try {
               var JSCompiler_inline_result = "string" === typeof element.contentWindow.location.href;
-            } catch (err) {
+            } catch (err2) {
               JSCompiler_inline_result = false;
             }
             if (JSCompiler_inline_result) containerInfo = element.contentWindow;
@@ -11408,10 +11408,10 @@
           if (injectedHook && "function" === typeof injectedHook.onCommitFiberUnmount)
             try {
               injectedHook.onCommitFiberUnmount(rendererID, deletedFiber);
-            } catch (err) {
+            } catch (err2) {
               hasLoggedError || (hasLoggedError = true, console.error(
                 "React instrumentation encountered an error: %o",
-                err
+                err2
               ));
             }
           var prevEffectStart = pushComponentEffectStart(), prevEffectDuration = pushComponentEffectDuration(), prevEffectErrors = pushComponentEffectErrors(), prevEffectDidSpawnUpdate = pushComponentEffectDidSpawnUpdate();
@@ -14317,10 +14317,10 @@
                   schedulerPriority,
                   didError
                 );
-              } catch (err) {
+              } catch (err2) {
                 hasLoggedError || (hasLoggedError = true, console.error(
                   "React instrumentation encountered an error: %o",
-                  err
+                  err2
                 ));
               }
             isDevToolsPresent && startViewTransitionStartTime.memoizedUpdaters.clear();
@@ -14476,10 +14476,10 @@
             if (injectedHook && "function" === typeof injectedHook.onPostCommitFiberRoot)
               try {
                 injectedHook.onPostCommitFiberRoot(rendererID, priority);
-              } catch (err) {
+              } catch (err2) {
                 hasLoggedError || (hasLoggedError = true, console.error(
                   "React instrumentation encountered an error: %o",
-                  err
+                  err2
                 ));
               }
             var stateNode = priority.current.stateNode;
@@ -17991,10 +17991,10 @@
           if (injectedHook && "function" === typeof injectedHook.onScheduleFiberRoot)
             try {
               injectedHook.onScheduleFiberRoot(rendererID, container, element);
-            } catch (err) {
+            } catch (err2) {
               hasLoggedError || (hasLoggedError = true, console.error(
                 "React instrumentation encountered an error: %o",
-                err
+                err2
               ));
             }
           parentComponent = getContextForSubtree(parentComponent);
@@ -22599,26 +22599,38 @@ THE WARDED HOUSE APP
   }
   function WardFloat({ u, tasks, workouts, books, requests, purchases, restdays, unabsences, clockIn, maint, visitors, overrides, getWC, wardInstr = "", saveWardInstr = () => {
   }, rules = [], groqKey: groqKey2 = "" }) {
-    const [open, setOpen] = (0, import_react.useState)(false);
-    const [wardTab, setWardTab] = (0, import_react.useState)("chat");
-    const [msgs, setMsgs] = (0, import_react.useState)([]);
-    const [input, setInput] = (0, import_react.useState)("");
-    const [thinking, setThinking] = (0, import_react.useState)(false);
-    const [err, setErr] = (0, import_react.useState)("");
-    const [instrDraft, setInstrDraft] = (0, import_react.useState)(wardInstr || "");
-    const [instrSaved, setInstrSaved] = (0, import_react.useState)(false);
-    const bottomRef = (0, import_react.useRef)(null);
-    const [btnPos, setBtnPos] = (0, import_react.useState)({ x: 16, y: 82 });
+    const [open2, setOpen2] = (0, import_react.useState)(false);
+    const [wardTab2, setWardTab2] = (0, import_react.useState)("chat");
+    const [msgs2, setMsgs2] = (0, import_react.useState)([]);
+    const [input2, setInput2] = (0, import_react.useState)("");
+    const [thinking2, setThinking] = (0, import_react.useState)(false);
+    const [err2, setErr2] = (0, import_react.useState)("");
+    const [instrDraft2, setInstrDraft2] = (0, import_react.useState)(wardInstr || "");
+    const [instrSaved2, setInstrSaved2] = (0, import_react.useState)(false);
+    const bottomRef2 = (0, import_react.useRef)(null);
+    const [btnPos2, setBtnPos] = (0, import_react.useState)({ x: 16, y: 82 });
     const dragRef = (0, import_react.useRef)(null);
-    const dragging = (0, import_react.useRef)(false);
+    const dragging2 = (0, import_react.useRef)(false);
     const startPos = (0, import_react.useRef)({});
     (0, import_react.useEffect)(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [msgs, thinking]);
+      bottomRef2.current?.scrollIntoView({ behavior: "smooth" });
+    }, [msgs2, thinking2]);
     (0, import_react.useEffect)(() => {
-      if (wardTab === "settings") setInstrDraft(wardInstr);
+      if (wardTab2 === "settings") setInstrDraft2(wardInstr);
     }, [wardInstr]);
-    const buildSnapshot = () => {
+    const alertCount2 = (0, import_react.useMemo)(() => {
+      const h = (/* @__PURE__ */ new Date()).getHours();
+      let n = 0;
+      if (u.isStaff && h >= 9 && clockIn?.date !== td()) n++;
+      if (u.canApprove) {
+        if (requests.filter((r) => r.status === "pending_admin").length) n++;
+        if (purchases.filter((p) => p.status === "pending_admin").length) n++;
+        const wc = getWC?.(u.id) || {};
+        if (!wc.compliant && [5, 6].includes((/* @__PURE__ */ new Date()).getDay())) n++;
+      }
+      return n;
+    }, [clockIn, requests, purchases, u]);
+    const buildSnapshot2 = () => {
       try {
         const today = td();
         const wk = wr();
@@ -22664,40 +22676,40 @@ THE WARDED HOUSE APP
         return `User: ${u.name}`;
       }
     };
-    const WARD_DAILY_LIMIT = 200;
+    const WARD_DAILY_LIMIT2 = 200;
     const getUsageKey = () => `wh3_ward_usage_${u.id}_${td()}`;
     const checkAndIncrLimit = async () => {
       try {
         const key = getUsageKey();
         const cur = await DB.get(key, 0);
-        if (cur >= WARD_DAILY_LIMIT) return false;
+        if (cur >= WARD_DAILY_LIMIT2) return false;
         await DB.set(key, cur + 1);
         return true;
       } catch {
         return true;
       }
     };
-    const send = async () => {
-      const text = input.trim();
-      if (!text || thinking) return;
+    const send2 = async () => {
+      const text = input2.trim();
+      if (!text || thinking2) return;
       if (!groqKey2) {
-        setErr("Ward setup incomplete \u2014 Groq key missing from Firebase.");
+        setErr2("Ward setup incomplete \u2014 Groq key missing from Firebase.");
         return;
       }
-      setInput("");
-      setErr("");
+      setInput2("");
+      setErr2("");
       const userMsg = { role: "user", content: text };
-      const newMsgs = [...msgs, userMsg];
-      setMsgs(newMsgs);
+      const newMsgs = [...msgs2, userMsg];
+      setMsgs2(newMsgs);
       setThinking(true);
       const allowed = await checkAndIncrLimit();
       if (!allowed) {
         setThinking(false);
-        setErr("ward_resting");
+        setErr2("ward_resting");
         return;
       }
       try {
-        const snapshot = buildSnapshot();
+        const snapshot = buildSnapshot2();
         const instrSection = wardInstr ? `
 
 HOUSEHOLD INSTRUCTIONS (follow these carefully):
@@ -22757,9 +22769,9 @@ OPERATIONAL DETAILS:
 
 This data is real-time. Reference it directly in your responses. Never say "let me check" or "I'll look into that" \u2014 you already have it above. Be specific.
 
-Today is \${new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}.
+Today is ${(/* @__PURE__ */ new Date()).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}.
 
-Respond in whatever language the person writes in \u2014 English or Bisaya/Filipino.
+Always respond in English first with a Bisaya translation following. If the user writes in Bisaya, respond in Bisaya first with English translation. Default is English-first.
 
 IMPORTANT BEHAVIOR RULES:
 - You HAVE the live household data above. Use it directly. Never say "let me check" or "I don't have access to" \u2014 you already have the data.
@@ -22777,27 +22789,27 @@ IMPORTANT BEHAVIOR RULES:
         }
         const d = await res.json();
         const reply = d.choices?.[0]?.message?.content || "Sorry, I could not respond.";
-        setMsgs((m) => [...m, { role: "assistant", content: reply }]);
+        setMsgs2((m) => [...m, { role: "assistant", content: reply }]);
       } catch (e) {
         if (!groqKey2) {
-          setErr("Ward setup incomplete \u2014 Groq key not found in Firebase. Check wh3_config_groq_key.");
+          setErr2("Ward setup incomplete \u2014 Groq key not found in Firebase. Check wh3_config_groq_key.");
         } else {
-          setErr("Ward error: " + e.message);
+          setErr2("Ward error: " + e.message);
         }
       } finally {
         setThinking(false);
       }
     };
-    const onDragStart = (e) => {
-      dragging.current = false;
+    const onDragStart2 = (e) => {
+      dragging2.current = false;
       const touch = e.touches ? e.touches[0] : e;
-      startPos.current = { mx: touch.clientX, my: touch.clientY, bx: btnPos.x, by: btnPos.y };
+      startPos.current = { mx: touch.clientX, my: touch.clientY, bx: btnPos2.x, by: btnPos2.y };
       dragRef.current = { move: (ev) => {
         const t = ev.touches ? ev.touches[0] : ev;
         const dx = t.clientX - startPos.current.mx;
         const dy = t.clientY - startPos.current.my;
-        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragging.current = true;
-        if (dragging.current) {
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragging2.current = true;
+        if (dragging2.current) {
           const newLeft = Math.max(8, Math.min(window.innerWidth - 120, startPos.current.bx + dx));
           const newBottom = Math.max(68, Math.min(window.innerHeight - 60, startPos.current.by - dy));
           setBtnPos({ x: newLeft, y: newBottom });
@@ -22813,56 +22825,18 @@ IMPORTANT BEHAVIOR RULES:
       document.addEventListener("touchmove", dragRef.current.move, { passive: true });
       document.addEventListener("touchend", dragRef.current.end);
     };
-    const [showSessionChoice, setShowSessionChoice] = (0, import_react.useState)(false);
-    const openWard = () => {
-      if (!dragging.current) {
-        if (msgs.length > 0) {
-          setShowSessionChoice(true);
-        } else {
-          setOpen(true);
-        }
-      }
-    };
-    if (showSessionChoice) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "#141410", border: "1px solid rgba(212,146,74,0.2)", borderRadius: 16, padding: 24, maxWidth: 300, width: "100%" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, color: "#D4924A", textAlign: "center", marginBottom: 6 }, children: "Welcome back" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13, textAlign: "center", marginBottom: 20 }, children: "You have an ongoing conversation with Ward." }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: () => {
-          setShowSessionChoice(false);
-          setOpen(true);
-        }, children: "Continue conversation" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => {
-          setMsgs([]);
-          setShowSessionChoice(false);
-          setOpen(true);
-        }, children: "Start new session" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setShowSessionChoice(false), children: "Cancel" })
-      ] })
-    ] }) });
-    const alertCount = (0, import_react.useMemo)(() => {
-      const h = (/* @__PURE__ */ new Date()).getHours();
-      let n = 0;
-      if (u.isStaff && h >= 9 && clockIn?.date !== td()) n++;
-      if (u.canApprove) {
-        if (requests.filter((r) => r.status === "pending_admin").length) n++;
-        if (purchases.filter((p) => p.status === "pending_admin").length) n++;
-        const wc = getWC?.(u.id) || {};
-        if (!wc.compliant && [5, 6].includes((/* @__PURE__ */ new Date()).getDay())) n++;
-      }
-      return n;
-    }, [clockIn, requests, purchases, u]);
-    if (!open) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+    ;
+    if (!open2) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
       "button",
       {
-        onMouseDown: onDragStart,
-        onTouchStart: onDragStart,
+        onMouseDown: onDragStart2,
+        onTouchStart: onDragStart2,
         onClick: openWard,
-        style: { position: "fixed", bottom: btnPos.y, left: btnPos.x, height: 40, paddingLeft: 12, paddingRight: 16, borderRadius: 20, background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", gap: 7, zIndex: 30, touchAction: "none", whiteSpace: "nowrap" },
+        style: { position: "fixed", bottom: btnPos2.y, left: btnPos2.x, height: 40, paddingLeft: 12, paddingRight: 16, borderRadius: 20, background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", gap: 7, zIndex: 30, touchAction: "none", whiteSpace: "nowrap" },
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 16, c: "#0A0907" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, fontWeight: 700, color: "#0A0907", letterSpacing: "0.03em" }, children: "Talk to Ward" }),
-          alertCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { position: "absolute", top: -4, right: -4, width: 18, height: 18, borderRadius: "50%", background: "#C97060", border: "2px solid #0A0907", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#fff" }, children: alertCount })
+          alertCount2 > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { position: "absolute", top: -4, right: -4, width: 18, height: 18, borderRadius: "50%", background: "#C97060", border: "2px solid #0A0907", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#fff" }, children: alertCount2 })
         ]
       }
     );
@@ -22873,26 +22847,26 @@ IMPORTANT BEHAVIOR RULES:
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, fontWeight: 600, color: "#D4924A" }, children: "Ward" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 3 }, children: (u.canApprove ? ["chat", "settings"] : ["chat"]).map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
             if (t === "settings") {
-              setWardTab("settings");
-              setInstrDraft(wardInstr);
+              setWardTab2("settings");
+              setInstrDraft2(wardInstr);
             } else {
-              setWardTab(t);
+              setWardTab2(t);
             }
-          }, style: { background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: wardTab === t ? 700 : 400, color: wardTab === t ? "#D4924A" : "#5A4E3A", textTransform: "capitalize", padding: 0, borderBottom: wardTab === t ? "1px solid #D4924A" : "1px solid transparent", paddingBottom: 1 }, children: t }, t)) })
+          }, style: { background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: wardTab2 === t ? 700 : 400, color: wardTab2 === t ? "#D4924A" : "#5A4E3A", textTransform: "capitalize", padding: 0, borderBottom: wardTab2 === t ? "1px solid #D4924A" : "1px solid transparent", paddingBottom: 1 }, children: t }, t)) })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
-          setOpen(false);
-          setErr("");
+          setOpen2(false);
+          setErr2("");
         }, style: { background: "none", border: "none", color: "#5A4E3A", cursor: "pointer", fontSize: 22, padding: "4px 8px" }, children: "\xD7" })
       ] }),
-      wardTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "20px 16px" }, children: [
+      wardTab2 === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "20px 16px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#D4924A", marginBottom: 6 }, children: "Ward Instructions" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", marginBottom: 14, lineHeight: 1.6 }, children: "Tell Ward about your household \u2014 values, preferences, routines, things to avoid. Ward will use this in every conversation." }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "textarea",
           {
-            value: instrDraft,
-            onChange: (e) => setInstrDraft(e.target.value),
+            value: instrDraft2,
+            onChange: (e) => setInstrDraft2(e.target.value),
             placeholder: "Add household-specific context Ward should always know:\n\u2022 Cats: Kya, Indi, Arwen \u2014 flag anything toxic to them\n\u2022 Transitioning to zero/low plastic and non-toxic products\n\u2022 Healthier lifestyle focus \u2014 less processed food, more whole foods\n\u2022 We shop at local Dumaguete markets (prefer locally available ingredients)\n\u2022 Abet is lactose intolerant (if applicable)\n\u2022 Preferred cleaning: vinegar, baking soda, castile soap\n\u2022 [Add anything else Ward should always remember]",
             rows: 12,
             style: { width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 13, padding: "12px 14px", resize: "vertical", outline: "none", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.6, marginBottom: 12 }
@@ -22900,47 +22874,47 @@ IMPORTANT BEHAVIOR RULES:
         ),
         u.canApprove ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 10 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: () => {
-            saveWardInstr(instrDraft);
-            setInstrSaved(true);
-            setTimeout(() => setInstrSaved(false), 2e3);
-          }, sx: { flex: 1 }, children: instrSaved ? "\u2713 Saved" : "Save Instructions" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setInstrDraft(wardInstr), children: "Reset" })
+            saveWardInstr(instrDraft2);
+            setInstrSaved2(true);
+            setTimeout(() => setInstrSaved2(false), 2e3);
+          }, sx: { flex: 1 }, children: instrSaved2 ? "\u2713 Saved" : "Save Instructions" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setInstrDraft2(wardInstr), children: "Reset" })
         ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", fontStyle: "italic" }, children: "Only Ari or Roniq can edit Ward's instructions." })
       ] }),
-      wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
-        msgs.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardGreeting, { u, snapshot: buildSnapshot() }),
-        msgs.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "82%", padding: "10px 14px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? "rgba(212,146,74,0.15)" : "rgba(255,255,255,0.04)", border: m.role === "user" ? "1px solid rgba(212,146,74,0.25)" : "1px solid rgba(255,255,255,0.07)", color: m.role === "user" ? "#D4924A" : "#C8C0B0", fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-wrap" }, children: m.content }) }, i)),
-        thinking && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6, padding: "10px 14px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "18px 18px 18px 4px", width: "fit-content" }, children: [0, 1, 2].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 6, height: 6, borderRadius: "50%", background: "#5A4E3A", animation: "wardDot 1.2s ease-in-out infinite", animationDelay: i * 0.2 + "s" } }, i)) }),
-        err && err === "ward_resting" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px 16px", background: "rgba(212,146,74,0.05)", border: "1px solid rgba(212,146,74,0.1)", borderRadius: 14, margin: "0 8px" }, children: [
+      wardTab2 === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
+        msgs2.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardGreeting, { u, snapshot: buildSnapshot2() }),
+        msgs2.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "82%", padding: "10px 14px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? "rgba(212,146,74,0.15)" : "rgba(255,255,255,0.04)", border: m.role === "user" ? "1px solid rgba(212,146,74,0.25)" : "1px solid rgba(255,255,255,0.07)", color: m.role === "user" ? "#D4924A" : "#C8C0B0", fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-wrap" }, children: m.content }) }, i)),
+        thinking2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6, padding: "10px 14px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "18px 18px 18px 4px", width: "fit-content" }, children: [0, 1, 2].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 6, height: 6, borderRadius: "50%", background: "#5A4E3A", animation: "wardDot 1.2s ease-in-out infinite", animationDelay: i * 0.2 + "s" } }, i)) }),
+        err2 && err2 === "ward_resting" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px 16px", background: "rgba(212,146,74,0.05)", border: "1px solid rgba(212,146,74,0.1)", borderRadius: 14, margin: "0 8px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 28, marginBottom: 8 }, children: "\u{1F319}" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#D4924A", marginBottom: 4 }, children: "Ward needs to rest" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: "#5A4E3A", fontSize: 12, lineHeight: 1.6 }, children: [
             "You've reached your ",
-            WARD_DAILY_LIMIT,
+            WARD_DAILY_LIMIT2,
             " message daily limit. Ward will be back at midnight. You can still scroll through your conversation above."
           ] })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center" }, children: err }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: bottomRef })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center" }, children: err2 }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: bottomRef2 })
       ] }),
-      wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", gap: 10, alignItems: "flex-end", flexShrink: 0, paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }, children: [
+      wardTab2 === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", gap: 10, alignItems: "flex-end", flexShrink: 0, paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "textarea",
           {
-            value: input,
-            onChange: (e) => setInput(e.target.value),
+            value: input2,
+            onChange: (e) => setInput2(e.target.value),
             onKeyDown: (e) => {
-              if (e.key === "Enter" && !e.shiftKey && err !== "ward_resting") {
+              if (e.key === "Enter" && !e.shiftKey && err2 !== "ward_resting") {
                 e.preventDefault();
-                send();
+                send2();
               }
             },
-            disabled: err === "ward_resting",
-            placeholder: err === "ward_resting" ? "Ward is resting until midnight..." : "Ask Ward anything...",
+            disabled: err2 === "ward_resting",
+            placeholder: err2 === "ward_resting" ? "Ward is resting until midnight..." : "Ask Ward anything...",
             rows: 1,
             style: { flex: 1, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 14, padding: "10px 14px", resize: "none", outline: "none", maxHeight: 100, overflowY: "auto", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.5 }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: send, disabled: !input.trim() || thinking || err === "ward_resting", style: { width: 40, height: 40, borderRadius: "50%", background: input.trim() && !thinking ? "linear-gradient(135deg,#C4893A,#D4924A)" : "rgba(255,255,255,0.05)", border: "none", cursor: input.trim() && !thinking ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "upload", s: 16, c: input.trim() && !thinking ? "#0A0907" : "#3A3428" }) })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: send2, disabled: !input2.trim() || thinking2 || err2 === "ward_resting", style: { width: 40, height: 40, borderRadius: "50%", background: input2.trim() && !thinking2 ? "linear-gradient(135deg,#C4893A,#D4924A)" : "rgba(255,255,255,0.05)", border: "none", cursor: input2.trim() && !thinking2 ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "upload", s: 16, c: input2.trim() && !thinking2 ? "#0A0907" : "#3A3428" }) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: ".wardDot{animation:wardDot 1.2s ease-in-out infinite}@keyframes wardDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}" })
     ] });
@@ -23674,7 +23648,7 @@ IMPORTANT BEHAVIOR RULES:
       ] })
     ] }) });
   }
-  function TaskRow({ t, u, onCheck, onSkip, onTimer, tick, reorderMode, isDragging, isDragOver, onDragStart, onDragOver, onDragEnd, onDrop, onEdit }) {
+  function TaskRow({ t, u, onCheck, onSkip, onTimer, tick, reorderMode, isDragging, isDragOver, onDragStart: onDragStart2, onDragOver, onDragEnd, onDrop, onEdit }) {
     const active = !!t.timerStart;
     const elapsed = active ? (t.timerElapsed || 0) + (Date.now() - t.timerStart) : t.timerElapsed || 0;
     const ss = Math.floor(elapsed / 1e3), mm = Math.floor(ss / 60);
@@ -23685,7 +23659,7 @@ IMPORTANT BEHAVIOR RULES:
       "div",
       {
         draggable: !!reorderMode,
-        onDragStart,
+        onDragStart: onDragStart2,
         onDragOver,
         onDragEnd,
         onDrop,
@@ -25758,7 +25732,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     };
     const del = (id) => save(maint.filter((m) => m.id !== id));
     const SEVCOLOR = { Minor: G, Moderate: "#C9A04C", Urgent: "#C97060" };
-    const open = maint.filter((m) => m.status === "open");
+    const open2 = maint.filter((m) => m.status === "open");
     const ackd = maint.filter((m) => m.status === "acknowledged");
     const resolved = maint.filter((m) => m.status === "resolved");
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -25780,9 +25754,9 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setSf(false), children: "Cancel" })
         ] })
       ] }),
-      open.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 22 }, children: [
+      open2.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 22 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { fontFamily: "'Playfair Display',serif", fontSize: 17, fontWeight: 600, color: CR, marginBottom: 12 }, children: "Open Issues" }),
-        open.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { sx: { marginBottom: 8, borderColor: "rgba(201,112,96,0.2)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 10 }, children: [
+        open2.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { sx: { marginBottom: 8, borderColor: "rgba(201,112,96,0.2)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 10 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bdg, { color: SEVCOLOR[m.severity] || G, children: m.severity }),
@@ -26047,7 +26021,7 @@ WARD BEHAVIOR RULES
 \u2022 Humor is welcome when it fits naturally.
 \u2022 Speak like trusted family \u2014 warm, direct, real. No walls, no formality.
 \u2022 With Abet: always direct, always encouraging. Build her confidence.
-\u2022 Language: if the user writes in Bisaya first, respond in Bisaya with English translation. If they write in English first, respond in English with Bisaya translation. Always match who speaks first.`, wh3_pins: {}, wh3_unabsences: [], wh3_pay_overrides: [], wh3_clockin: null, wh3_today_meta: null };
+\u2022 Language: Always respond in English first, followed by a Bisaya translation in parentheses or on the next line. ONLY switch to Bisaya-first if the user writes their message in Bisaya. The opening greeting is always English first.`, wh3_pins: {}, wh3_unabsences: [], wh3_pay_overrides: [], wh3_clockin: null, wh3_today_meta: null };
   function Header({ onRefresh, refreshing, sseOk = false }) {
     const [now, setNow] = (0, import_react.useState)(/* @__PURE__ */ new Date());
     const [isOnline, setIsOnline] = (0, import_react.useState)(() => navigator.onLine);
@@ -26424,10 +26398,10 @@ WARD BEHAVIOR RULES
         setSseOk(true);
         setLoadError(null);
         if (!silent) setReady(true);
-      } catch (err) {
-        console.error("doLoad error", err);
+      } catch (err2) {
+        console.error("doLoad error", err2);
         setSseOk(false);
-        setLoadError(err?.message || "Failed to load data");
+        setLoadError(err2?.message || "Failed to load data");
         setReady(true);
       } finally {
         setRefreshing(false);
@@ -26483,7 +26457,7 @@ WARD BEHAVIOR RULES
               else if (k === "wh3_clockin") setClockIn(data);
               else if (k === "wh3_today_meta") setTodayMeta(data && data.date === td() ? data : null);
               else if (k === "wh3_wardinstr") setWardInstr(data || STORAGE_DEFAULTS.wh3_wardinstr);
-            } catch (err) {
+            } catch (err2) {
             }
           });
           es.onerror = () => {
@@ -26491,7 +26465,7 @@ WARD BEHAVIOR RULES
             es?.close();
             setTimeout(connect, 5e3);
           };
-        } catch (err) {
+        } catch (err2) {
           setTimeout(connect, 1e4);
         }
       };
@@ -26748,6 +26722,125 @@ WARD BEHAVIOR RULES
           }
         )
       ] })
+    ] });
+    const [showSessionChoice, setShowSessionChoice] = (0, import_react.useState)(false);
+    const openWard2 = () => {
+      if (!dragging.current) {
+        if (msgs.length > 0) {
+          setShowSessionChoice(true);
+        } else {
+          setOpen(true);
+        }
+      }
+    };
+    if (showSessionChoice) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "#141410", border: "1px solid rgba(212,146,74,0.2)", borderRadius: 16, padding: 24, maxWidth: 300, width: "100%" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, color: "#D4924A", textAlign: "center", marginBottom: 6 }, children: "Welcome back" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13, textAlign: "center", marginBottom: 20 }, children: "You have an ongoing conversation with Ward." }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: () => {
+          setShowSessionChoice(false);
+          setOpen(true);
+        }, children: "Continue conversation" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => {
+          setMsgs([]);
+          setShowSessionChoice(false);
+          setOpen(true);
+        }, children: "Start new session" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setShowSessionChoice(false), children: "Cancel" })
+      ] })
+    ] }) });
+    if (!open) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+      "button",
+      {
+        onMouseDown: onDragStart,
+        onTouchStart: onDragStart,
+        onClick: openWard2,
+        style: { position: "fixed", bottom: btnPos.y, left: btnPos.x, height: 40, paddingLeft: 12, paddingRight: 16, borderRadius: 20, background: "linear-gradient(135deg,#C4893A,#D4924A)", boxShadow: "0 4px 18px rgba(196,137,58,0.45)", border: "none", cursor: "grab", display: "flex", alignItems: "center", gap: 7, zIndex: 30, touchAction: "none", whiteSpace: "nowrap" },
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 16, c: "#0A0907" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, fontWeight: 700, color: "#0A0907", letterSpacing: "0.03em" }, children: "Talk to Ward" }),
+          alertCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { position: "absolute", top: -4, right: -4, width: 18, height: 18, borderRadius: "50%", background: "#C97060", border: "2px solid #0A0907", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#fff" }, children: alertCount })
+        ]
+      }
+    );
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "fixed", inset: 0, background: "#0A0907", zIndex: 50, display: "flex", flexDirection: "column" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "14px 16px", borderBottom: "1px solid rgba(212,146,74,0.1)", display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#C4893A,#D4924A)", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "ward", s: 18, c: "#0A0907" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, fontWeight: 600, color: "#D4924A" }, children: "Ward" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 3 }, children: (u.canApprove ? ["chat", "settings"] : ["chat"]).map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
+            if (t === "settings") {
+              setWardTab("settings");
+              setInstrDraft(wardInstr);
+            } else {
+              setWardTab(t);
+            }
+          }, style: { background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: wardTab === t ? 700 : 400, color: wardTab === t ? "#D4924A" : "#5A4E3A", textTransform: "capitalize", padding: 0, borderBottom: wardTab === t ? "1px solid #D4924A" : "1px solid transparent", paddingBottom: 1 }, children: t }, t)) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
+          setOpen(false);
+          setErr("");
+        }, style: { background: "none", border: "none", color: "#5A4E3A", cursor: "pointer", fontSize: 22, padding: "4px 8px" }, children: "\xD7" })
+      ] }),
+      wardTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "20px 16px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#D4924A", marginBottom: 6 }, children: "Ward Instructions" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", marginBottom: 14, lineHeight: 1.6 }, children: "Tell Ward about your household \u2014 values, preferences, routines, things to avoid." }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "textarea",
+          {
+            value: instrDraft,
+            onChange: (e) => setInstrDraft(e.target.value),
+            placeholder: "Add household-specific context Ward should always know...",
+            rows: 12,
+            style: { width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 13, padding: "12px 14px", resize: "vertical", outline: "none", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.6, marginBottom: 12 }
+          }
+        ),
+        u.canApprove ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 10 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "gold", onClick: () => {
+            saveWardInstr(instrDraft);
+            setInstrSaved(true);
+            setTimeout(() => setInstrSaved(false), 2e3);
+          }, sx: { flex: 1 }, children: instrSaved ? "\u2713 Saved" : "Save Instructions" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, { v: "ghost", onClick: () => setInstrDraft(wardInstr), children: "Reset" })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 12, color: "#5A4E3A", fontStyle: "italic" }, children: "Only Ari or Roniq can edit Ward's instructions." })
+      ] }),
+      wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 12 }, children: [
+        msgs.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WardGreeting, { u, snapshot: buildSnapshot() }),
+        msgs.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "82%", padding: "10px 14px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? "rgba(212,146,74,0.15)" : "rgba(255,255,255,0.04)", border: m.role === "user" ? "1px solid rgba(212,146,74,0.25)" : "1px solid rgba(255,255,255,0.07)", color: m.role === "user" ? "#D4924A" : "#C8C0B0", fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-wrap" }, children: m.content }) }, i)),
+        thinking && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6, padding: "10px 14px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "18px 18px 18px 4px", width: "fit-content" }, children: [0, 1, 2].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 6, height: 6, borderRadius: "50%", background: "#5A4E3A", animation: "wardDot 1.2s ease-in-out infinite", animationDelay: i * 0.2 + "s" } }, i)) }),
+        err && err === "ward_resting" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px 16px", background: "rgba(212,146,74,0.05)", border: "1px solid rgba(212,146,74,0.1)", borderRadius: 14, margin: "0 8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 28, marginBottom: 8 }, children: "\u{1F319}" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#D4924A", marginBottom: 4 }, children: "Ward needs to rest" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: "#5A4E3A", fontSize: 12, lineHeight: 1.6 }, children: [
+            "You've reached your ",
+            WARD_DAILY_LIMIT,
+            " message daily limit. Ward will be back at midnight."
+          ] })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center" }, children: err }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: bottomRef })
+      ] }),
+      wardTab === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", gap: 10, alignItems: "flex-end", flexShrink: 0, paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "textarea",
+          {
+            value: input,
+            onChange: (e) => setInput(e.target.value),
+            onKeyDown: (e) => {
+              if (e.key === "Enter" && !e.shiftKey && err !== "ward_resting") {
+                e.preventDefault();
+                send();
+              }
+            },
+            disabled: err === "ward_resting",
+            placeholder: err === "ward_resting" ? "Ward is resting until midnight..." : "Ask Ward anything...",
+            rows: 1,
+            style: { flex: 1, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 14, padding: "10px 14px", resize: "none", outline: "none", maxHeight: 100, overflowY: "auto", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.5 }
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: send, disabled: !input.trim() || thinking || err === "ward_resting", style: { width: 40, height: 40, borderRadius: "50%", background: input.trim() && !thinking && err !== "ward_resting" ? "linear-gradient(135deg,#C4893A,#D4924A)" : "rgba(255,255,255,0.05)", border: "none", cursor: input.trim() && !thinking ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ic, { n: "upload", s: 16, c: input.trim() && !thinking && err !== "ward_resting" ? "#0A0907" : "#3A3428" }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: ".wardDot{animation:wardDot 1.2s ease-in-out infinite}@keyframes wardDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}} @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}" })
     ] });
   }
 
