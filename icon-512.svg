@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="112.6" fill="#0A0907"/>
+  <!-- Subtle radial glow -->
+  <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#D4924A" stop-opacity="0.08"/>
+    <stop offset="100%" stop-color="#D4924A" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="512" height="512" rx="112.6" fill="url(#glow)"/>
+  <!-- Castle (scaled and centered) -->
+  <g transform="translate(89.60,100.95) scale(7.5636)">
+    <!-- Left tower body -->
+    <rect x="1" y="19" width="12" height="22" rx="0.5" fill="#D4924A" opacity="0.72"/>
+    <!-- Left tower battlements -->
+    <rect x="1" y="13" width="3" height="6" rx="0.5" fill="#D4924A" opacity="0.72"/>
+    <rect x="6" y="13" width="3" height="6" rx="0.5" fill="#D4924A" opacity="0.72"/>
+    <rect x="10" y="13" width="3" height="6" rx="0.5" fill="#D4924A" opacity="0.72"/>
+    <!-- Right tower body -->
+    <rect x="31" y="19" width="12" height="22" rx="0.5" fill="#D4924A" opacity="0.72"/>
+    <!-- Right tower battlements -->
+    <rect x="31" y="13" width="3" height="6" rx="0.5" fill="#D4924A" opacity="0.72"/>
+    <rect x="36" y="13" width="3" height="6" rx="0.5" fill="#D4924A" opacity="0.72"/>
+    <rect x="40" y="13" width="3" height="6" rx="0.5" fill="#D4924A" opacity="0.72"/>
+    <!-- Center keep body -->
+    <rect x="14" y="10" width="16" height="31" rx="0.5" fill="#D4924A"/>
+    <!-- Center keep battlements -->
+    <rect x="14" y="3" width="4" height="7" rx="0.5" fill="#D4924A"/>
+    <rect x="20" y="3" width="4" height="7" rx="0.5" fill="#D4924A"/>
+    <rect x="26" y="3" width="4" height="7" rx="0.5" fill="#D4924A"/>
+    <!-- Arched doorway -->
+    <path d="M19 41 L19 31 Q22 27.5 25 31 L25 41 Z" fill="#0A0907" opacity="0.8"/>
+    <!-- Window -->
+    <rect x="19" y="13" width="6" height="8" rx="3" fill="#0A0907" opacity="0.55"/>
+  </g>
+  <!-- Thin gold border ring -->
+  <rect width="512" height="512" rx="112.6" fill="none" stroke="#D4924A" stroke-width="9.2" stroke-opacity="0.25"/>
+</svg>

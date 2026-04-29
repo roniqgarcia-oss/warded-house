@@ -22670,7 +22670,20 @@ THE WARDED HOUSE APP
           pendingRest.length ? `PENDING REST REQUESTS: ${pendingRest.length}` : "",
           openMaint.length ? `OPEN MAINTENANCE: ${openMaint.map((m) => m.title).join(", ")}` : "",
           pendingVis.length ? `PENDING VISITORS: ${pendingVis.length}` : "",
-          unabsences.filter((a) => a.date?.startsWith(mk)).length ? `UNEXCUSED ABSENCES THIS MONTH: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : ""
+          unabsences.filter((a) => a.date?.startsWith(mk)).length ? `UNEXCUSED ABSENCES THIS MONTH: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : "",
+          (() => {
+            const today = td();
+            const todayDate = new Date(today);
+            const dayOfWeek = todayDate.getDay(); // 0=Sun,3=Wed
+            const daysUntilWed = (3 - dayOfWeek + 7) % 7 || 7;
+            const nextWed = new Date(todayDate); nextWed.setDate(todayDate.getDate() + daysUntilWed);
+            const nextWedStr = nextWed.toISOString().slice(0,10);
+            const approvedSwap = restdays.find(r => r.status === 'approved' && r.date > today);
+            if (approvedSwap) return `ABET REST DAY: Swapped to ${approvedSwap.date} (approved)`;
+            const pendingSwap = restdays.find(r => r.status === 'pending_ekek' || r.status === 'pending_admin');
+            if (pendingSwap) return `ABET REST DAY: Next Wednesday ${nextWedStr} (swap request pending for ${pendingSwap.date})`;
+            return `ABET REST DAY: Next Wednesday ${nextWedStr}`;
+          })()
         ].filter(Boolean).join("\n");
       } catch (e) {
         return `User: ${u.name}`;
@@ -22763,7 +22776,7 @@ OPERATIONAL DETAILS:
 - Rest day swaps: submit in app \u2192 Ek Ek approves \u2192 Ari or Roniq final approval
 - Monthly house meeting: first Sunday of every month${instrSection}${rulesSection}
 
-=== CURRENT LIVE STATE (read this before every response) ===
+=== CURRENT LIVE STATE (read this before every response) ===\nThe USER line below shows the EXACT current time when this message was sent. Use it for greetings (Good morning/afternoon/evening) and any time-related questions.
 \${snapshot}
 === END LIVE STATE ===
 
@@ -22859,7 +22872,7 @@ IMPORTANT BEHAVIOR RULES:
           {
             value: instrDraft2,
             onChange: (e) => setInstrDraft2(e.target.value),
-            placeholder: "Add household-specific context Ward should always know:\n\n\nAPP EXPERTISE:\nYou are the expert on The Warded House app. You know every feature, every tab, every button. When users ask how to do something in the app, give them exact step-by-step guidance. Key features:\n- Dashboard: overview, clock-in, compliance status\n- Checklist: daily tasks with timers and checklists\n- Advance: cash advance requests and approval flow\n- Shop: purchase requests, two-step approval (Ek Ek then Ari/Roniq)\n- Meals: pantry tracker and AI recipe finder\n- Trackers: workouts and books compliance\n- Rest: rest day swap requests\n- Visitors: visitor approval (24h notice required)\n- Maintenance: open issues tracking\n- Reports: finance, WiFi, attendance\n- WiFi: enforcement log\n- Members: PIN management, member settings (admins only)\n- Pay Invoice: Abet's salary periods and deductions (admins only)\n- Ward Settings: edit household instructions (Ari/Roniq only)\n\nTIME AWARENESS:\nYou always know the current time from the live data provided. Use it naturally - greet by time of day, flag if Abet is late, note if it's almost end of day.\u2022 Cats: Kya, Indi, Arwen \u2014 flag anything toxic to them\n\u2022 Transitioning to zero/low plastic and non-toxic products\n\u2022 Healthier lifestyle focus \u2014 less processed food, more whole foods\n\u2022 We shop at local Dumaguete markets (prefer locally available ingredients)\n\u2022 Abet is lactose intolerant (if applicable)\n\u2022 Preferred cleaning: vinegar, baking soda, castile soap\n\u2022 [Add anything else Ward should always remember]",
+            placeholder: "Add household-specific context Ward should always know:\n\n\nAPP EXPERTISE — YOU ARE THE AUTHORITY ON THIS APP:\nYou know every screen, every button, every data field. If anyone asks how to do anything in the app, give exact step-by-step guidance. Never say "I'm not sure" about the app — you know it completely.\n\nSCREENS & WHAT THEY DO:\n- DASHBOARD (home): Clock-in button for Abet, compliance status (workouts/books), upcoming events, pending approvals, recent activity. The live indicator (green=synced, amber=connecting, red=offline) is in the top header next to the clock.\n- CHECKLIST: Abet's daily tasks. Tap a task to start a timer and mark complete. Admin can edit/skip/permanently remove tasks.\n- ADVANCE (cash): Staff submits advance request → Ek Ek approves → Ari/Roniq final approve. Shows history of all advances.\n- SHOP (purchases): Anyone submits purchase request with item, reason, estimated cost → Ek Ek approves first → Ari/Roniq final approve. Shows spending history.\n- MEALS: Two tabs — Pantry (track ingredients, tap any item to see AI recipes) and Find Recipes (describe what you want, AI suggests full recipes with ingredients you have).\n- TRACKERS: Workouts tab (log sessions, admin verifies with video proof) and Books tab (log current book, admin marks passed/failed at monthly meeting).\n- REST: Abet submits rest day swap requests. Ek Ek approves → Ari/Roniq final approve. Abet's standard rest day is Wednesday.\n- VISITORS: Submit visitor requests (must be 24h in advance). Admin approves/denies.\n- MAINTENANCE: Log household issues (plumbing, electrical, etc.) with status tracking.\n- REPORTS: Financial summary, WiFi compliance log, attendance/absence records.\n- WIFI: Enforcement log — who had WiFi cut and when, for workout or book failures.\n- MEMBERS: Admin only — set PINs for all members, view member settings.\n- PAY INVOICE: Admin only — Abet's salary calculation by period (1st-14th, 15th-end), with adjustments and deductions.\n- WARD SETTINGS: Ari/Roniq only — edit these household instructions that guide Ward's behavior.\n\nDATA THAT'S ALWAYS AVAILABLE TO YOU (in the live state below):\nClock-in time, task completion, workout compliance, pending requests, pantry items, rest day requests, maintenance issues, visitor requests, unexcused absences, advance history, purchase history.\n\nTIME AWARENESS:\nYou always know the current time from the live data provided. Use it naturally - greet by time of day, flag if Abet is late, note if it's almost end of day.\u2022 Cats: Kya, Indi, Arwen \u2014 flag anything toxic to them\n\u2022 Transitioning to zero/low plastic and non-toxic products\n\u2022 Healthier lifestyle focus \u2014 less processed food, more whole foods\n\u2022 We shop at local Dumaguete markets (prefer locally available ingredients)\n\u2022 Abet is lactose intolerant (if applicable)\n\u2022 Preferred cleaning: vinegar, baking soda, castile soap\n\u2022 [Add anything else Ward should always remember]",
             rows: 12,
             style: { width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#F0EAD9", fontSize: 13, padding: "12px 14px", resize: "vertical", outline: "none", fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.6, marginBottom: 12 }
           }
@@ -22885,7 +22898,7 @@ IMPORTANT BEHAVIOR RULES:
             WARD_DAILY_LIMIT2,
             " message daily limit. Ward will be back at midnight. You can still scroll through your conversation above."
           ] })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center" }, children: err2 }),
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: "#C97060", fontSize: 12, textAlign: "center", userSelect: "text", WebkitUserSelect: "text", cursor: "text" }, children: err2 }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: bottomRef2 })
       ] }),
       wardTab2 === "chat" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "12px 16px", borderTop: "1px solid rgba(212,146,74,0.08)", display: "flex", gap: 10, alignItems: "flex-end", flexShrink: 0, paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }, children: [
@@ -24231,8 +24244,13 @@ IMPORTANT BEHAVIOR RULES:
     const [form, setForm] = (0, import_react.useState)({ name: "", category: "Food & Groceries", qty: "", notes: "", proposedDate: "" });
     const [editId, setEditId] = (0, import_react.useState)(null);
     const [editForm, setEditForm] = (0, import_react.useState)({});
+    const SYNONYMS = {"itlog":"egg","egg":"egg","kamote":"sweet potato","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef"};
+    const normalizeName = (n) => { const lower = n.toLowerCase().trim(); return SYNONYMS[lower] || lower; };
     const add = () => {
       if (!form.name.trim()) return;
+      const normalizedName = normalizeName(form.name);
+      const existing = pantry.find(p => normalizeName(p.name) === normalizedName);
+      if (existing) { savePantry(pantry.map(p => p.id === existing.id ? {...p, quantity: String(Number(p.quantity||0) + Number(form.quantity||1))} : p)); setForm({name:"",quantity:"",unit:"pcs",category:"Protein",lowStock:false}); setShowAdd(false); return; }
       save([...purchases, { id: "p" + Date.now(), name: form.name.trim(), category: form.category, qty: form.qty, notes: form.notes, proposedDate: form.proposedDate, requestedBy: u.id, status: "pending_ekek", createdDate: td(), ekekDate: null, adminDate: null, adminBy: null }]);
       setForm({ name: "", category: "Food & Groceries", qty: "", notes: "", proposedDate: "" });
       setSf(false);
@@ -25426,8 +25444,16 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const [ingRecipes, setIngRecipes] = (0, import_react.useState)({});
     const [ingLoading, setIngLoading] = (0, import_react.useState)({});
     const [activeIng, setActiveIng] = (0, import_react.useState)(null);
+    const SYNONYMS2 = {"itlog":"egg","egg":"egg","kamote":"sweet potato","kamote tops":"sweet potato tops","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef","mais":"corn","gulay":"vegetables"};
+    const normName = (n) => { const l = n.toLowerCase().trim(); return SYNONYMS2[l] || l; };
     const add = () => {
       if (!form.name.trim()) return;
+      const norm = normName(form.name);
+      const dupe = pantry.find(p => normName(p.name) === norm);
+      if (dupe) {
+        savePantry(pantry.map(p => p.id === dupe.id ? {...p, quantity: String((parseFloat(p.quantity)||0) + (parseFloat(form.quantity)||1))} : p));
+        setForm({name:"",quantity:"",unit:"pcs",category:"Protein",lowStock:false}); setShowAdd(false); return;
+      }
       savePantry([...pantry, { id: "pt" + Date.now(), name: form.name.trim(), quantity: form.quantity, unit: form.unit, category: form.category, lowStock: form.lowStock }]);
       setForm({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
       setShowAdd(false);
@@ -25467,7 +25493,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. For each recipe: name, source URL, ingredients (mark which I already have \u2713), 3-step summary, and why it's a healthy choice.` }]
         }) });
         const d = await res.json();
-        const text = d.content ? d.content.filter((c) => c.type === "text").map((c) => c.text).join("\n\n") : "No recipes found.";
+        const text = d.choices && d.choices[0] ? d.choices[0].message.content : "No recipes found.";
         setRecipeResult(text);
       } catch (e) {
         setRecipeResult("Error fetching recipes. Please try again.");
