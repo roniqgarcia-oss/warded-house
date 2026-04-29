@@ -25400,7 +25400,20 @@ ${rules.map((r, i) => `${i + 1}. ${r.title || r.rule || JSON.stringify(r)}`).joi
     ] });
   }
   var PANTRY_CATS = ["Protein", "Vegetable", "Fruit", "Grain & Carb", "Dairy", "Condiment", "Herb & Spice", "Other"];
-  function MealPlanner({ u, pantry, savePantry, groqKey = "" }) {
+  function MealPlanner({ u, pantry: rawPantry, savePantry, groqKey = "" }) {
+    // Merge synonyms on load
+    const SYNONYMS3 = {"itlog":"egg","egg":"egg","kamote":"sweet potato","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef"};
+    const normN = (n) => { const l = (n||"").toLowerCase().trim(); return SYNONYMS3[l] || n; };
+    const pantry = rawPantry.reduce((acc, item) => {
+      const norm = normN(item.name);
+      const existing = acc.find(p => normN(p.name) === norm);
+      if (existing) {
+        existing.quantity = String((parseFloat(existing.quantity)||0) + (parseFloat(item.quantity)||0));
+        return acc;
+      }
+      return [...acc, {...item, name: norm}];
+    }, []);
+
     const [tab, setTab] = (0, import_react.useState)("pantry");
     const [showAdd, setShowAdd] = (0, import_react.useState)(false);
     const [form, setForm] = (0, import_react.useState)({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
@@ -25476,8 +25489,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 1500,
-          tools: [{ "type": "web_search_20250305", "name": "web_search" }],
-          messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. For each recipe: name, source URL, ingredients (mark which I already have \u2713), 3-step summary, and why it's a healthy choice.` }]
+          messages: [{ role: "user", content: `I have these ingredients: ${ingList}. Search online and find me 3 healthy, practical recipes I can make using these. Requirements: nutritious, practical for a household in Dumaguete Philippines, absolutely NO ingredients toxic to cats (onions, garlic, leeks, grapes, chocolate, xylitol \u2014 flag if any recipe contains these), prefer low-plastic sourcing. For each recipe: name, ingredients (mark which I already have \u2713), 3-step summary, and why it's a healthy choice.` }]
         }) });
         const d = await res.json();
         const text = d.choices && d.choices[0] ? d.choices[0].message.content : "No recipes found.";
