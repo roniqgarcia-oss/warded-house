@@ -22588,18 +22588,6 @@ THE WARDED HOUSE APP
       if (atRisk) {
         msg += "\u26A0 You're at risk for WiFi cut this Monday \u2014 you need more workouts this week. ";
       }
-      if (u.canApprove || u.isFoodManager) {
-        var advLine = lines.find(function(l){return l.startsWith("PENDING ADVANCES:");});
-        var purchLine = lines.find(function(l){return l.startsWith("PENDING PURCHASES:");});
-        var pending = [];
-        if (advLine && advLine.includes("pending")) pending.push("cash advance");
-        if (purchLine && purchLine.includes("pending")) pending.push("purchase request");
-        if (pending.length) msg += "\uD83D\uDD14 Needs approval: " + pending.join(", ") + ". ";
-      }
-      if (u.isStaff) {
-        var rd = lines.find(function(l){return l.startsWith("ABET REST DAY:");});
-        if (rd) msg += "Rest day: " + rd.replace("ABET REST DAY: ", "") + ". ";
-      }
       msg = msg.trim();
       setGreeting(msg);
       setLoading(false);
@@ -22682,16 +22670,13 @@ THE WARDED HOUSE APP
           pendingRest.length ? `PENDING REST REQUESTS: ${pendingRest.length}` : "",
           openMaint.length ? `OPEN MAINTENANCE: ${openMaint.map((m) => m.title).join(", ")}` : "",
           pendingVis.length ? `PENDING VISITORS: ${pendingVis.length}` : "",
-          unabsences.filter((a) => a.date?.startsWith(mk)).length ? `UNEXCUSED ABSENCES THIS MONTH: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : "",
-          (function() { var t2=td(); var d2=new Date(t2); var dow=d2.getDay(); var dw=(3-dow+7)%7||7; var nw=new Date(d2); nw.setDate(d2.getDate()+dw); var nws=nw.toISOString().slice(0,10); var aS=restdays.find(function(r2){return r2.status==="approved"&&r2.date>t2;}); if(aS) return "ABET REST DAY: Swapped to "+aS.date+" (approved)"; var pS=restdays.find(function(r2){return r2.status==="pending_ekek"||r2.status==="pending_admin";}); if(pS) return "ABET REST DAY: Next Wednesday "+nws+" (swap pending for "+pS.date+")"; return "ABET REST DAY: Next Wednesday "+nws; })()
+          unabsences.filter((a) => a.date?.startsWith(mk)).length ? `UNEXCUSED ABSENCES THIS MONTH: ${unabsences.filter((a) => a.date?.startsWith(mk)).length}` : ""
         ].filter(Boolean).join("\n");
       } catch (e) {
         return `User: ${u.name}`;
       }
     };
     const WARD_DAILY_LIMIT = u.id === "roniq" ? 20 : u.id === "ari" ? 40 : 60;
-    const [usageCount, setUsageCount] = (0, import_react.useState)(0);
-    (0, import_react.useEffect)(function() { DB.get(getUsageKey(), 0).then(function(n) { setUsageCount(n || 0); }); }, [open]);
     const getUsageKey = () => `wh3_ward_usage_${u.id}_${td()}`;
     const checkAndIncrLimit = async () => {
       try {
@@ -22699,7 +22684,6 @@ THE WARDED HOUSE APP
         const cur = await DB.get(key, 0);
         if (cur >= WARD_DAILY_LIMIT) return false;
         await DB.set(key, cur + 1);
-        setUsageCount(cur + 1);
         return true;
       } catch {
         return true;
@@ -22849,6 +22833,7 @@ IMPORTANT BEHAVIOR RULES:
       document.addEventListener("touchmove", dragRef.current.move, { passive: true });
       document.addEventListener("touchend", dragRef.current.end);
     };
+    ;
     const [showSessionChoice, setShowSessionChoice] = (0, import_react.useState)(false);
     const openWard = () => {
       if (!dragging2.current) {
@@ -23063,21 +23048,6 @@ IMPORTANT BEHAVIOR RULES:
       ] })
     ] });
   }
-  var NAV = [
-    { id: "dash", icon: "\u229E", label: "Dashboard" },
-    { id: "clean", icon: "\u2726", label: "Checklist" },
-    { id: "cash", icon: "\u25C8", label: "Advance" },
-    { id: "shop", icon: "\u25C9", label: "Purchase List" },
-    { id: "rules", icon: "\u229B", label: "House Rules" },
-    { id: "trackers", icon: "\u25B2", label: "Trackers" },
-    { id: "rest", icon: "\u263D", label: "Rest Days" },
-    { id: "maint", icon: "\u2699", label: "Maintenance Log" },
-    { id: "visitors", icon: "\u25ED", label: "Visitor Requests" },
-    { id: "members", icon: "\u25C8", label: "Member Settings" },
-    { id: "report", icon: "\u25E9", label: "Reports" },
-    { id: "meals", icon: "\u25D1", label: "Meal Planner" },
-    { id: "payinvoice", icon: "\u25CE", label: "Pay Invoice" }
-  ];
   function Sidebar({ u, view, go, out, badges }) {
     return (0, import_jsx_runtime2.jsxs)("div", { className: "app-sidebar", style: { width: 212, minHeight: "100vh", background: "#120F09", borderRight: "1px solid rgba(212,146,74,0.07)", display: "flex", flexDirection: "column", position: "sticky", top: 0, flexShrink: 0 }, children: [
       (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "20px 16px 16px", borderBottom: "1px solid rgba(212,146,74,0.07)" }, children: [
@@ -23374,260 +23344,6 @@ IMPORTANT BEHAVIOR RULES:
             ev.date === td() && (0, import_jsx_runtime2.jsx)(Bdg, { color: G, children: "Today" })
           ] }, ev.id);
         })
-      ] })
-    ] });
-  }
-  function TaskRow({ t, u, onCheck, onSkip, onTimer, tick, reorderMode, isDragging, isDragOver, onDragStart, onDragOver, onDragEnd, onDrop, onEdit }) {
-    const active = !!t.timerStart;
-    const elapsed = active ? (t.timerElapsed || 0) + (Date.now() - t.timerStart) : t.timerElapsed || 0;
-    const ss = Math.floor(elapsed / 1e3), mm = Math.floor(ss / 60);
-    const timerStr = active || t.timerPaused ? mm > 0 ? `${mm}:${String(ss % 60).padStart(2, "0")}` : `0:${String(ss % 60).padStart(2, "0")}` : null;
-    const isAdmin = !u.isStaff;
-    const nextDate = fmtNextDate(t);
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
-      "div",
-      {
-        draggable: !!reorderMode,
-        onDragStart,
-        onDragOver,
-        onDragEnd,
-        onDrop,
-        style: {
-          display: "flex",
-          alignItems: "center",
-          gap: 9,
-          padding: "10px 12px",
-          borderRadius: 8,
-          background: isDragOver ? "rgba(212,146,74,0.07)" : "rgba(255,255,255,0.02)",
-          border: `1px solid ${isDragOver ? "rgba(212,146,74,0.35)" : "rgba(255,255,255,0.04)"}`,
-          marginBottom: 5,
-          opacity: isDragging ? 0.35 : 1,
-          cursor: reorderMode ? "grab" : "default",
-          transition: "all 0.12s"
-        },
-        children: [
-          reorderMode && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 2.5, flexShrink: 0, opacity: 0.4, userSelect: "none" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 13, borderTop: `1.5px solid ${CR}` } }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 13, borderTop: `1.5px solid ${CR}` } }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 13, borderTop: `1.5px solid ${CR}` } })
-          ] }),
-          !reorderMode && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-            "button",
-            {
-              onClick: () => onCheck(t.id, isAdmin),
-              style: { width: 20, height: 20, borderRadius: 5, border: "1.5px solid rgba(212,146,74,0.35)", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.12s" }
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, minWidth: 0, cursor: "pointer" }, onClick: () => !reorderMode && onEdit && onEdit(), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 13, color: CR, lineHeight: 1.35 }, children: [
-              t.name,
-              t.adhoc && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, marginLeft: 6, color: "#C9A84C", background: "rgba(201,160,76,0.12)", padding: "1px 6px", borderRadius: 9, fontWeight: 600 }, children: "TODAY" })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 6, alignItems: "center", marginTop: 3, flexWrap: "wrap" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, color: "#4A4030", background: "rgba(255,255,255,0.06)", padding: "1px 7px", borderRadius: 9 }, children: t.area }),
-              !t.adhoc && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, color: "#3A3428" }, children: fmtInt(t.intervalDays) }),
-              nextDate && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 9, color: "#3A5A3A", background: "rgba(130,184,150,0.08)", padding: "1px 7px", borderRadius: 9 }, children: [
-                "Next: ",
-                nextDate
-              ] }),
-              timerStr && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 11, color: t.timerPaused ? "rgba(201,160,76,0.7)" : "#C9A84C", fontWeight: 600 }, children: [
-                timerStr,
-                t.timerPaused ? " \u23F8" : ""
-              ] })
-            ] })
-          ] }),
-          u.isStaff && !reorderMode && (active ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "pause"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,160,76,0.12)", color: "#C9A84C", border: "1px solid rgba(201,160,76,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Pause" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "end"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.1)", color: "#C97060", border: "1px solid rgba(201,112,96,0.28)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "End" })
-          ] }) : t.timerPaused ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 5 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "resume"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(130,184,150,0.1)", color: "#82B896", border: "1px solid rgba(130,184,150,0.3)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Resume" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "end"), style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.1)", color: "#C97060", border: "1px solid rgba(201,112,96,0.28)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "End" })
-          ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => onTimer(t.id, "start"), style: { fontSize: 11, padding: "4px 10px", background: "rgba(255,255,255,0.05)", color: DIM, border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Start" })),
-          isAdmin && !reorderMode && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: onSkip, style: { fontSize: 11, padding: "4px 9px", background: "rgba(201,112,96,0.07)", color: "#8A5A50", border: "1px solid rgba(201,112,96,0.15)", borderRadius: 16, cursor: "pointer", whiteSpace: "nowrap" }, children: "Skip" })
-        ]
-      }
-    );
-  }
-  function CalendarPicker({ value, onChange, dayCounts = {} }) {
-    const [cur, setCur] = (0, import_react.useState)(() => {
-      const d = /* @__PURE__ */ new Date((value || td()) + "T00:00:00");
-      return { y: d.getFullYear(), m: d.getMonth() };
-    });
-    const { y, m } = cur;
-    const firstDay = new Date(y, m, 1).getDay(), daysInMonth = new Date(y, m + 1, 0).getDate();
-    const DS2 = ["S", "M", "T", "W", "T", "F", "S"];
-    const MNTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const ds = (d) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    const dotCol = (n) => !n ? null : n >= 4 ? "#C97060" : n >= 2 ? "#C9A84C" : "#82B896";
-    const cells = [];
-    for (let i = 0; i < firstDay; i++) cells.push(null);
-    for (let d = 1; d <= daysInMonth; d++) cells.push(d);
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { background: "rgba(0,0,0,0.25)", border: "1px solid rgba(212,146,74,0.12)", borderRadius: 14, padding: "12px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => setCur((c) => {
-          const d = new Date(c.y, c.m - 1);
-          return { y: d.getFullYear(), m: d.getMonth() };
-        }), style: { border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.06)", color: CR, cursor: "pointer", borderRadius: 7, padding: "3px 10px", fontSize: 16 }, children: "\u2039" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 13, fontWeight: 600, color: CR }, children: [
-          MNTHS[m],
-          " ",
-          y
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => setCur((c) => {
-          const d = new Date(c.y, c.m + 1);
-          return { y: d.getFullYear(), m: d.getMonth() };
-        }), style: { border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.06)", color: CR, cursor: "pointer", borderRadius: 7, padding: "3px 10px", fontSize: 16 }, children: "\u203A" })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(7,1fr)", marginBottom: 4 }, children: DS2.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { textAlign: "center", fontSize: 10, fontWeight: 600, color: DIM, padding: "2px 0" }, children: d }, i)) }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2 }, children: cells.map((d, i) => {
-        if (!d) return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {}, i);
-        const dateStr = ds(d);
-        const sel = dateStr === value, isToday = dateStr === td(), isSun1 = isFirstSunday(dateStr);
-        const cnt = dayCounts[dateStr] || 0, col = dotCol(cnt);
-        return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { onClick: () => !isSun1 && onChange(dateStr), style: { position: "relative", textAlign: "center", padding: "6px 2px 10px", borderRadius: 7, cursor: isSun1 ? "not-allowed" : "pointer", background: sel ? G : isToday ? "rgba(255,255,255,0.08)" : isSun1 ? "rgba(201,160,76,0.05)" : "transparent", border: `1px solid ${sel ? G : isToday ? "rgba(255,255,255,0.15)" : isSun1 ? "rgba(201,160,76,0.15)" : "transparent"}`, opacity: isSun1 ? 0.5 : 1, transition: "background 0.1s" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 13, fontWeight: sel ? 700 : 400, color: sel ? "#0A0907" : isSun1 ? "#C9A84C" : CR }, children: d }),
-          cnt > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { position: "absolute", bottom: 2, left: "50%", transform: "translateX(-50%)", fontSize: 9, fontWeight: 700, color: col, lineHeight: 1 }, children: cnt }),
-          isSun1 && !cnt && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { position: "absolute", bottom: 3, left: "50%", transform: "translateX(-50%)", width: 4, height: 4, borderRadius: "50%", background: "#C9A84C", display: "block" } })
-        ] }, i);
-      }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 9, paddingTop: 9, borderTop: "1px solid rgba(255,255,255,0.06)", flexWrap: "wrap" }, children: [[G, "1\u20133 tasks"], ["#C9A84C", "3 tasks"], ["#C97060", "4+ tasks"], ["#C9A84C", "1st Sun (free"]].map(([c, l], i) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 7, height: 7, borderRadius: "50%", background: c, flexShrink: 0 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, color: DIM }, children: l })
-      ] }, i)) })
-    ] });
-  }
-  function ScheduleTab({ tasks }) {
-    const [daysAhead, setDaysAhead] = (0, import_react.useState)(14);
-    const nonDaily = [...tasks].filter((t) => !t.adhoc && !t.paused && t.intervalDays > 1).sort((a, b) => a.order - b.order);
-    const byDate = (0, import_react.useMemo)(() => {
-      const map = {};
-      const limit = /* @__PURE__ */ new Date();
-      limit.setDate(limit.getDate() + daysAhead);
-      nonDaily.forEach((t) => {
-        let d = /* @__PURE__ */ new Date(nextDueTask(t) + "T00:00:00");
-        while (d <= limit) {
-          const ds = skipFirstSunday(d.toISOString().split("T")[0], t.intervalDays);
-          const dAdj = /* @__PURE__ */ new Date(ds + "T00:00:00");
-          if (dAdj <= limit) {
-            if (!map[ds]) map[ds] = [];
-            map[ds].push(t);
-          }
-          d = /* @__PURE__ */ new Date(ds + "T00:00:00");
-          d.setDate(d.getDate() + t.intervalDays);
-        }
-      });
-      return Object.entries(map).sort(([a], [b]) => a.localeCompare(b));
-    }, [tasks, daysAhead]);
-    const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: { fontSize: 11, color: DIM, margin: 0 }, children: "Non-daily tasks \xB7 1st Sunday of each month is always free" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("select", { value: daysAhead, onChange: (e) => setDaysAhead(+e.target.value), style: { background: "rgba(0,0,0,0.3)", border: "1px solid rgba(212,146,74,0.15)", color: CR, padding: "4px 8px", borderRadius: 7, fontSize: 12, fontFamily: "'Plus Jakarta Sans',sans-serif", outline: "none" }, children: [[7, "7 days"], [14, "14 days"], [30, "30 days"], [60, "60 days"]].map(([v, l]) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { value: v, children: l }, v)) })
-      ] }),
-      byDate.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { textAlign: "center", padding: "20px", color: DIM, fontSize: 13 }, children: "No non-daily tasks scheduled in this window." }),
-      byDate.map(([dateStr, dayTasks]) => {
-        const d = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
-        const isToday = dateStr === td();
-        const isSun1 = isFirstSunday(dateStr);
-        const busy = dayTasks.length >= 4;
-        return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 14 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 12, fontWeight: 600, color: isToday ? G : CR, minWidth: 90 }, children: isToday ? "Today" : DAY_NAMES[d.getDay()] + ", " + d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) }),
-            isSun1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 9, color: "#C9A84C", background: "rgba(201,160,76,0.12)", padding: "1px 7px", borderRadius: 9, fontWeight: 600 }, children: "1ST SUN \xB7 FREE DAY" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 10, padding: "1px 8px", borderRadius: 9, fontWeight: 500, background: busy ? "rgba(201,112,96,0.12)" : "rgba(255,255,255,0.06)", color: busy ? "#C97060" : DIM }, children: [
-              dayTasks.length,
-              " task",
-              dayTasks.length !== 1 ? "s" : "",
-              busy ? " \xB7 busy" : ""
-            ] })
-          ] }),
-          dayTasks.map((t) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", marginBottom: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, color: CR, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: t.name }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 10, color: DIM, marginTop: 2, display: "flex", gap: 5 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { background: "rgba(255,255,255,0.07)", padding: "1px 6px", borderRadius: 8 }, children: t.area }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: "#3A3428" }, children: fmtInt(t.intervalDays) })
-            ] })
-          ] }) }, t.id))
-        ] }, dateStr);
-      })
-    ] });
-  }
-  function AreaManager({ areas, tasks, onUpdate, newArea, setNewArea }) {
-    const [editingIdx, setEditingIdx] = (0, import_react.useState)(null);
-    const [editVal, setEditVal] = (0, import_react.useState)("");
-    const startEdit = (i) => {
-      setEditingIdx(i);
-      setEditVal(areas[i]);
-    };
-    const saveEdit = (i) => {
-      const oldName = areas[i];
-      const trimmed = editVal.trim();
-      if (!trimmed || trimmed === oldName) {
-        setEditingIdx(null);
-        return;
-      }
-      const newAreas = areas.map((a, j) => j === i ? trimmed : a);
-      const updatedTasks = tasks.map((t) => t.area === oldName ? { ...t, area: trimmed } : t);
-      onUpdate(newAreas, updatedTasks);
-      setEditingIdx(null);
-    };
-    const delArea = (i) => {
-      const name = areas[i];
-      const hasTasks = tasks.some((t) => t.area === name);
-      if (hasTasks) return;
-      onUpdate(areas.filter((_, j) => j !== i), tasks);
-    };
-    const addArea = () => {
-      if (!newArea.trim() || areas.includes(newArea.trim())) return;
-      onUpdate([...areas, newArea.trim()], tasks);
-      setNewArea("");
-    };
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: { fontSize: 11, color: DIM, marginBottom: 12 }, children: "Renaming an area updates all tasks assigned to it." }),
-      areas.map((area, i) => {
-        const count = tasks.filter((t) => t.area === area).length;
-        if (editingIdx === i) return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 7, alignItems: "center", marginBottom: 5 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-            "input",
-            {
-              value: editVal,
-              onChange: (e) => setEditVal(e.target.value),
-              onKeyDown: (e) => {
-                if (e.key === "Enter") saveEdit(i);
-                if (e.key === "Escape") setEditingIdx(null);
-              },
-              autoFocus: true,
-              style: { flex: 1, background: "rgba(0,0,0,0.3)", border: "1px solid rgba(212,146,74,0.3)", color: CR, padding: "7px 10px", borderRadius: 8, fontSize: 13, fontFamily: "'Plus Jakarta Sans',sans-serif", outline: "none" }
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "gold", sm: true, onClick: () => saveEdit(i), children: "Save" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", sm: true, onClick: () => setEditingIdx(null), children: "\u2715" })
-        ] }, area);
-        return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderRadius: 7, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", marginBottom: 5 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { flex: 1, fontSize: 13, color: CR }, children: area }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 10, color: "#3A3428" }, children: [
-            count,
-            " task",
-            count !== 1 ? "s" : ""
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => startEdit(i), style: { fontSize: 11, padding: "3px 9px", border: "1px solid rgba(255,255,255,0.08)", background: "transparent", color: DIM, borderRadius: 6, cursor: "pointer" }, children: "Rename" }),
-          count === 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => delArea(i), style: { fontSize: 11, padding: "3px 9px", border: "1px solid rgba(201,112,96,0.2)", background: "transparent", color: "#C97060", borderRadius: 6, cursor: "pointer" }, children: "Del" })
-        ] }, area);
-      }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 8, marginTop: 12 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-          "input",
-          {
-            placeholder: "New area name...",
-            value: newArea,
-            onChange: (e) => setNewArea(e.target.value),
-            onKeyDown: (e) => {
-              if (e.key === "Enter") addArea();
-            },
-            style: { width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(212,146,74,0.15)", color: CR, padding: "8px 12px", borderRadius: 8, fontSize: 13, fontFamily: "'Plus Jakarta Sans',sans-serif", outline: "none" }
-          }
-        ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "gold", sm: true, onClick: addArea, disabled: !newArea.trim(), children: "Add" })
       ] })
     ] });
   }
@@ -24383,13 +24099,25 @@ IMPORTANT BEHAVIOR RULES:
     const [form, setForm] = (0, import_react.useState)({ name: "", category: "Food & Groceries", qty: "", notes: "", proposedDate: "" });
     const [editId, setEditId] = (0, import_react.useState)(null);
     const [editForm, setEditForm] = (0, import_react.useState)({});
+    const SYNONYMS = { "itlog": "egg", "egg": "egg", "kamote": "sweet potato", "gata": "coconut milk", "malunggay": "moringa", "kangkong": "water spinach", "talong": "eggplant", "ampalaya": "bitter melon", "sibuyas": "onion", "bawang": "garlic", "luya": "ginger", "saging": "banana", "mangga": "mango", "isda": "fish", "manok": "chicken", "baboy": "pork", "baka": "beef" };
+    const normalizeName = (n) => {
+      const lower = n.toLowerCase().trim();
+      return SYNONYMS[lower] || lower;
+    };
     const add = () => {
       if (!form.name.trim()) return;
+      const normalizedName = normalizeName(form.name);
+      const existing = pantry.find((p) => normalizeName(p.name) === normalizedName);
+      if (existing) {
+        savePantry(pantry.map((p) => p.id === existing.id ? { ...p, quantity: String(Number(p.quantity || 0) + Number(form.quantity || 1)) } : p));
+        setForm({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
+        setShowAdd(false);
+        return;
+      }
       save([...purchases, { id: "p" + Date.now(), name: form.name.trim(), category: form.category, qty: form.qty, notes: form.notes, proposedDate: form.proposedDate, requestedBy: u.id, status: "pending_ekek", createdDate: td(), ekekDate: null, adminDate: null, adminBy: null }]);
       setForm({ name: "", category: "Food & Groceries", qty: "", notes: "", proposedDate: "" });
       setSf(false);
     };
-
     const startEdit = (p) => {
       setEditId(p.id);
       setEditForm({ name: p.name, category: p.category, qty: p.qty || "", notes: p.notes || "", proposedDate: p.proposedDate || "" });
@@ -24909,101 +24637,6 @@ IMPORTANT BEHAVIOR RULES:
       ] }, l.id))
     ] });
   }
-  function UnabsencesSection({ u, unabsences = [], saveUnabsences }) {
-    const [sf, setSf] = (0, import_react.useState)(false);
-    const [form, setForm] = (0, import_react.useState)({ date: td(), reason: "" });
-    const canLog = u.canApprove || u.isFoodManager;
-    const add = () => {
-      if (!form.date || !form.reason.trim()) return;
-      const entry = { id: "ua" + Date.now(), date: form.date, reason: form.reason.trim(), loggedBy: u.id, loggedDate: td(), dailyRate: DAILY_RATE };
-      saveUnabsences([...unabsences, entry]);
-      setForm({ date: td(), reason: "" });
-      setSf(false);
-    };
-    const del = (id) => saveUnabsences(unabsences.filter((a) => a.id !== id));
-    const sorted = [...unabsences].sort((a, b) => b.date.localeCompare(a.date));
-    const pending = unabsences.filter((a) => {
-      const np = nextPaydayAfter(a.date);
-      return np > td();
-    });
-    const totalPending = Math.round(pending.length * DAILY_RATE * 100) / 100;
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginTop: 28 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { style: { fontFamily: "'Playfair Display',serif", fontSize: 17, fontWeight: 600, color: CR }, children: "Unapproved Absences" }),
-          pending.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(Bdg, { color: "#C97060", children: [
-            pending.length,
-            " pending"
-          ] })
-        ] }),
-        canLog && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "danger", sm: true, onClick: () => setSf(!sf), children: "+ Log Absence" })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Card, { sx: { marginBottom: 14, background: "rgba(201,112,96,0.05)", borderColor: "rgba(201,112,96,0.15)" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: 14, flexWrap: "wrap" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 3 }, children: "Daily Rate" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 20, color: CR, fontWeight: 700 }, children: [
-            "\u20B1",
-            DAILY_RATE.toFixed(2)
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 10, marginTop: 1 }, children: "\u20B18,500 \xF7 24 days" })
-        ] }),
-        pending.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: "#C97060", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 3 }, children: "Pending Deductions" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 20, color: "#C97060", fontWeight: 700 }, children: [
-            "\u2212\u20B1",
-            totalPending.toLocaleString()
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 10, marginTop: 1 }, children: "from next payday" })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, minWidth: 180, color: DIM, fontSize: 12, lineHeight: 1.65, alignSelf: "center" }, children: [
-          "Unapproved absences are deducted from Abet's next nearest payday at \u20B1",
-          DAILY_RATE.toFixed(2),
-          "/day. Approved rest day requests are not affected."
-        ] })
-      ] }) }),
-      sf && canLog && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(Card, { sx: { marginBottom: 14 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h4", { style: { fontFamily: "'Playfair Display',serif", fontSize: 15, fontWeight: 600, color: CR, marginBottom: 12 }, children: "Log Unapproved Absence" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Fi, { label: "Date of Absence", type: "date", value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }), sx: { marginBottom: 10 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Fi, { label: "Reason (required)", placeholder: "e.g. No show, left early without notice...", value: form.reason, onChange: (e) => setForm({ ...form, reason: e.target.value }), sx: { marginBottom: 10 } }),
-        form.date && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { background: "rgba(201,112,96,0.07)", border: "1px solid rgba(201,112,96,0.18)", borderRadius: 8, padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#C97060" }, children: [
-          "\u20B1",
-          DAILY_RATE.toFixed(2),
-          " will be deducted on ",
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { children: fd(nextPaydayAfter(form.date)) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 7 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "danger", onClick: add, disabled: !form.date || !form.reason.trim(), children: "Log Absence" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", onClick: () => setSf(false), children: "Cancel" })
-        ] })
-      ] }),
-      sorted.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Card, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13 }, children: "No unapproved absences on record." }) }) : sorted.map((a) => {
-        const np = nextPaydayAfter(a.date);
-        const isPast = np <= td();
-        return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Card, { sx: { padding: "11px 14px", marginBottom: 7, borderColor: isPast ? "rgba(130,184,150,0.15)" : "rgba(201,112,96,0.18)" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: CR, fontSize: 14, fontWeight: 600 }, children: fd(a.date) }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Bdg, { color: isPast ? "#82B896" : "#C97060", children: isPast ? "Deducted" : "Pending" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { color: "#C97060", fontSize: 12, fontWeight: 600 }, children: [
-                "\u2212\u20B1",
-                (a.dailyRate || DAILY_RATE).toFixed(2)
-              ] })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11, fontWeight: 500 }, children: a.reason }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { color: "#4A3E30", fontSize: 10, marginTop: 2 }, children: [
-              "Logged by ",
-              mbid(a.loggedBy).name,
-              " \xB7 ",
-              fd(a.loggedDate),
-              " \xB7 Deducts on ",
-              fd(np)
-            ] })
-          ] }),
-          canLog && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(XBtn, { onClick: () => del(a.id) })
-        ] }) }, a.id);
-      })
-    ] });
-  }
   function Report({ u, tasks, workouts, books, requests, purchases, wifiLog, saveWifiLog = () => {
   }, events, cleanLog = [], restdays = [], unabsences = [], saveUnabsences = () => {
   }, clockIn }) {
@@ -25436,6 +25069,7 @@ IMPORTANT BEHAVIOR RULES:
           r.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
         }
       }
+      ;
       return r;
     };
     const wedList = nextRestDays();
@@ -25546,37 +25180,15 @@ IMPORTANT BEHAVIOR RULES:
       ] }) }, r.id))
     ] });
   }
-  var PANTRY_CATS = ["Protein", "Vegetable", "Fruit", "Grain & Carb", "Dairy", "Condiment", "Herb & Spice", "Other"];
   function MealPlanner({ u, pantry: rawPantry2, savePantry: savePantry2, groqKey = "" }) {
     const SYNONYMS3 = {"itlog":"egg","egg":"egg","kamote":"sweet potato","gata":"coconut milk","malunggay":"moringa","kangkong":"water spinach","talong":"eggplant","ampalaya":"bitter melon","sibuyas":"onion","bawang":"garlic","luya":"ginger","saging":"banana","mangga":"mango","isda":"fish","manok":"chicken","baboy":"pork","baka":"beef"};
-    const normN = (n) => { const l = (n||"").toLowerCase().trim(); return SYNONYMS3[l] || n; };
-    const pantry2 = rawPantry2.reduce((acc, item) => {
-      const norm = normN(item.name);
-      const existing = acc.find(p => normN(p.name) === norm);
-      if (existing) { existing.quantity = String((parseFloat(existing.quantity)||0) + (parseFloat(item.quantity)||0)); return acc; }
-      return [...acc, {...item, name: norm}];
+    const normN = (n) => { const l=(n||"").toLowerCase().trim(); return SYNONYMS3[l]||n; };
+    const pantry2 = rawPantry2.reduce(function(acc,item){
+      const norm=normN(item.name), ex=acc.find(function(p){return normN(p.name)===norm;});
+      if(ex){ex.quantity=String((parseFloat(ex.quantity)||0)+(parseFloat(item.quantity)||0));return acc;}
+      return acc.concat([Object.assign({},item,{name:norm})]);
     }, []);
     const [tab, setTab] = (0, import_react.useState)("pantry");
-    const MP_DAILY_LIMIT = 5;
-    const mpKey = () => "wh3_mp_usage_" + td();
-    const normKey = (n) => n.toLowerCase().trim().replace(/\s+/g, "_").replace(/[^a-z0-9_]/g, "");
-    const mergeRecipes = (existing, fresh) => {
-      const seen = new Set(existing.map(function(r3){ return normKey(r3.split("\n")[0] || ""); }));
-      var added = [];
-      fresh.forEach(function(r3){
-        var k2 = normKey(r3.split("\n")[0] || "");
-        if (k2 && !seen.has(k2)) { seen.add(k2); added.push(r3); }
-      });
-      return existing.concat(added).slice(0, 50);
-    };
-    const loadCachedRecipes = async (cacheKey) => {
-      try { return (await DB.get(cacheKey, [])) || []; } catch(e) { return []; }
-    };
-    const saveCachedRecipes = async (cacheKey, recipes) => {
-      try { await DB.set(cacheKey, recipes); } catch(e) {}
-    };
-    const [mpUsage, setMpUsage] = (0, import_react.useState)(0);
-    (0, import_react.useEffect)(function() { DB.get(mpKey(), 0).then(function(n){ setMpUsage(n||0); }); }, []);
     const [showAdd, setShowAdd2] = (0, import_react.useState)(false);
     const [form, setForm] = (0, import_react.useState)({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
     const [classifying, setClassifying] = (0, import_react.useState)(false);
@@ -25604,6 +25216,19 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const [recipeResult, setRecipeResult] = (0, import_react.useState)("");
     const [ingPage2, setIngPage2] = (0, import_react.useState)({});
     const [ingAllRecs, setIngAllRecs] = (0, import_react.useState)({});
+    const [frPage, setFrPage] = (0, import_react.useState)(0);
+    const [frAllRecs, setFrAllRecs] = (0, import_react.useState)([]);
+    const MP_DAILY_LIMIT = 5;
+    const mpKey = () => "wh3_mp_usage_" + td();
+    const [mpUsage, setMpUsage] = (0, import_react.useState)(0);
+    (0, import_react.useEffect)(function() { DB.get(mpKey(), 0).then(function(n){ setMpUsage(n||0); }); }, []);
+    const normKey2 = (n) => (n||"").toLowerCase().trim().replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"");
+    const mergeR = (existing, fresh) => {
+      const seen = new Set(existing.map(function(r3){ return normKey2(r3.split("\n")[0]||""); }));
+      return existing.concat(fresh.filter(function(r3){ const k2=normKey2(r3.split("\n")[0]||""); return k2&&!seen.has(k2)&&seen.add(k2); })).slice(0,50);
+    };
+    const loadR = async (k2) => { try { return (await DB.get(k2,[]))||[]; } catch(e){ return []; } };
+    const saveR = async (k2, arr) => { try { await DB.set(k2,arr); } catch(e){} };
     const [expandedRecipe, setExpandedRecipe] = (0, import_react.useState)(null);
     const [recipeLoading, setRecipeLoading] = (0, import_react.useState)(false);
     const [ingRecipes, setIngRecipes] = (0, import_react.useState)({});
@@ -25634,20 +25259,19 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const checkMpLimit = async () => {
       const cur = await DB.get(mpKey(), 0);
       if (cur >= MP_DAILY_LIMIT) return false;
-      await DB.set(mpKey(), cur + 1);
-      setMpUsage(cur + 1);
-      return true;
+      await DB.set(mpKey(), cur+1); setMpUsage(cur+1); return true;
     };
     const lookupIngredient = async (item) => {
       setActiveIng(item.id);
       if (ingRecipes[item.id]) return;
-      var cKey = "wh3_recipes_ing_" + normKey(item.name);
-      var cached = await loadCachedRecipes(cKey);
+      const cKey = "wh3_recipes_ing_" + normKey2(item.name);
+      const cached = await loadR(cKey);
       if (cached.length > 0) {
-        setIngRecipes(function(r){ return Object.assign({}, r, { [item.id]: cached.join("\n\n1. ") }); });
+        setIngAllRecs(function(r){return Object.assign({},r,{[item.id]:cached});});
+        setIngPage2(function(p){return Object.assign({},p,{[item.id]:0});});
+        setIngRecipes(function(r){return Object.assign({},r,{[item.id]:cached.slice(0,10).join("\n---\n")});});
       }
-      var mpOk = await checkMpLimit();
-      if (!mpOk) return;
+      if (!(await checkMpLimit())) return;
       setIngLoading((l) => ({ ...l, [item.id]: true }));
       try {
         if (!groqKey) {
@@ -25655,16 +25279,18 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           setIngRecipes((r) => ({ ...r, [item.id]: [] }));
           return;
         }
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `Return ONLY a numbered list of up to 10 recipes that use ${item.name} as one ingredient, sorted by popularity. No intro, no preamble, no asterisks, no extra text. Each recipe: number, name, then on new lines: Ingredients, Steps (3), Why. Separate each recipe with a blank line. Format:\n1. Recipe Name\nIngredients: ...\nSteps: 1)... 2)... 3)...\nWhy: ...\n\n2. Recipe Name\nIngredients: ...\n(etc)` }] }) });
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 2000, messages: [{ role: "user", content: `Return ONLY a numbered list of up to 10 recipes that include ${item.name} as one ingredient, sorted by popularity. No intro, no preamble, no asterisks. Format each: 1. Name\\nIngredients: ...\\nSteps: 1)... 2)... 3)...\\nWhy: ...` }] }) });
         const d = await res.json();
-        var freshText = d.choices && d.choices[0] ? d.choices[0].message.content : "";
-        if (freshText) {
-          var freshList = freshText.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
-          var merged = mergeRecipes(cached, freshList);
-          saveCachedRecipes(cKey, merged);
-          setIngRecipes(function(r){ return Object.assign({}, r, { [item.id]: merged.join("\n\n1. ") }); });
+        const ft = d.choices&&d.choices[0]?d.choices[0].message.content:"";
+        if (ft) {
+          const fl = ft.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
+          const mg = mergeR(cached, fl);
+          saveR(cKey, mg);
+          const pg = ingPage2[item.id]||0;
+          setIngAllRecs(function(r){return Object.assign({},r,{[item.id]:mg});});
+          setIngRecipes(function(r){return Object.assign({},r,{[item.id]:mg.slice(pg*10,pg*10+10).join("\n---\n")});});
         } else if (!cached.length) {
-          setIngRecipes(function(r){ return Object.assign({}, r, { [item.id]: "Could not load recipes." }); });
+          setIngRecipes(function(r){return Object.assign({},r,{[item.id]:"Could not load recipes."});});
         }
       } catch (e) {
         setIngRecipes((r) => ({ ...r, [item.id]: "Error loading. Try again." }));
@@ -25672,14 +25298,16 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       setIngLoading((l) => ({ ...l, [item.id]: false }));
     };
     const findRecipes = async () => {
-      const items = pantry2.filter((p) => selected.includes(p.id));
+      const items = pantry2.filter(function(p){return selected.includes(p.id);});
       if (!items.length) return;
-      var selNames2 = items.map(function(p2){ return normKey(p2.name); }).sort().join("_");
-      var frKey = "wh3_recipes_find_" + selNames2.slice(0, 80);
-      var frCached = await loadCachedRecipes(frKey);
-      if (frCached.length > 0) { setRecipeResult(frCached.join("\n---\n")); }
-      var mpOk2 = await checkMpLimit();
-      if (!mpOk2) return;
+      const selKey = items.map(function(p){return normKey2(p.name);}).sort().join("_");
+      const frKey = "wh3_recipes_find_" + selKey.slice(0,80);
+      const frCached = await loadR(frKey);
+      if (frCached.length > 0) {
+        setFrAllRecs(frCached); setFrPage(0);
+        setRecipeResult(frCached.slice(0,10).join("\n---\n"));
+      }
+      if (!(await checkMpLimit())) return;
       setRecipeLoading(true);
       setRecipeResult("");
       try {
@@ -25687,50 +25315,28 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 1500,
-          messages: [{ role: "user", content: `Return ONLY a numbered list of up to 10 recipes using ONLY these ingredients: ${ingList}. Do not use any ingredients not listed. No intro, no preamble, no asterisks, no commentary. Each recipe: number, name, then Ingredients (only from the list), Steps (3), Why healthy. Separate recipes with a blank line. Philippines-practical, cat-safe (no onions/garlic/chocolate/grapes).` }]
+          messages: [{ role: "user", content: `Return ONLY a numbered list of up to 10 recipes using ONLY these ingredients: ${ingList}. No intro, no preamble, no asterisks. Use ONLY listed ingredients, nothing else. Format: 1. Name\\nIngredients: (only from list)\\nSteps: 1)... 2)... 3)...\\nWhy: ... Philippines-practical, cat-safe (no onions/garlic/chocolate/grapes).` }]
         }) });
         const d = await res.json();
-        var frFreshText2 = d.choices && d.choices[0] ? d.choices[0].message.content : "";
-        if (frFreshText2) {
-          var frFreshList2 = frFreshText2.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
-          var frMerged2 = mergeRecipes(frCached, frFreshList2);
-          saveCachedRecipes(frKey, frMerged2);
-          setRecipeResult(frMerged2.join("\n---\n"));
-        } else if (!frCached.length) {
-          setRecipeResult("No recipes found.");
-        }
+        const frt = d.choices&&d.choices[0]?d.choices[0].message.content:"";
+        if (frt) {
+          const frl = frt.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
+          const frm = mergeR(frCached, frl);
+          saveR(frKey, frm);
+          setFrAllRecs(frm); setFrPage(0);
+          setRecipeResult(frm.slice(0,10).join("\n---\n"));
+        } else if (!frCached.length) { setRecipeResult("No recipes found."); }
       } catch (e) {
         setRecipeResult("Error fetching recipes. Please try again.");
       }
       setRecipeLoading(false);
     };
     const catGroups = PANTRY_CATS.map((cat) => ({ cat, items: pantry2.filter((p) => p.category === cat) })).filter((g) => g.items.length > 0);
-    return (0, import_jsx_runtime2.jsxs)("div", { style: { position: "relative" }, children: [
-      expandedRecipe && (0, import_jsx_runtime2.jsx)("div", {
-        onClick: function() { setExpandedRecipe(null); },
-        style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 100,
-          display: "flex", alignItems: "flex-start", justifyContent: "center",
-          padding: "10vh 16px 16px", overflowY: "auto" },
-        children: (0, import_jsx_runtime2.jsx)("div", {
-          onClick: function(ev) { ev.stopPropagation(); },
-          style: { background: "#1A1610", border: "1px solid rgba(212,146,74,0.25)",
-            borderRadius: 16, padding: "20px 20px 28px", maxWidth: 480, width: "100%",
-            marginBottom: 40, maxHeight: "70vh", overflowY: "auto" },
-          children: (0, import_jsx_runtime2.jsxs)("div", { children: [
-            (0, import_jsx_runtime2.jsx)("div", { style: { color: "#D4924A", fontWeight: 700, fontSize: 15, marginBottom: 12 },
-              children: expandedRecipe.split("\n")[0].replace(/^\d+\.\s*/, "").replace(/[\*#_~`]+/g, "").replace(/^[-–—\s]+/, "").trim() }),
-            (0, import_jsx_runtime2.jsx)("p", { style: { color: "#C8C0B0", fontSize: 13, lineHeight: 1.8,
-              whiteSpace: "pre-wrap", margin: 0, userSelect: "text", WebkitUserSelect: "text" },
-              children: expandedRecipe.split("\n").slice(1).join("\n").trim().replace(/[\*#_~`]+/g, "").replace(/^[-]+$/gm, "").trim() })
-          ] })
-        })
-      }),
+    return (0, import_jsx_runtime2.jsxs)("div", { children: [
       (0, import_jsx_runtime2.jsx)(SH, { title: "Meal Planner", sub: "Pantry tracker \xB7 AI-powered recipe finder" }),
-      mpUsage >= MP_DAILY_LIMIT ? (0, import_jsx_runtime2.jsxs)("div", { style: { margin: "0 0 16px", padding: "14px 16px", background: "rgba(201,112,96,0.08)", border: "1px solid rgba(201,112,96,0.2)", borderRadius: 12 }, children: [
-        (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 20, marginBottom: 6 }, children: "\uD83C\uDF5D" }),
-        (0, import_jsx_runtime2.jsx)("p", { style: { color: "#C97060", fontWeight: 600, fontSize: 14, marginBottom: 4 }, children: "Meal Planner needs to rest" }),
-        (0, import_jsx_runtime2.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13, lineHeight: 1.6 }, children: "Daily recipe limit reached. Try Google in the meantime \u2014 come back tomorrow!" })
-      ] }) : (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", marginBottom: 8 }, children: (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 11, color: "#5A4E3A", opacity: 0.8 }, children: (MP_DAILY_LIMIT - mpUsage) + " recipe lookups left today" }) }),
+      (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", marginBottom: 4 },
+        children: (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 11, color: mpUsage >= MP_DAILY_LIMIT ? "#C97060" : "#5A4E3A" },
+          children: mpUsage >= MP_DAILY_LIMIT ? "Recipe lookups exhausted \u2014 using cached only" : (MP_DAILY_LIMIT - mpUsage) + " recipe lookups left today" }) }),
       (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: 8, marginBottom: 20 }, children: ["pantry", "recipes"].map((t) => (0, import_jsx_runtime2.jsx)("button", { onClick: () => setTab(t), style: { padding: "7px 18px", borderRadius: 7, border: `1px solid ${tab === t ? G : "rgba(255,255,255,0.08)"}`, background: tab === t ? "rgba(212,146,74,0.1)" : "transparent", color: tab === t ? G : DIM, fontSize: 12, cursor: "pointer", fontWeight: tab === t ? 500 : 400, textTransform: "capitalize" }, children: t === "pantry" ? `Pantry (${pantry2.length})` : "Find Recipes" }, t)) }),
       tab === "pantry" && (0, import_jsx_runtime2.jsxs)("div", { children: [
         (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }, children: [
@@ -25820,33 +25426,18 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
                 "Recipes with ",
                 pantry2.find((p) => p.id === activeIng)?.name
               ] }),
-              (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split(/\n\s*---\s*\n/).filter(function(s){return s.trim();}).map((recipe, i) => (0, import_jsx_runtime2.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe.trim()), children: (() => { var _fl = recipe.trim().split("\n")[0] || ""; var first = _fl.replace(/^\d+\.\s*/, "").trim() || "Recipe"; const m2 = first.match(/^\d+\.\s*([^\u2014\-]+)/); return m2 ? m2[1].trim() : first; })() }, i)) })
+              (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split(/\n(?=\d+\.)/).filter(Boolean).map((recipe, i) => (0, import_jsx_runtime2.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe.trim()), children: (() => { const first = recipe.trim().split("\n")[0]; const m2 = first.match(/^\d+\.\s*([^\u2014\-]+)/); return m2 ? m2[1].trim() : first; })() }, i)) })
             ] }) }),
             activeIng && (function(){
-              var all = ingAllRecs[activeIng] || [];
-              var pg = ingPage2[activeIng] || 0;
-              var total = all.length;
-              var hasPrev = pg > 0;
-              var hasMore = (pg+1)*10 < total;
-              var canFetchMore = total < 50;
-              if (!hasPrev && !hasMore && !canFetchMore) return null;
-              return (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 8, marginTop: 8, justifyContent: "space-between", alignItems: "center" }, children: [
-                hasPrev ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
-                  var newPg = pg - 1;
-                  setIngPage2(function(p){ return Object.assign({}, p, { [activeIng]: newPg }); });
-                  setIngRecipes(function(r){ return Object.assign({}, r, { [activeIng]: all.slice(newPg*10, newPg*10+10).join("\n---\n") }); });
-                }, style: { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,146,74,0.2)", color: "#D4924A", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer" }, children: "← Back" }) : (0, import_jsx_runtime2.jsx)("span", { children: "" }),
-                (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 11, color: "#5A4E3A" }, children: "Page " + (pg+1) + " of " + Math.ceil(total/10) + (canFetchMore ? "+" : "") }),
-                hasMore ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
-                  var newPg = pg + 1;
-                  setIngPage2(function(p){ return Object.assign({}, p, { [activeIng]: newPg }); });
-                  setIngRecipes(function(r){ return Object.assign({}, r, { [activeIng]: all.slice(newPg*10, newPg*10+10).join("\n---\n") }); });
-                }, style: { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,146,74,0.2)", color: "#D4924A", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer" }, children: "Show More →" }) :
-                canFetchMore ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
-                  var item = pantry2.find(function(p){ return p.id === activeIng; });
-                  if (item) { setIngRecipes(function(r){ return Object.assign({}, r, { [item.id]: undefined }); }); lookupIngredient(item); }
-                }, style: { background: "linear-gradient(135deg,#C4893A,#D4924A)", border: "none", color: "#0A0907", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer", fontWeight: 600 }, children: "Fetch More →" }) : null
-              ] });
+              const all=ingAllRecs[activeIng]||[], pg=ingPage2[activeIng]||0;
+              const hasPrev=pg>0, hasMore=(pg+1)*10<all.length, canFetch=all.length<50&&mpUsage<MP_DAILY_LIMIT;
+              if(!hasPrev&&!hasMore&&!canFetch) return null;
+              return (0,import_jsx_runtime2.jsxs)("div",{style:{display:"flex",gap:8,marginTop:8,justifyContent:"space-between",alignItems:"center"},children:[
+                hasPrev?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=pg-1;setIngPage2(function(p){return Object.assign({},p,{[activeIng]:np});});setIngRecipes(function(r){return Object.assign({},r,{[activeIng]:all.slice(np*10,np*10+10).join("\n---\n")});});},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"\u2190 Back"}):(0,import_jsx_runtime2.jsx)("span",{}),
+                (0,import_jsx_runtime2.jsx)("span",{style:{fontSize:11,color:"#5A4E3A"},children:"Page "+(pg+1)+" of "+Math.ceil(Math.max(all.length,1)/10)+(canFetch?"+":"")}),
+                hasMore?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=pg+1;setIngPage2(function(p){return Object.assign({},p,{[activeIng]:np});});setIngRecipes(function(r){return Object.assign({},r,{[activeIng]:all.slice(np*10,np*10+10).join("\n---\n")});});},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"Show More \u2192"}):
+                canFetch?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const item=pantry2.find(function(p){return p.id===activeIng;});if(item){setIngRecipes(function(r){return Object.assign({},r,{[item.id]:void 0});});lookupIngredient(item);}},style:{background:"linear-gradient(135deg,#C4893A,#D4924A)",border:"none",color:"#0A0907",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer",fontWeight:600},children:"Fetch More \u2192"}):null
+              ]});
             })(),
             !activeIng && pantry2.length > 0 && (0, import_jsx_runtime2.jsx)(Card, { children: (0, import_jsx_runtime2.jsx)("p", { style: { color: DIM, fontSize: 12, fontWeight: 500 }, children: "Click any ingredient on the left to see what recipes you can make with it." }) })
           ] })
@@ -25876,8 +25467,18 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         ] }) }),
         recipeResult && !recipeLoading && (0, import_jsx_runtime2.jsxs)(Card, { children: [
           (0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 12 }, children: "Recipes found" }),
-          (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (recipeResult || "").split(/\n\s*---\s*\n/).filter(function(s) { return s.trim(); }).map(function(recipe, i) { var _firstLine = recipe.trim().split("\n")[0] || ""; var rawName = _firstLine.replace(/^\d+\.\s*/, "").trim() || ("Recipe "+(i+1)); var name = rawName.replace(/^\d+\.\s*/, "").replace(/^RECIPE NAME:?\s*/i, "").replace(/[\*#_~`]+/g, "").replace(/^[-–—\s]+/, "").trim() || rawName; return (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,146,74,0.2)", cursor: "pointer" }, onClick: function() { setExpandedRecipe(recipe.trim()); }, children: [(0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontWeight: 600, fontSize: 14, marginBottom: 2 }, children: name }),(0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })] }, i); }) })
+          (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (recipeResult || "").split("\n---\n").filter(function(s) { return s.trim(); }).map(function(recipe, i) { var name = recipe.trim().split("\n")[0] || ("Recipe " + (i+1)); return (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,146,74,0.2)", cursor: "pointer" }, onClick: function() { setExpandedRecipe(recipe.trim()); }, children: [(0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontWeight: 600, fontSize: 14, marginBottom: 2 }, children: name }),(0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })] }, i); }) })
         ] }),
+        frAllRecs.length > 0 && (function(){
+          const fTotal=frAllRecs.length, fPrev=frPage>0, fMore=(frPage+1)*10<fTotal, fFetch=fTotal<50&&mpUsage<MP_DAILY_LIMIT;
+          if(!fPrev&&!fMore&&!fFetch) return null;
+          return (0,import_jsx_runtime2.jsxs)("div",{style:{display:"flex",gap:8,margin:"8px 0",justifyContent:"space-between",alignItems:"center"},children:[
+            fPrev?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=frPage-1;setFrPage(np);setRecipeResult(frAllRecs.slice(np*10,np*10+10).join("\n---\n"));},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"\u2190 Back"}):(0,import_jsx_runtime2.jsx)("span",{}),
+            (0,import_jsx_runtime2.jsx)("span",{style:{fontSize:11,color:"#5A4E3A"},children:"Page "+(frPage+1)+" of "+Math.ceil(Math.max(fTotal,1)/10)+(fFetch?"+":"")}),
+            fMore?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=frPage+1;setFrPage(np);setRecipeResult(frAllRecs.slice(np*10,np*10+10).join("\n---\n"));},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"Show More \u2192"}):
+            fFetch?(0,import_jsx_runtime2.jsx)("button",{onClick:findRecipes,style:{background:"linear-gradient(135deg,#C4893A,#D4924A)",border:"none",color:"#0A0907",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer",fontWeight:600},children:"Fetch More \u2192"}):null
+          ]});
+        })(),
         !recipeResult && !recipeLoading && (0, import_jsx_runtime2.jsx)(Card, { children: (0, import_jsx_runtime2.jsx)("p", { style: { color: "#5A4E3A", fontSize: 12 }, children: "Select ingredients above and tap Find Recipes \u2014 Ward will search online for real recipes that match." }) })
       ] }),
       (0, import_jsx_runtime2.jsx)("style", { children: `@keyframes spin{to{transform:rotate(360deg)}}` })
@@ -26105,38 +25706,6 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         ] }),
         u.canApprove && (0, import_jsx_runtime2.jsx)(XBtn, { onClick: () => del(m.id) })
       ] }) }, m.id))
-    ] });
-  }
-  function PinCard({ m, pins, savePins }) {
-    const [show, setShow] = (0, import_react.useState)(false);
-    const [confirming, setConfirming] = (0, import_react.useState)(false);
-    const hasPin = !!(pins && pins[m.id]);
-    const doReset = () => {
-      savePins({ ...pins, [m.id]: null });
-      setConfirming(false);
-    };
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(Card, { sx: { padding: "14px 16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 32, height: 32, borderRadius: "50%", background: m.color + "18", border: `1.5px solid ${m.color}40`, display: "flex", alignItems: "center", justifyContent: "center", color: m.color, fontSize: 14, fontWeight: 700, flexShrink: 0 }, children: m.name.charAt(0) }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: CR, fontSize: 13, fontWeight: 600 }, children: m.name }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: hasPin ? "#82B896" : "#C97060", fontSize: 10, marginTop: 1 }, children: hasPin ? "PIN set" : "No PIN set" })
-        ] })
-      ] }),
-      hasPin && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 10, padding: "7px 10px", background: "rgba(255,255,255,0.03)", borderRadius: 7, border: "1px solid rgba(255,255,255,0.06)" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: CR, fontSize: 15, letterSpacing: "0.18em", flex: 1, fontFamily: "monospace" }, children: show ? pins[m.id] || "----" : "\u2022\u2022\u2022\u2022" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => setShow((s) => !s), style: { background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 11, padding: "2px 6px", borderRadius: 4 }, children: show ? "Hide" : "Show" })
-      ] }),
-      confirming ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { background: "rgba(201,112,96,0.08)", border: "1px solid rgba(201,112,96,0.25)", borderRadius: 8, padding: "10px 12px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("p", { style: { color: "#C97060", fontSize: 12, fontWeight: 500, marginBottom: 8 }, children: [
-          m.name,
-          " will need to create a new PIN on next login."
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 7 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "danger", sm: true, onClick: doReset, children: "Yes, Reset" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", sm: true, onClick: () => setConfirming(false), children: "Cancel" })
-        ] })
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Btn, { v: "danger", sm: true, onClick: () => hasPin ? setConfirming(true) : null, disabled: !hasPin, children: hasPin ? "Reset PIN" : "No PIN" })
     ] });
   }
   function MemberSettings({ u, memberSettings, saveMembers, pins, savePins }) {
