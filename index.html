@@ -25557,6 +25557,26 @@ IMPORTANT BEHAVIOR RULES:
       return [...acc, {...item, name: norm}];
     }, []);
     const [tab, setTab] = (0, import_react.useState)("pantry");
+    const MP_DAILY_LIMIT = 5;
+    const mpKey = () => "wh3_mp_usage_" + td();
+    const normKey = (n) => n.toLowerCase().trim().replace(/\s+/g, "_").replace(/[^a-z0-9_]/g, "");
+    const mergeRecipes = (existing, fresh) => {
+      const seen = new Set(existing.map(function(r3){ return normKey(r3.split("\n")[0] || ""); }));
+      var added = [];
+      fresh.forEach(function(r3){
+        var k2 = normKey(r3.split("\n")[0] || "");
+        if (k2 && !seen.has(k2)) { seen.add(k2); added.push(r3); }
+      });
+      return existing.concat(added).slice(0, 50);
+    };
+    const loadCachedRecipes = async (cacheKey) => {
+      try { return (await DB.get(cacheKey, [])) || []; } catch(e) { return []; }
+    };
+    const saveCachedRecipes = async (cacheKey, recipes) => {
+      try { await DB.set(cacheKey, recipes); } catch(e) {}
+    };
+    const [mpUsage, setMpUsage] = (0, import_react.useState)(0);
+    (0, import_react.useEffect)(function() { DB.get(mpKey(), 0).then(function(n){ setMpUsage(n||0); }); }, []);
     const [showAdd, setShowAdd2] = (0, import_react.useState)(false);
     const [form, setForm] = (0, import_react.useState)({ name: "", quantity: "", unit: "pcs", category: "Protein", lowStock: false });
     const [classifying, setClassifying] = (0, import_react.useState)(false);
@@ -25609,9 +25629,23 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const rm = (id) => savePantry2(pantry2.filter((p) => p.id !== id));
     const toggleLowStock = (id) => savePantry2(pantry2.map((p) => p.id === id ? { ...p, lowStock: !p.lowStock } : p));
     const toggleSel = (id) => setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
+    const checkMpLimit = async () => {
+      const cur = await DB.get(mpKey(), 0);
+      if (cur >= MP_DAILY_LIMIT) return false;
+      await DB.set(mpKey(), cur + 1);
+      setMpUsage(cur + 1);
+      return true;
+    };
     const lookupIngredient = async (item) => {
       setActiveIng(item.id);
       if (ingRecipes[item.id]) return;
+      var cKey = "wh3_recipes_ing_" + normKey(item.name);
+      var cached = await loadCachedRecipes(cKey);
+      if (cached.length > 0) {
+        setIngRecipes(function(r){ return Object.assign({}, r, { [item.id]: cached.join("\n\n1. ") }); });
+      }
+      var mpOk = await checkMpLimit();
+      if (!mpOk) return;
       setIngLoading((l) => ({ ...l, [item.id]: true }));
       try {
         if (!groqKey) {
@@ -25619,9 +25653,17 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           setIngRecipes((r) => ({ ...r, [item.id]: [] }));
           return;
         }
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `Return exactly 10 recipes that include ${item.name} as one ingredient, sorted by popularity. No intro, no preamble, no commentary. Use ONLY this format, separated by ---:\nRECIPE NAME\nIngredients: ingredient1, ingredient2 (checkmark ${item.name})\nSteps: 1) ... 2) ... 3) ...\nWhy: one sentence health benefit\n---` }] }) });
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 500, messages: [{ role: "user", content: `Return ONLY a numbered list of up to 10 recipes that use ${item.name} as one ingredient, sorted by popularity. No intro, no preamble, no asterisks, no extra text. Each recipe: number, name, then on new lines: Ingredients, Steps (3), Why. Separate each recipe with a blank line. Format:\n1. Recipe Name\nIngredients: ...\nSteps: 1)... 2)... 3)...\nWhy: ...\n\n2. Recipe Name\nIngredients: ...\n(etc)` }] }) });
         const d = await res.json();
-        setIngRecipes((r) => ({ ...r, [item.id]: d.choices && d.choices[0] ? d.choices[0].message.content : "Could not load recipes." }));
+        var freshText = d.choices && d.choices[0] ? d.choices[0].message.content : "";
+        if (freshText) {
+          var freshList = freshText.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
+          var merged = mergeRecipes(cached, freshList);
+          saveCachedRecipes(cKey, merged);
+          setIngRecipes(function(r){ return Object.assign({}, r, { [item.id]: merged.join("\n\n1. ") }); });
+        } else if (!cached.length) {
+          setIngRecipes(function(r){ return Object.assign({}, r, { [item.id]: "Could not load recipes." }); });
+        }
       } catch (e) {
         setIngRecipes((r) => ({ ...r, [item.id]: "Error loading. Try again." }));
       }
@@ -25630,6 +25672,12 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     const findRecipes = async () => {
       const items = pantry2.filter((p) => selected.includes(p.id));
       if (!items.length) return;
+      var selNames2 = items.map(function(p2){ return normKey(p2.name); }).sort().join("_");
+      var frKey = "wh3_recipes_find_" + selNames2.slice(0, 80);
+      var frCached = await loadCachedRecipes(frKey);
+      if (frCached.length > 0) { setRecipeResult(frCached.join("\n\n1. ")); }
+      var mpOk2 = await checkMpLimit();
+      if (!mpOk2) return;
       setRecipeLoading(true);
       setRecipeResult("");
       try {
@@ -25637,11 +25685,18 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           max_tokens: 1500,
-          messages: [{ role: "user", content: `You are a recipe assistant. Return ONLY the recipes with NO introduction, preamble, or commentary. IMPORTANT: Use ONLY the ingredients listed. Do not suggest recipes that require ingredients not in this list. Use exactly this format, separated by ---:\nRECIPE NAME\nIngredients: (checkmark each one - only from the provided list)\nSteps: 1)... 2)... 3)...\nWhy healthy: one sentence\n---\nAvailable ingredients ONLY: ${ingList}. Give up to 10 recipes using ONLY these ingredients. More is better. Philippines-practical, cat-safe (no onions/garlic/grapes/chocolate), low plastic.` }]
+          messages: [{ role: "user", content: `Return ONLY a numbered list of up to 10 recipes using ONLY these ingredients: ${ingList}. Do not use any ingredients not listed. No intro, no preamble, no asterisks, no commentary. Each recipe: number, name, then Ingredients (only from the list), Steps (3), Why healthy. Separate recipes with a blank line. Philippines-practical, cat-safe (no onions/garlic/chocolate/grapes).` }]
         }) });
         const d = await res.json();
-        const text = d.choices && d.choices[0] ? d.choices[0].message.content : "No recipes found.";
-        setRecipeResult(text);
+        var frFreshText2 = d.choices && d.choices[0] ? d.choices[0].message.content : "";
+        if (frFreshText2) {
+          var frFreshList2 = frFreshText2.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
+          var frMerged2 = mergeRecipes(frCached, frFreshList2);
+          saveCachedRecipes(frKey, frMerged2);
+          setRecipeResult(frMerged2.join("\n\n1. "));
+        } else if (!frCached.length) {
+          setRecipeResult("No recipes found.");
+        }
       } catch (e) {
         setRecipeResult("Error fetching recipes. Please try again.");
       }
@@ -25669,6 +25724,11 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         })
       }),
       (0, import_jsx_runtime2.jsx)(SH, { title: "Meal Planner", sub: "Pantry tracker \xB7 AI-powered recipe finder" }),
+      mpUsage >= MP_DAILY_LIMIT ? (0, import_jsx_runtime2.jsxs)("div", { style: { margin: "0 0 16px", padding: "14px 16px", background: "rgba(201,112,96,0.08)", border: "1px solid rgba(201,112,96,0.2)", borderRadius: 12 }, children: [
+        (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 20, marginBottom: 6 }, children: "\uD83C\uDF5D" }),
+        (0, import_jsx_runtime2.jsx)("p", { style: { color: "#C97060", fontWeight: 600, fontSize: 14, marginBottom: 4 }, children: "Meal Planner needs to rest" }),
+        (0, import_jsx_runtime2.jsx)("p", { style: { color: "#5A4E3A", fontSize: 13, lineHeight: 1.6 }, children: "Daily recipe limit reached. Try Google in the meantime \u2014 come back tomorrow!" })
+      ] }) : (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", marginBottom: 8 }, children: (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 11, color: "#5A4E3A", opacity: 0.8 }, children: (MP_DAILY_LIMIT - mpUsage) + " recipe lookups left today" }) }),
       (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: 8, marginBottom: 20 }, children: ["pantry", "recipes"].map((t) => (0, import_jsx_runtime2.jsx)("button", { onClick: () => setTab(t), style: { padding: "7px 18px", borderRadius: 7, border: `1px solid ${tab === t ? G : "rgba(255,255,255,0.08)"}`, background: tab === t ? "rgba(212,146,74,0.1)" : "transparent", color: tab === t ? G : DIM, fontSize: 12, cursor: "pointer", fontWeight: tab === t ? 500 : 400, textTransform: "capitalize" }, children: t === "pantry" ? `Pantry (${pantry2.length})` : "Find Recipes" }, t)) }),
       tab === "pantry" && (0, import_jsx_runtime2.jsxs)("div", { children: [
         (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }, children: [
@@ -25758,8 +25818,34 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
                 "Recipes with ",
                 pantry2.find((p) => p.id === activeIng)?.name
               ] }),
-              (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split(/\n\s*---\s*\n/).filter(function(s){return s.trim();}).map((recipe, i) => (0, import_jsx_runtime2.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe.trim()), children: (() => { var _pl = recipe.trim().split("\n"); var first = (_pl.find(function(l){return l.trim() && !/^[-–—\s*]+$/.test(l.trim());}) || "Recipe"); const m2 = first.match(/^\d+\.\s*([^\u2014\-]+)/); return m2 ? m2[1].trim() : first; })() }, i)) })
+              (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split(/\n\s*---\s*\n/).filter(function(s){return s.trim();}).map((recipe, i) => (0, import_jsx_runtime2.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe.trim()), children: (() => { var _fl = recipe.trim().split("\n")[0] || ""; var first = _fl.replace(/^\d+\.\s*/, "").trim() || "Recipe"; const m2 = first.match(/^\d+\.\s*([^\u2014\-]+)/); return m2 ? m2[1].trim() : first; })() }, i)) })
             ] }) }),
+            activeIng && (function(){
+              var all = ingAllRecipes[activeIng] || [];
+              var pg = ingPage[activeIng] || 0;
+              var total = all.length;
+              var hasPrev = pg > 0;
+              var hasMore = (pg+1)*10 < total;
+              var canFetchMore = total < 50;
+              if (!hasPrev && !hasMore && !canFetchMore) return null;
+              return (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 8, marginTop: 8, justifyContent: "space-between", alignItems: "center" }, children: [
+                hasPrev ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
+                  var newPg = pg - 1;
+                  setIngPage(function(p){ return Object.assign({}, p, { [activeIng]: newPg }); });
+                  setIngRecipes(function(r){ return Object.assign({}, r, { [activeIng]: all.slice(newPg*10, newPg*10+10).join("\n\n1. ") }); });
+                }, style: { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,146,74,0.2)", color: "#D4924A", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer" }, children: "← Back" }) : (0, import_jsx_runtime2.jsx)("span", { children: "" }),
+                (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 11, color: "#5A4E3A" }, children: "Page " + (pg+1) + " of " + Math.ceil(total/10) + (canFetchMore ? "+" : "") }),
+                hasMore ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
+                  var newPg = pg + 1;
+                  setIngPage(function(p){ return Object.assign({}, p, { [activeIng]: newPg }); });
+                  setIngRecipes(function(r){ return Object.assign({}, r, { [activeIng]: all.slice(newPg*10, newPg*10+10).join("\n\n1. ") }); });
+                }, style: { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,146,74,0.2)", color: "#D4924A", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer" }, children: "Show More →" }) :
+                canFetchMore ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
+                  var item = pantry2.find(function(p){ return p.id === activeIng; });
+                  if (item) { setIngRecipes(function(r){ return Object.assign({}, r, { [item.id]: undefined }); }); lookupIngredient(item); }
+                }, style: { background: "linear-gradient(135deg,#C4893A,#D4924A)", border: "none", color: "#0A0907", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer", fontWeight: 600 }, children: "Fetch More →" }) : null
+              ] });
+            })(),
             !activeIng && pantry2.length > 0 && (0, import_jsx_runtime2.jsx)(Card, { children: (0, import_jsx_runtime2.jsx)("p", { style: { color: DIM, fontSize: 12, fontWeight: 500 }, children: "Click any ingredient on the left to see what recipes you can make with it." }) })
           ] })
         ] })
@@ -25788,7 +25874,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
         ] }) }),
         recipeResult && !recipeLoading && (0, import_jsx_runtime2.jsxs)(Card, { children: [
           (0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 12 }, children: "Recipes found" }),
-          (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (recipeResult || "").split(/\n\s*---\s*\n/).filter(function(s) { return s.trim(); }).map(function(recipe, i) { var _lines = recipe.trim().split("\n"); var rawName = (_lines.find(function(l){return l.trim() && !/^[-–—\s*]+$/.test(l.trim());}) || ("Recipe "+(i+1))); var name = rawName.replace(/^\d+\.\s*/, "").replace(/^RECIPE NAME:?\s*/i, "").replace(/[\*#_~`]+/g, "").replace(/^[-–—\s]+/, "").trim() || rawName; return (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,146,74,0.2)", cursor: "pointer" }, onClick: function() { setExpandedRecipe(recipe.trim()); }, children: [(0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontWeight: 600, fontSize: 14, marginBottom: 2 }, children: name }),(0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })] }, i); }) })
+          (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (recipeResult || "").split(/\n\s*---\s*\n/).filter(function(s) { return s.trim(); }).map(function(recipe, i) { var _firstLine = recipe.trim().split("\n")[0] || ""; var rawName = _firstLine.replace(/^\d+\.\s*/, "").trim() || ("Recipe "+(i+1)); var name = rawName.replace(/^\d+\.\s*/, "").replace(/^RECIPE NAME:?\s*/i, "").replace(/[\*#_~`]+/g, "").replace(/^[-–—\s]+/, "").trim() || rawName; return (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,146,74,0.2)", cursor: "pointer" }, onClick: function() { setExpandedRecipe(recipe.trim()); }, children: [(0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontWeight: 600, fontSize: 14, marginBottom: 2 }, children: name }),(0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })] }, i); }) })
         ] }),
         !recipeResult && !recipeLoading && (0, import_jsx_runtime2.jsx)(Card, { children: (0, import_jsx_runtime2.jsx)("p", { style: { color: "#5A4E3A", fontSize: 12 }, children: "Select ingredients above and tap Find Recipes \u2014 Ward will search online for real recipes that match." }) })
       ] }),
