@@ -22905,6 +22905,7 @@ IMPORTANT BEHAVIOR RULES:
           }, style: { background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: wardTab2 === t ? 700 : 400, color: wardTab2 === t ? "#D4924A" : "#5A4E3A", textTransform: "capitalize", padding: 0, borderBottom: wardTab2 === t ? "1px solid #D4924A" : "1px solid transparent", paddingBottom: 1 }, children: t }, t)) })
         ] }),
         (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 10, color: "#5A4E3A", marginRight: 4, opacity: 0.8 }, children: (WARD_DAILY_LIMIT2 - usageCount2) + " left" }),
+        (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 10, color: "#5A4E3A", marginRight: 4, opacity: 0.8 }, children: (WARD_DAILY_LIMIT2 - usageCount2) + " left" }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => {
           setOpen2(false);
           setErr2("");
@@ -23235,7 +23236,7 @@ IMPORTANT BEHAVIOR RULES:
       (0, import_jsx_runtime2.jsx)("h3", { style: { fontFamily: "'Playfair Display',serif", fontSize: 17, fontWeight: 600, color: CR, marginBottom: 13 }, children: "Compliance Overview" }),
       (0, import_jsx_runtime2.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(185px,1fr))", gap: 9, marginBottom: 24 }, children: _MB.map((m) => {
         const wo = getWC(m.id), bk = getBC(m.id), safe = wo.compliant && bk.compliant;
-        return (0, import_jsx_runtime2.jsxs)(Card, { key: m.id, sx: { padding: "12px 14px" }, children: [
+        return (0, import_jsx_runtime2.jsxs)(Card, { sx: { padding: "12px 14px" }, children: [
           (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 9 }, children: [
             (0, import_jsx_runtime2.jsx)(Av, { m, size: 28 }),
             (0, import_jsx_runtime2.jsxs)("div", { children: [
@@ -23362,7 +23363,7 @@ IMPORTANT BEHAVIOR RULES:
         (0, import_jsx_runtime2.jsx)("p", { style: { fontSize: 11, color: DIM, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 9 }, children: "Upcoming" }),
         upcoming.map((ev) => {
           const d = /* @__PURE__ */ new Date(ev.date + "T00:00:00");
-          return (0, import_jsx_runtime2.jsxs)(Card, { key: ev.id, sx: { padding: "9px 13px", display: "flex", alignItems: "center", gap: 11, marginBottom: 6 }, children: [
+          return (0, import_jsx_runtime2.jsxs)(Card, { sx: { padding: "9px 13px", display: "flex", alignItems: "center", gap: 11, marginBottom: 6 }, children: [
             (0, import_jsx_runtime2.jsxs)("div", { style: { width: 34, height: 34, borderRadius: 6, background: ev.color + "18", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
               (0, import_jsx_runtime2.jsx)("div", { style: { color: ev.color, fontSize: 12, fontWeight: 700, lineHeight: 1 }, children: d.getDate() }),
               (0, import_jsx_runtime2.jsx)("div", { style: { color: ev.color, fontSize: 7, opacity: 0.7, letterSpacing: "0.06em" }, children: MONTHS[d.getMonth()].slice(0, 3).toUpperCase() })
@@ -25337,9 +25338,9 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     (0, import_react.useEffect)(function() { DB.get(mpKey(), 0).then(function(n){ setMpUsage(n||0); }); }, []);
     const normKey2 = (n) => (n||"").toLowerCase().trim().replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"");
     const mergeR = (existing, fresh) => {
-      const seen = new Set(existing.map(function(r3){ return normKey2(r3.split("\n")[0]||""); }));
-      return existing.concat(fresh.filter(function(r3){ const k2=normKey2(r3.split("\n")[0]||""); return k2&&!seen.has(k2)&&seen.add(k2); })).slice(0,50);
-    };
+      const seen = new Set(existing.map(function(r3){ return normKey2((r3&&r3.name)||""); }));
+      return existing.concat(fresh.filter(function(r3){ const k2=normKey2((r3&&r3.name)||""); return k2&&!seen.has(k2)&&seen.add(k2); })).slice(0,50);
+    }
     const loadR = async (k2) => { try { return (await DB.get(k2,[]))||[]; } catch(e){ return []; } };
     const saveR = async (k2, arr) => { try { await DB.set(k2,arr); } catch(e){} };
     const [expandedRecipe, setExpandedRecipe] = (0, import_react.useState)(null);
@@ -25376,38 +25377,36 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     };
     const lookupIngredient = async (item) => {
       setActiveIng(item.id);
-      if (ingRecipes[item.id]) return;
+      if (ingRecipes[item.id] && ingRecipes[item.id].length > 0) return;
       const cKey = "wh3_recipes_ing_" + normKey2(item.name);
       const cached = await loadR(cKey);
       if (cached.length > 0) {
         setIngAllRecs(function(r){return Object.assign({},r,{[item.id]:cached});});
         setIngPage2(function(p){return Object.assign({},p,{[item.id]:0});});
-        setIngRecipes(function(r){return Object.assign({},r,{[item.id]:cached.slice(0,10).join("\n---\n")});});
+        setIngRecipes(function(r){return Object.assign({},r,{[item.id]:cached.slice(0,10)});});
       }
       if (!(await checkMpLimit())) return;
       setIngLoading((l) => ({ ...l, [item.id]: true }));
       try {
-        if (!groqKey) {
-          setIngLoading((l) => ({ ...l, [item.id]: false }));
-          setIngRecipes((r) => ({ ...r, [item.id]: [] }));
-          return;
-        }
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 2000, messages: [{ role: "user", content: `Return ONLY a numbered list of up to 10 recipes that include ${item.name} as one ingredient, sorted by popularity. No intro, no preamble, no asterisks. Format each: 1. Name\\nIngredients: ...\\nSteps: 1)... 2)... 3)...\\nWhy: ...` }] }) });
+        if (!groqKey) { setIngLoading((l) => ({ ...l, [item.id]: false })); return; }
+        const prompt = "Return a JSON array of up to 8 recipes that use " + item.name + ". Each object: {\"name\":string, \"ingredients\":string[], \"steps\":string[], \"why\":string}. Output ONLY the raw JSON array.";
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }) });
         const d = await res.json();
         const ft = d.choices&&d.choices[0]?d.choices[0].message.content:"";
         if (ft) {
-          const fl = ft.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
-          const mg = mergeR(cached, fl);
-          saveR(cKey, mg);
-          const pg = ingPage2[item.id]||0;
-          setIngAllRecs(function(r){return Object.assign({},r,{[item.id]:mg});});
-          setIngRecipes(function(r){return Object.assign({},r,{[item.id]:mg.slice(pg*10,pg*10+10).join("\n---\n")});});
-        } else if (!cached.length) {
-          setIngRecipes(function(r){return Object.assign({},r,{[item.id]:"Could not load recipes."});});
-        }
-      } catch (e) {
-        setIngRecipes((r) => ({ ...r, [item.id]: "Error loading. Try again." }));
-      }
+          try {
+            const cleaned = ft.replace(/^```(?:json)?\n?/,"").replace(/\n?```$/,"").trim();
+            const fl = JSON.parse(cleaned);
+            if (Array.isArray(fl) && fl.length > 0) {
+              const mg = mergeR(cached, fl);
+              saveR(cKey, mg);
+              const pg = ingPage2[item.id]||0;
+              setIngAllRecs(function(r){return Object.assign({},r,{[item.id]:mg});});
+              setIngRecipes(function(r){return Object.assign({},r,{[item.id]:mg.slice(pg*10,pg*10+10)});});
+            }
+          } catch(pe) { if (!cached.length) setIngRecipes(function(r){return Object.assign({},r,{[item.id]:[]});}); }
+        } else if (!cached.length) { setIngRecipes(function(r){return Object.assign({},r,{[item.id]:[]}); }); }
+      } catch (e) { if (!cached.length) setIngRecipes((r) => ({ ...r, [item.id]: [] })); }
       setIngLoading((l) => ({ ...l, [item.id]: false }));
     };
     const findRecipes = async () => {
@@ -25416,47 +25415,58 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       const selKey = items.map(function(p){return normKey2(p.name);}).sort().join("_");
       const frKey = "wh3_recipes_find_" + selKey.slice(0,80);
       const frCached = await loadR(frKey);
-      if (frCached.length > 0) {
-        setFrAllRecs(frCached); setFrPage(0);
-        setRecipeResult(frCached.slice(0,10).join("\n---\n"));
-      }
+      if (frCached.length > 0) { setFrAllRecs(frCached); setFrPage(0); setRecipeResult(frCached.slice(0,10)); }
       if (!(await checkMpLimit())) return;
       setRecipeLoading(true);
-      setRecipeResult("");
+      setRecipeResult([]);
       try {
-        const ingList = items.map((i) => `${i.name}${i.quantity ? ` (${i.quantity} ${i.unit})` : ""}`).join(", ");
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
-          max_tokens: 1500,
-          messages: [{ role: "user", content: `Return ONLY a numbered list of up to 10 recipes using ONLY these ingredients: ${ingList}. No intro, no preamble, no asterisks. Use ONLY listed ingredients, nothing else. Format: 1. Name\\nIngredients: (only from list)\\nSteps: 1)... 2)... 3)...\\nWhy: ... Philippines-practical, cat-safe (no onions/garlic/chocolate/grapes).` }]
-        }) });
+        const ingList = items.map((i) => i.name + (i.quantity ? " (" + i.quantity + " " + i.unit + ")" : "")).join(", ");
+        const prompt = "Return a JSON array of up to 8 recipes using ONLY: " + ingList + ". Philippines-practical, cat-safe. Each object: {\"name\":string, \"ingredients\":string[], \"steps\":string[], \"why\":string}. Output ONLY the raw JSON array.";
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Authorization": "Bearer " + groqKey, "Content-Type": "application/json" }, body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 1500, messages: [{ role: "user", content: prompt }] }) });
         const d = await res.json();
         const frt = d.choices&&d.choices[0]?d.choices[0].message.content:"";
         if (frt) {
-          const frl = frt.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
-          const frm = mergeR(frCached, frl);
-          saveR(frKey, frm);
-          setFrAllRecs(frm); setFrPage(0);
-          setRecipeResult(frm.slice(0,10).join("\n---\n"));
-        } else if (!frCached.length) { setRecipeResult("No recipes found."); }
-      } catch (e) {
-        setRecipeResult("Error fetching recipes. Please try again.");
-      }
+          try {
+            const cleaned = frt.replace(/^```(?:json)?\n?/,"").replace(/\n?```$/,"").trim();
+            const frl = JSON.parse(cleaned);
+            if (Array.isArray(frl) && frl.length > 0) {
+              const frm = mergeR(frCached, frl);
+              saveR(frKey, frm);
+              setFrAllRecs(frm); setFrPage(0);
+              setRecipeResult(frm.slice(0,10));
+            } else if (!frCached.length) { setRecipeResult([]); }
+          } catch(pe) { if (!frCached.length) setRecipeResult([]); }
+        } else if (!frCached.length) { setRecipeResult([]); }
+      } catch (e) { setRecipeResult([]); }
       setRecipeLoading(false);
     };
     const catGroups = PANTRY_CATS.map((cat) => ({ cat, items: pantry2.filter((p) => p.category === cat) })).filter((g) => g.items.length > 0);
-    return (0, import_jsx_runtime2.jsxs)("div", { style: { position: "relative" }, children: [
+    return (0, import_jsx_runtime2.jsxs)("div", { children: [
       expandedRecipe && (0, import_jsx_runtime2.jsx)("div", { style: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 60, display: "flex", alignItems: "flex-end", justifyContent: "center" }, onClick: () => setExpandedRecipe(null), children:
-        (0, import_jsx_runtime2.jsxs)("div", { style: { background: "#141410", border: "1px solid rgba(212,146,74,0.18)", borderRadius: "20px 20px 0 0", width: "100%", maxWidth: 640, maxHeight: "80vh", overflowY: "auto", padding: "22px 20px 36px" }, onClick: (e) => e.stopPropagation(), children: [
+        (0, import_jsx_runtime2.jsxs)("div", { style: { background: "#141410", border: "1px solid rgba(212,146,74,0.18)", borderRadius: "20px 20px 0 0", width: "100%", maxWidth: 640, maxHeight: "82vh", overflowY: "auto", padding: "22px 20px 36px" }, onClick: (e) => e.stopPropagation(), children: [
           (0, import_jsx_runtime2.jsx)("div", { style: { width: 36, height: 4, background: "rgba(255,255,255,0.15)", borderRadius: 2, margin: "0 auto 18px" } }),
-          (0, import_jsx_runtime2.jsx)("div", { style: { color: "#D4924A", fontSize: 12, fontWeight: 500, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 10 }, children: "Recipe" }),
-          (0, import_jsx_runtime2.jsx)("pre", { style: { color: "#C8C0B0", fontSize: 13, lineHeight: 1.75, whiteSpace: "pre-wrap", fontFamily: "Plus Jakarta Sans,sans-serif", margin: 0 }, children: expandedRecipe }),
-          (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", onClick: () => setExpandedRecipe(null), sx: { marginTop: 16, width: "100%" }, children: "Close" })
+          (0, import_jsx_runtime2.jsx)("div", { style: { fontFamily: "'Playfair Display',serif", fontSize: 18, fontWeight: 700, color: CR, marginBottom: 16 }, children: expandedRecipe && expandedRecipe.name }),
+          expandedRecipe && (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 14 }, children: [
+            (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, color: G, fontWeight: 600, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 8 }, children: "Ingredients" }),
+            (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexWrap: "wrap", gap: 6 }, children: (expandedRecipe.ingredients||[]).map(function(ing, j){ return (0, import_jsx_runtime2.jsx)("span", { style: { padding: "4px 10px", borderRadius: 20, background: "rgba(212,146,74,0.1)", border: "1px solid rgba(212,146,74,0.2)", color: CR, fontSize: 12 }, children: ing }, j); }) })
+          ] }),
+          expandedRecipe && (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 14 }, children: [
+            (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, color: G, fontWeight: 600, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 8 }, children: "Steps" }),
+            (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (expandedRecipe.steps||[]).map(function(step, j){ return (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 10, alignItems: "flex-start" }, children: [
+              (0, import_jsx_runtime2.jsx)("div", { style: { minWidth: 22, height: 22, borderRadius: "50%", background: "rgba(212,146,74,0.15)", border: "1px solid rgba(212,146,74,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: G }, children: j+1 }),
+              (0, import_jsx_runtime2.jsx)("div", { style: { color: CR, fontSize: 13, lineHeight: 1.6, paddingTop: 2 }, children: step })
+            ] }, j); }) })
+          ] }),
+          expandedRecipe && expandedRecipe.why && (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "10px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 10, marginBottom: 16 }, children: [
+            (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, color: DIM, fontWeight: 600, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 4 }, children: "Why this works" }),
+            (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 12, lineHeight: 1.6 }, children: expandedRecipe.why })
+          ] }),
+          (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", onClick: () => setExpandedRecipe(null), sx: { width: "100%" }, children: "Close" })
         ] })
       }),
       (0, import_jsx_runtime2.jsx)(SH, { title: "Meal Planner", sub: "Pantry tracker \xB7 AI-powered recipe finder" }),
       (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", marginBottom: 4 },
-        children: (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 12, color: mpUsage >= MP_DAILY_LIMIT ? "#C97060" : "#9A8878", fontWeight: 500 },
+        children: (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 11, color: mpUsage >= MP_DAILY_LIMIT ? "#C97060" : "#5A4E3A" },
           children: mpUsage >= MP_DAILY_LIMIT ? "Recipe lookups exhausted \u2014 using cached only" : (MP_DAILY_LIMIT - mpUsage) + " recipe lookups left today" }) }),
       mpUsage >= MP_DAILY_LIMIT && tab === "recipes" && !recipeResult && frAllRecs.length === 0 && (0, import_jsx_runtime2.jsxs)("div", { style: { margin: "0 0 16px", padding: "14px 16px", background: "rgba(201,112,96,0.08)", border: "1px solid rgba(201,112,96,0.2)", borderRadius: 12 }, children: [
         (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 20, marginBottom: 6 }, children: "\uD83C\uDF5D" }),
@@ -25552,14 +25562,17 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
                 "Recipes with ",
                 pantry2.find((p) => p.id === activeIng)?.name
               ] }),
-              (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split("\n---\n").filter(function(s){return s.trim();}).map((recipe, i) => (0, import_jsx_runtime2.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe.trim()), children: (() => { const first = recipe.trim().split("\n")[0]; const m2 = first.match(/^\d+\.\s*([^\u2014\-]+)/); return m2 ? m2[1].trim() : first; })() }, i)) })
+              (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || []).map((recipe, i) => (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe), children: [
+              (0, import_jsx_runtime2.jsx)("div", { style: { color: CR, fontSize: 14, fontWeight: 600, marginBottom: 2 }, children: recipe.name }),
+              (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })
+            ] }, i)) })
             ] }) }),
             activeIng && (function(){
               const all=ingAllRecs[activeIng]||[], pg=ingPage2[activeIng]||0;
               const hasPrev=pg>0, hasMore=(pg+1)*10<all.length, canFetch=all.length<50&&mpUsage<MP_DAILY_LIMIT;
               if(!hasPrev&&!hasMore&&!canFetch) return null;
               return (0,import_jsx_runtime2.jsxs)("div",{style:{display:"flex",gap:8,marginTop:8,justifyContent:"space-between",alignItems:"center"},children:[
-                hasPrev?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=pg-1;setIngPage2(function(p){return Object.assign({},p,{[activeIng]:np});});setIngRecipes(function(r){return Object.assign({},r,{[activeIng]:all.slice(np*10,np*10+10).join("\n---\n")});});},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"\u2190 Back"}):(0,import_jsx_runtime2.jsx)("span",{}),
+                hasPrev?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=pg-1;setIngPage2(function(p){return Object.assign({},p,{[activeIng]:np});});setIngRecipes(function(r){return Object.assign({},r,{[activeIng]:all.slice(np*10,np*10+10)});});},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"\u2190 Back"}):(0,import_jsx_runtime2.jsx)("span",{}),
                 (0,import_jsx_runtime2.jsx)("span",{style:{fontSize:11,color:"#5A4E3A"},children:"Page "+(pg+1)+" of "+Math.ceil(Math.max(all.length,1)/10)+(canFetch?"+":"")}),
                 hasMore?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=pg+1;setIngPage2(function(p){return Object.assign({},p,{[activeIng]:np});});setIngRecipes(function(r){return Object.assign({},r,{[activeIng]:all.slice(np*10,np*10+10).join("\n---\n")});});},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"Show More \u2192"}):
                 canFetch?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const item=pantry2.find(function(p){return p.id===activeIng;});if(item){setIngRecipes(function(r){return Object.assign({},r,{[item.id]:void 0});});lookupIngredient(item);}},style:{background:"linear-gradient(135deg,#C4893A,#D4924A)",border:"none",color:"#0A0907",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer",fontWeight:600},children:"Fetch More \u2192"}):null
@@ -25591,21 +25604,24 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           (0, import_jsx_runtime2.jsx)("div", { style: { width: 16, height: 16, borderRadius: "50%", border: `2px solid ${G}`, borderTopColor: "transparent", animation: "spin 0.8s linear infinite", flexShrink: 0 } }),
           "Searching online for real recipes..."
         ] }) }),
-        recipeResult && !recipeLoading && (0, import_jsx_runtime2.jsxs)(Card, { children: [
+        Array.isArray(recipeResult) && recipeResult.length > 0 && !recipeLoading && (0, import_jsx_runtime2.jsxs)(Card, { children: [
           (0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 12 }, children: "Recipes found" }),
-          (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (recipeResult || "").split("\n---\n").filter(function(s) { return s.trim(); }).map(function(recipe, i) { var name = recipe.trim().split("\n")[0] || ("Recipe " + (i+1)); return (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,146,74,0.2)", cursor: "pointer" }, onClick: function() { setExpandedRecipe(recipe.trim()); }, children: [(0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontWeight: 600, fontSize: 14, marginBottom: 2 }, children: name }),(0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })] }, i); }) })
+          (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (Array.isArray(recipeResult) ? recipeResult : []).map(function(recipe, i) { return (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,146,74,0.2)", cursor: "pointer" }, onClick: function() { setExpandedRecipe(recipe); }, children: [
+          (0, import_jsx_runtime2.jsx)("div", { style: { color: G, fontWeight: 600, fontSize: 14, marginBottom: 2 }, children: recipe.name }),
+          (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })
+        ] }, i); }) })
         ] }),
         frAllRecs.length > 0 && (function(){
           const fTotal=frAllRecs.length, fPrev=frPage>0, fMore=(frPage+1)*10<fTotal, fFetch=fTotal<50&&mpUsage<MP_DAILY_LIMIT;
           if(!fPrev&&!fMore&&!fFetch) return null;
           return (0,import_jsx_runtime2.jsxs)("div",{style:{display:"flex",gap:8,margin:"8px 0",justifyContent:"space-between",alignItems:"center"},children:[
-            fPrev?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=frPage-1;setFrPage(np);setRecipeResult(frAllRecs.slice(np*10,np*10+10).join("\n---\n"));},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"\u2190 Back"}):(0,import_jsx_runtime2.jsx)("span",{}),
+            fPrev?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=frPage-1;setFrPage(np);setRecipeResult(frAllRecs.slice(np*10,np*10+10));},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"\u2190 Back"}):(0,import_jsx_runtime2.jsx)("span",{}),
             (0,import_jsx_runtime2.jsx)("span",{style:{fontSize:11,color:"#5A4E3A"},children:"Page "+(frPage+1)+" of "+Math.ceil(Math.max(fTotal,1)/10)+(fFetch?"+":"")}),
-            fMore?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=frPage+1;setFrPage(np);setRecipeResult(frAllRecs.slice(np*10,np*10+10).join("\n---\n"));},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"Show More \u2192"}):
+            fMore?(0,import_jsx_runtime2.jsx)("button",{onClick:function(){const np=frPage+1;setFrPage(np);setRecipeResult(frAllRecs.slice(np*10,np*10+10));},style:{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(212,146,74,0.2)",color:"#D4924A",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer"},children:"Show More \u2192"}):
             fFetch?(0,import_jsx_runtime2.jsx)("button",{onClick:findRecipes,style:{background:"linear-gradient(135deg,#C4893A,#D4924A)",border:"none",color:"#0A0907",borderRadius:8,padding:"6px 12px",fontSize:12,cursor:"pointer",fontWeight:600},children:"Fetch More \u2192"}):null
           ]});
         })(),
-        !recipeResult && !recipeLoading && (0, import_jsx_runtime2.jsx)(Card, { children: (0, import_jsx_runtime2.jsx)("p", { style: { color: "#5A4E3A", fontSize: 12 }, children: "Select ingredients above and tap Find Recipes \u2014 Ward will search online for real recipes that match." }) })
+        (!recipeResult || (Array.isArray(recipeResult) && !recipeResult.length)) && !recipeLoading && (0, import_jsx_runtime2.jsx)(Card, { children: (0, import_jsx_runtime2.jsx)("p", { style: { color: "#5A4E3A", fontSize: 12 }, children: "Select ingredients above and tap Find Recipes \u2014 Ward will search online for real recipes that match." }) })
       ] }),
       (0, import_jsx_runtime2.jsx)("style", { children: `@keyframes spin{to{transform:rotate(360deg)}}` })
     ] });
@@ -25808,7 +25824,10 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
               (0, import_jsx_runtime2.jsx)(Btn, { v: "success", sm: true, onClick: () => resolve(m.id), disabled: !resolution.trim(), children: "Mark Resolved" }),
               (0, import_jsx_runtime2.jsx)(Btn, { v: "ghost", sm: true, onClick: () => setResolveId(null), children: "Cancel" })
             ] })
-          ] }) : (0, import_jsx_runtime2.jsx)(Btn, { v: "success", sm: true, onClick: () => setResolveId(m.id), children: "Mark Resolved" }) })
+          ] }) : (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 7, alignItems: "center" }, children: [
+            (0, import_jsx_runtime2.jsx)(Btn, { v: "success", sm: true, onClick: () => setResolveId(m.id), children: "Mark Resolved" }),
+            u.canApprove && (0, import_jsx_runtime2.jsx)(XBtn, { onClick: () => del(m.id) })
+          ] }) })
         ] }) }, m.id))
       ] }),
       (0, import_jsx_runtime2.jsx)("h3", { style: { fontFamily: "'Playfair Display',serif", fontSize: 17, fontWeight: 600, color: CR, marginBottom: 12 }, children: "Resolved" }),
@@ -26261,7 +26280,7 @@ WARD BEHAVIOR RULES
           DB.get("wh3_wardinstr", STORAGE_DEFAULTS.wh3_wardinstr),
           DB.get("wh3_config_groq_key", "")
         ]);
-        const rawTasks = t && t.length > 0 && t[0].task !== void 0 ? DEFAULT_TASKS : t;
+        const rawTasks = (!t || t.length === 0) ? DEFAULT_TASKS : (t[0].task !== void 0 ? DEFAULT_TASKS : t);
         const loadedTasks = normaliseTasks(rawTasks);
         setTasks(loadedTasks);
         setEvents(e || []);
@@ -26285,7 +26304,6 @@ WARD BEHAVIOR RULES
         setClockIn(ci);
         setTodayMeta(tm && tm.date === td() ? tm : null);
         setWardInstr(wi || STORAGE_DEFAULTS.wh3_wardinstr);
-        if (gk && typeof gk === "string" && gk.startsWith("gsk_")) setGroqKey2(gk);
         if (gk && typeof gk === "string" && gk.startsWith("gsk_")) setGroqKey2(gk);
         setSseOk(true);
         setLoadError(null);
