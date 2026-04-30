@@ -25602,6 +25602,8 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
     };
     const [selected, setSelected] = (0, import_react.useState)([]);
     const [recipeResult, setRecipeResult] = (0, import_react.useState)("");
+    const [ingPage2, setIngPage2] = (0, import_react.useState)({});
+    const [ingAllRecs, setIngAllRecs] = (0, import_react.useState)({});
     const [expandedRecipe, setExpandedRecipe] = (0, import_react.useState)(null);
     const [recipeLoading, setRecipeLoading] = (0, import_react.useState)(false);
     const [ingRecipes, setIngRecipes] = (0, import_react.useState)({});
@@ -25675,7 +25677,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       var selNames2 = items.map(function(p2){ return normKey(p2.name); }).sort().join("_");
       var frKey = "wh3_recipes_find_" + selNames2.slice(0, 80);
       var frCached = await loadCachedRecipes(frKey);
-      if (frCached.length > 0) { setRecipeResult(frCached.join("\n\n1. ")); }
+      if (frCached.length > 0) { setRecipeResult(frCached.join("\n---\n")); }
       var mpOk2 = await checkMpLimit();
       if (!mpOk2) return;
       setRecipeLoading(true);
@@ -25693,7 +25695,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           var frFreshList2 = frFreshText2.split(/(?=\n\d+\.)/).map(function(c){return c.trim();}).filter(function(c){return c.length>10;});
           var frMerged2 = mergeRecipes(frCached, frFreshList2);
           saveCachedRecipes(frKey, frMerged2);
-          setRecipeResult(frMerged2.join("\n\n1. "));
+          setRecipeResult(frMerged2.join("\n---\n"));
         } else if (!frCached.length) {
           setRecipeResult("No recipes found.");
         }
@@ -25713,7 +25715,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
           onClick: function(ev) { ev.stopPropagation(); },
           style: { background: "#1A1610", border: "1px solid rgba(212,146,74,0.25)",
             borderRadius: 16, padding: "20px 20px 28px", maxWidth: 480, width: "100%",
-            marginBottom: 40 },
+            marginBottom: 40, maxHeight: "70vh", overflowY: "auto" },
           children: (0, import_jsx_runtime2.jsxs)("div", { children: [
             (0, import_jsx_runtime2.jsx)("div", { style: { color: "#D4924A", fontWeight: 700, fontSize: 15, marginBottom: 12 },
               children: expandedRecipe.split("\n")[0].replace(/^\d+\.\s*/, "").replace(/[\*#_~`]+/g, "").replace(/^[-–—\s]+/, "").trim() }),
@@ -25821,8 +25823,8 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
               (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || "").split(/\n\s*---\s*\n/).filter(function(s){return s.trim();}).map((recipe, i) => (0, import_jsx_runtime2.jsx)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", fontSize: 13, lineHeight: 1.7, color: CR, cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe.trim()), children: (() => { var _fl = recipe.trim().split("\n")[0] || ""; var first = _fl.replace(/^\d+\.\s*/, "").trim() || "Recipe"; const m2 = first.match(/^\d+\.\s*([^\u2014\-]+)/); return m2 ? m2[1].trim() : first; })() }, i)) })
             ] }) }),
             activeIng && (function(){
-              var all = ingAllRecipes[activeIng] || [];
-              var pg = ingPage[activeIng] || 0;
+              var all = ingAllRecs[activeIng] || [];
+              var pg = ingPage2[activeIng] || 0;
               var total = all.length;
               var hasPrev = pg > 0;
               var hasMore = (pg+1)*10 < total;
@@ -25831,14 +25833,14 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
               return (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 8, marginTop: 8, justifyContent: "space-between", alignItems: "center" }, children: [
                 hasPrev ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
                   var newPg = pg - 1;
-                  setIngPage(function(p){ return Object.assign({}, p, { [activeIng]: newPg }); });
-                  setIngRecipes(function(r){ return Object.assign({}, r, { [activeIng]: all.slice(newPg*10, newPg*10+10).join("\n\n1. ") }); });
+                  setIngPage2(function(p){ return Object.assign({}, p, { [activeIng]: newPg }); });
+                  setIngRecipes(function(r){ return Object.assign({}, r, { [activeIng]: all.slice(newPg*10, newPg*10+10).join("\n---\n") }); });
                 }, style: { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,146,74,0.2)", color: "#D4924A", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer" }, children: "← Back" }) : (0, import_jsx_runtime2.jsx)("span", { children: "" }),
                 (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 11, color: "#5A4E3A" }, children: "Page " + (pg+1) + " of " + Math.ceil(total/10) + (canFetchMore ? "+" : "") }),
                 hasMore ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
                   var newPg = pg + 1;
-                  setIngPage(function(p){ return Object.assign({}, p, { [activeIng]: newPg }); });
-                  setIngRecipes(function(r){ return Object.assign({}, r, { [activeIng]: all.slice(newPg*10, newPg*10+10).join("\n\n1. ") }); });
+                  setIngPage2(function(p){ return Object.assign({}, p, { [activeIng]: newPg }); });
+                  setIngRecipes(function(r){ return Object.assign({}, r, { [activeIng]: all.slice(newPg*10, newPg*10+10).join("\n---\n") }); });
                 }, style: { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,146,74,0.2)", color: "#D4924A", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer" }, children: "Show More →" }) :
                 canFetchMore ? (0, import_jsx_runtime2.jsx)("button", { onClick: function(){
                   var item = pantry2.find(function(p){ return p.id === activeIng; });
