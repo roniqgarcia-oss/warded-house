@@ -22807,6 +22807,7 @@ IMPORTANT BEHAVIOR RULES:
           body: JSON.stringify({ model: "llama-3.1-8b-instant", max_tokens: 600, messages: [{ role: "system", content: systemPrompt }, ...newMsgs] })
         });
         if (!res.ok) {
+          if (res.status === 401) throw new Error("Groq API key is invalid or expired. Please update it in Firebase.");
           const t = await res.text();
           throw new Error(t);
         }
@@ -23379,14 +23380,23 @@ IMPORTANT BEHAVIOR RULES:
     ] });
   }
 function TaskRow({ t, u, onCheck, onSkip, onTimer, tick, reorderMode, isDragging }) {
-    return (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,0.04)", opacity: isDragging ? 0.5 : 1 }, children: [
-      !reorderMode && (0, import_jsx_runtime2.jsx)("button", { onClick: function(){ onCheck(t.id); }, style: { width: 22, height: 22, borderRadius: "50%", border: "2px solid " + (t.done ? "#82B896" : "rgba(255,255,255,0.15)"), background: t.done ? "#82B896" : "transparent", cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }, children: t.done ? (0, import_jsx_runtime2.jsx)("span", { style: { color: "#0A0907", fontSize: 12, fontWeight: 700 }, children: "\u2713" }) : null }),
+    var done = t._doneToday;
+    var isRunning = !!(t.timerStart && !t.timerPaused);
+    var elapsedSec = isRunning ? Math.floor((Date.now() - t.timerStart + (t.timerElapsed||0)) / 1000) : Math.floor((t.timerElapsed||0) / 1000);
+    var dur = t.typicalDuration ? Math.round(t.typicalDuration / 60000) : null;
+    return (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,0.04)", opacity: isDragging ? 0.5 : 1, textDecoration: done ? "line-through" : "none" }, children: [
+      !reorderMode && (0, import_jsx_runtime2.jsx)("button", { onClick: function(){ onCheck(t.id); }, style: { width: 22, height: 22, borderRadius: "50%", border: "2px solid " + (done ? "#82B896" : "rgba(255,255,255,0.15)"), background: done ? "#82B896" : "transparent", cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }, children: done ? (0, import_jsx_runtime2.jsx)("span", { style: { color: "#0A0907", fontSize: 12, fontWeight: 700 }, children: "\u2713" }) : null }),
+      reorderMode && (0, import_jsx_runtime2.jsx)("span", { style: { color: "#5A4E3A", fontSize: 18, cursor: "grab", userSelect: "none" }, children: "\u2630" }),
       (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1 }, children: [
-        (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 13, color: t.done ? "#5A4E3A" : "#C8C0B0", textDecoration: t.done ? "line-through" : "none" }, children: t.label }),
-        t.timerSec > 0 && (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 11, color: "#D4924A", marginTop: 2 }, children: tick >= 0 && t.timerRunning ? Math.max(0, t.timerSec - tick) + "s remaining" : t.timerSec + "s timer" })
+        (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 13, color: done ? "#5A4E3A" : "#C8C0B0" }, children: t.name }),
+        (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 11, color: "#5A4E3A", marginTop: 1 }, children: [
+          t.area && (0, import_jsx_runtime2.jsx)("span", { children: t.area }),
+          dur && (0, import_jsx_runtime2.jsxs)("span", { children: [" \xB7 ", dur, "m"] }),
+          t.timerStart && (0, import_jsx_runtime2.jsxs)("span", { style: { color: isRunning ? "#D4924A" : "#5A4E3A" }, children: [" \xB7 ", isRunning ? (elapsedSec + "s") : (Math.floor((t.timerElapsed||0)/60000) + "m")] })
+        ] })
       ] }),
-      t.timerSec > 0 && !t.done && (0, import_jsx_runtime2.jsx)("button", { onClick: function(){ onTimer(t.id); }, style: { fontSize: 11, color: "#D4924A", background: "none", border: "1px solid rgba(212,146,74,0.3)", borderRadius: 6, padding: "2px 8px", cursor: "pointer" }, children: t.timerRunning ? "Stop" : "Start" }),
-      !t.done && !reorderMode && (0, import_jsx_runtime2.jsx)("button", { onClick: function(){ onSkip(t.id); }, style: { fontSize: 11, color: "#5A4E3A", background: "none", border: "none", cursor: "pointer" }, children: "Skip" })
+      !done && t.timerStart !== void 0 && (0, import_jsx_runtime2.jsx)("button", { onClick: function(){ onTimer(t.id, isRunning ? "pause" : "resume"); }, style: { fontSize: 11, color: "#D4924A", background: "none", border: "1px solid rgba(212,146,74,0.3)", borderRadius: 6, padding: "2px 8px", cursor: "pointer" }, children: isRunning ? "Pause" : "Resume" }),
+      !done && !reorderMode && (0, import_jsx_runtime2.jsx)("button", { onClick: function(){ onSkip(t.id); }, style: { fontSize: 11, color: "#5A4E3A", background: "none", border: "none", cursor: "pointer" }, children: "Skip" })
     ] });
   }
   function CalendarPicker({ value, onChange, dayCounts = {} }) {
@@ -25340,7 +25350,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
       const seen = new Set(existing.map(function(r3){ return normKey2((r3&&r3.name)||""); }));
       return existing.concat(fresh.filter(function(r3){ const k2=normKey2((r3&&r3.name)||""); return k2&&!seen.has(k2)&&seen.add(k2); })).slice(0,50);
     }
-    const loadR = async (k2) => { try { return (await DB.get(k2,[]))||[]; } catch(e){ return []; } };
+    const loadR = async (k2) => { try { const v = await DB.get(k2,[]); return Array.isArray(v) ? v : []; } catch(e){ return []; } };
     const saveR = async (k2, arr) => { try { await DB.set(k2,arr); } catch(e){} };
     const [expandedRecipe, setExpandedRecipe] = (0, import_react.useState)(null);
     const [recipeLoading, setRecipeLoading] = (0, import_react.useState)(false);
@@ -25561,7 +25571,7 @@ Categories: Protein, Vegetable, Fruit, Grain & Carb, Dairy, Condiment, Herb & Sp
                 "Recipes with ",
                 pantry2.find((p) => p.id === activeIng)?.name
               ] }),
-              (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (ingRecipes[activeIng] || []).map((recipe, i) => (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe), children: [
+              (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: ((Array.isArray(ingRecipes[activeIng]) ? ingRecipes[activeIng] : [])).map((recipe, i) => (0, import_jsx_runtime2.jsxs)("div", { style: { padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,146,74,0.1)", cursor: "pointer" }, onClick: () => setExpandedRecipe(recipe), children: [
               (0, import_jsx_runtime2.jsx)("div", { style: { color: CR, fontSize: 14, fontWeight: 600, marginBottom: 2 }, children: recipe.name }),
               (0, import_jsx_runtime2.jsx)("div", { style: { color: DIM, fontSize: 11 }, children: "Tap for full recipe" })
             ] }, i)) })
