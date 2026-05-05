@@ -22904,8 +22904,7 @@ IMPORTANT BEHAVIOR RULES:
             }
           }, style: { background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: wardTab2 === t ? 700 : 400, color: wardTab2 === t ? "#D4924A" : "#5A4E3A", textTransform: "capitalize", padding: 0, borderBottom: wardTab2 === t ? "1px solid #D4924A" : "1px solid transparent", paddingBottom: 1 }, children: t }, t)) })
         ] }),
-        (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 10, color: "#5A4E3A", marginRight: 4, opacity: 0.8 }, children: (WARD_DAILY_LIMIT2 - usageCount2) + " left" }),
-        (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 10, color: "#5A4E3A", marginRight: 4, opacity: 0.8 }, children: (WARD_DAILY_LIMIT2 - usageCount2) + " left" }),
+        (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 10, color: "#5A4E3A", marginRight: 4, opacity: 0.8 }, children: (WARD_DAILY_LIMIT - usageCount) + " left" }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: () => {
           setOpen2(false);
           setErr2("");
@@ -26280,7 +26279,10 @@ WARD BEHAVIOR RULES
           DB.get("wh3_wardinstr", STORAGE_DEFAULTS.wh3_wardinstr),
           DB.get("wh3_config_groq_key", "")
         ]);
-        const rawTasks = (!t || t.length === 0) ? DEFAULT_TASKS : (t[0].task !== void 0 ? DEFAULT_TASKS : t);
+        const rawArr = (!t || t.length === 0) ? DEFAULT_TASKS : (t[0] && t[0].task !== void 0 ? DEFAULT_TASKS : t);
+        const today2 = td();
+        const hasDue = rawArr.some(function(tk){return !tk.paused && !tk._doneToday && (function(x){const s=new Date((x.startingOn||today2)+"T00:00:00");const d=new Date(today2+"T00:00:00");if(x.intervalDays===1)return s<=d;while(s<d)s.setDate(s.getDate()+x.intervalDays);return s<=d;})(tk);});
+        const rawTasks = hasDue ? rawArr : DEFAULT_TASKS;
         const loadedTasks = normaliseTasks(rawTasks);
         setTasks(loadedTasks);
         setEvents(e || []);
